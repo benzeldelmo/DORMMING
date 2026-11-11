@@ -45,6 +45,8 @@ class World {
     final PaymentService payments = new PaymentService(transactions, dormService, balances, clock);
     final HomeService home = new HomeService(dormService, balances, bills, activity, transactions, users, clock);
 
+    final FriendService friendService = new FriendService(users, friends);
+
     final UserId a = user("a", "Benzel");
     final UserId b = user("b", "Vince");
     final UserId c = user("c", "Sydney");
