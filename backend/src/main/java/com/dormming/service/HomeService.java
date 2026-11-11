@@ -45,7 +45,7 @@ public class HomeService {
     }
 
     public HomeData home(UserId userId) {
-        User me = users.findById(userId).orElseThrow(() -> new NotFoundException("Account not found"));
+        User me = users.findById(userId).orElseThrow(() -> new UnauthorizedException("Please log in again"));
         LocalDate today = LocalDate.now(clock);
         Instant now = clock.instant();
         Dorm dorm = dorms.current(userId).orElse(null);

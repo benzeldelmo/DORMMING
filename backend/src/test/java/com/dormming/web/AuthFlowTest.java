@@ -88,6 +88,12 @@ class AuthFlowTest {
     }
 
     @Test
+    void tokenForUnknownUserIs401() throws Exception {
+        String ghost = tokenSignedWith(secret, Instant.now().plusSeconds(600));
+        mvc.perform(get("/api/me").header("Authorization", "Bearer " + ghost)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void forgotAndResetPasswordOnce() throws Exception {
         register("benz5@demo.ph", "dormming123");
         String body = mvc.perform(post("/api/auth/forgot").contentType(MediaType.APPLICATION_JSON)

@@ -15,6 +15,7 @@ import com.dormming.service.BillService;
 import com.dormming.service.DormService;
 import com.dormming.service.ExpenseService;
 import com.dormming.service.NotFoundException;
+import com.dormming.service.UnauthorizedException;
 import com.dormming.service.PaymentService;
 import com.dormming.service.SharedExpenseInput;
 import java.time.Clock;
@@ -60,7 +61,7 @@ public class AssistantService {
     }
 
     public AssistantContext context(UserId userId) {
-        User me = users.findById(userId).orElseThrow(() -> new NotFoundException("Account not found"));
+        User me = users.findById(userId).orElseThrow(() -> new UnauthorizedException("Please log in again"));
         Dorm dorm = dorms.require(userId);
         LocalDate today = LocalDate.now(clock);
         Map<UserId, String> mates = new LinkedHashMap<>();

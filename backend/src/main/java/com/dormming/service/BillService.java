@@ -80,7 +80,8 @@ public class BillService {
     }
 
     /** Creates the next bill in each repeating series once the current one is fully paid or past due. */
-    public void rollover(String dormId, LocalDate today) {
+    // synchronized: several phones poll at once; only one may create the next bill.
+    public synchronized void rollover(String dormId, LocalDate today) {
         for (Bill bill : transactions.billsByDorm(dormId)) {
             if (!bill.isRolledOver() && (bill.isFullyPaid() || today.isAfter(bill.dueDate()))) {
                 bill.nextInstance(clock.instant()).ifPresent(next -> {

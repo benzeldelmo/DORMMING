@@ -16,7 +16,8 @@ public class UserService {
     }
 
     public User get(UserId id) {
-        return users.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
+        // A valid token for a user that no longer exists (e.g. in-memory data reset): log in again.
+        return users.findById(id).orElseThrow(() -> new UnauthorizedException("Please log in again"));
     }
 
     /** Null fields are left unchanged. */

@@ -24,7 +24,8 @@ public class PaymentService {
         this.clock = clock;
     }
 
-    public Payment record(UserId from, UserId to, Money amount, String note, LocalDate date) {
+    // synchronized: a double-tap must not pay the same debt twice.
+    public synchronized Payment record(UserId from, UserId to, Money amount, String note, LocalDate date) {
         Dorm dorm = dorms.require(from);
         if (from.equals(to)) {
             throw new IllegalArgumentException("You can't pay yourself");
