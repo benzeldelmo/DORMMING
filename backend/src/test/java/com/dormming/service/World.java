@@ -41,6 +41,10 @@ class World {
     final ExpenseService expenses = new ExpenseService(transactions, dormService, clock);
     final ActivityService activity = new ActivityService(transactions, dormService);
 
+    final BillService bills = new BillService(transactions, dormService, clock);
+    final PaymentService payments = new PaymentService(transactions, dormService, balances, clock);
+    final HomeService home = new HomeService(dormService, balances, bills, activity, transactions, users, clock);
+
     final UserId a = user("a", "Benzel");
     final UserId b = user("b", "Vince");
     final UserId c = user("c", "Sydney");
