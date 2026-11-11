@@ -1,20 +1,20 @@
 /* DormMing hero demo, laid out in phone points (390 wide). */
 .dm-stage { --ss-accent: #6b7255; }
 .dm-phone { position: absolute; left: 50%; top: 18px; transform: translateX(-50%); }
-.dm-screen { position: absolute; inset: 0; overflow: hidden; background: #fff; font-family: ui-rounded, "SF Pro Rounded", Poppins, system-ui, sans-serif; color: #1c1b17; }
+.dm-screen { position: absolute; inset: 0; overflow: hidden; background: #f6f6f3; font-family: ui-rounded, "SF Pro Rounded", Nunito, system-ui, sans-serif; color: #1c1b17; }
 .dm-home, .dm-add { position: absolute; inset: 0; padding: 62px 20px 0; transition: transform 520ms cubic-bezier(.22,1,.36,1), opacity 420ms ease; }
 .dm-home[data-back] { transform: translateX(-24%); opacity: 0; }
-.dm-add { transform: translateX(100%); background: #fff; }
+.dm-add { transform: translateX(100%); background: #f6f6f3; }
 .dm-add[data-show] { transform: none; }
 
 .dm-greet { display: flex; align-items: flex-end; position: relative; z-index: 2; }
 .dm-ming { width: 150px; height: 150px; margin-bottom: -62px; flex: none; }
 .dm-ming > span { width: 100%; height: 100%; }
 .dm-hello { padding: 0 0 12px 4px; }
-.dm-hello__title { font-family: Poppins, sans-serif; font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: -0.02em; }
+.dm-hello__title { font-family: inherit; font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: -0.02em; }
 .dm-hello__sub { font-size: 10.5px; color: #5d5c55; margin-top: 4px; }
 .dm-banner { background: #6b7255; border-radius: 22px; min-height: 104px; padding: 16px 16px 16px 150px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 10px 24px -14px rgb(36 7 2 / .6); }
-.dm-sticker { font-family: Poppins, sans-serif; font-weight: 800; font-size: 20px; line-height: 1.05; color: #ffde59; -webkit-text-stroke: 5px #240702; paint-order: stroke fill; }
+.dm-sticker { font-family: inherit; font-weight: 800; font-size: 20px; line-height: 1.05; color: #ffde59; -webkit-text-stroke: 5px #240702; paint-order: stroke fill; }
 .dm-banner__sub { font-size: 10.5px; color: rgb(255 255 255 / .85); margin-top: 5px; }
 
 .dm-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
@@ -24,15 +24,15 @@
 .dm-card__label { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; }
 .dm-dot { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: rgb(107 114 85 / .15); color: #6b7255; }
 .dm-dot--orange { background: rgb(221 123 47 / .15); color: #dd7b2f; }
-.dm-card__amount { position: relative; align-self: flex-start; margin-left: 18px; font-family: Poppins, sans-serif; font-weight: 800; font-size: 30px; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.dm-card__amount { position: relative; align-self: flex-start; margin-left: 18px; font-family: inherit; font-weight: 800; font-size: 30px; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .dm-peso { position: absolute; right: 100%; padding-right: 1px; }
 
-.dm-section { font-family: Poppins, sans-serif; font-weight: 700; font-size: 16px; margin: 22px 4px 8px; }
+.dm-section { font-family: inherit; font-weight: 700; font-size: 16px; margin: 22px 4px 8px; }
 .dm-bill { display: flex; align-items: center; gap: 12px; background: #fff6ec; border-radius: 18px; padding: 11px 12px; margin-bottom: 8px; }
 .dm-bill__icon { width: 42px; height: 42px; border-radius: 12px; background: #fde6cf; color: #f08a2c; display: grid; place-items: center; flex: none; }
 .dm-bill__text { flex: 1; display: flex; flex-direction: column; gap: 5px; }
 .dm-bill__name { font-size: 16px; font-weight: 600; line-height: 1.2; }
-.dm-bill__amt { font-family: Poppins, sans-serif; font-weight: 700; color: #f08a2c; font-size: 17px; }
+.dm-bill__amt { font-family: inherit; font-weight: 700; color: #f08a2c; font-size: 17px; }
 .dm-bill--quiet .dm-line { background: #f5d9bd; }
 .dm-line { display: block; height: 7px; border-radius: 4px; background: #e6e2d8; }
 .dm-line--olive { background: rgb(107 114 85 / .22); }
@@ -47,20 +47,20 @@
 .dm-scrim[data-show] { opacity: 1; }
 .dm-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 6; background: #fff; border-radius: 28px 28px 0 0; padding: 26px 20px 46px; transform: translateY(105%); transition: transform 460ms cubic-bezier(.22,1,.36,1); }
 .dm-sheet[data-show] { transform: none; }
-.dm-sheet__title { font-family: Poppins, sans-serif; font-weight: 800; font-size: 24px; margin-bottom: 14px; }
+.dm-sheet__title { font-family: inherit; font-weight: 800; font-size: 24px; margin-bottom: 14px; }
 .dm-action { display: flex; align-items: center; gap: 12px; background: #e3e6d8; border-radius: 18px; padding: 12px; margin-bottom: 10px; transition: transform 160ms ease; }
 .dm-action[data-pressed] { transform: scale(.98); }
 .dm-action__icon { width: 42px; height: 42px; border-radius: 12px; background: #6b7255; color: #fff; display: grid; place-items: center; flex: none; }
 .dm-action--quiet .dm-action__icon { background: rgb(107 114 85 / .35); }
 .dm-action__text { display: flex; flex-direction: column; gap: 6px; }
-.dm-action__name { font-family: Poppins, sans-serif; font-weight: 700; font-size: 17px; line-height: 1.2; }
+.dm-action__name { font-family: inherit; font-weight: 700; font-size: 17px; line-height: 1.2; }
 
-.dm-add__title { font-family: Poppins, sans-serif; font-weight: 800; font-size: 26px; text-align: center; margin: 4px 0 16px; }
+.dm-add__title { font-family: inherit; font-weight: 800; font-size: 26px; text-align: center; margin: 4px 0 16px; }
 .dm-seg { display: grid; grid-template-columns: 1fr 1fr; background: #f2f2ee; border-radius: 999px; padding: 4px; font-size: 13px; font-weight: 600; text-align: center; }
 .dm-seg span { padding: 8px 0; border-radius: 999px; color: #55544d; }
 .dm-seg span[data-on] { background: #6b7255; color: #fff; }
 .dm-label { font-size: 12px; font-weight: 500; color: #55544d; margin: 18px 2px 6px; }
-.dm-amount { display: flex; align-items: center; height: 56px; border-radius: 18px; background: #e4e3de; padding: 0 18px; font-family: Poppins, sans-serif; font-weight: 800; font-size: 24px; font-variant-numeric: tabular-nums; }
+.dm-amount { display: flex; align-items: center; height: 56px; border-radius: 18px; background: #e4e3de; padding: 0 18px; font-family: inherit; font-weight: 800; font-size: 24px; font-variant-numeric: tabular-nums; }
 .dm-amount__peso { color: #6a6960; margin-right: 4px; }
 .dm-amount__ph { color: #b3b1a8; }
 .dm-caret { width: 2px; height: 26px; background: #6b7255; margin-left: 2px; animation: dm-blink 1s steps(1) infinite; }
@@ -69,7 +69,7 @@
 .dm-chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 999px; background: #f2f2ee; font-size: 14px; font-weight: 600; color: #55544d; }
 .dm-chip[data-on] { background: #6b7255; color: #fff; }
 .dm-each { font-size: 13px; color: #55544d; margin: 12px 2px 0; }
-.dm-save { margin-top: 22px; height: 52px; border-radius: 18px; background: #6b7255; color: #fff; display: grid; place-items: center; font-family: Poppins, sans-serif; font-weight: 700; font-size: 17px; box-shadow: 0 6px 16px -8px rgb(0 0 0 / .35); transition: transform 160ms ease; }
+.dm-save { margin-top: 22px; height: 52px; border-radius: 18px; background: #6b7255; color: #fff; display: grid; place-items: center; font-family: inherit; font-weight: 700; font-size: 17px; box-shadow: 0 6px 16px -8px rgb(0 0 0 / .35); transition: transform 160ms ease; }
 .dm-save[data-pressed] { transform: scale(.98); }
 
 .dm-toast { position: absolute; z-index: 8; left: 50%; bottom: 104px; transform: translate(-50%, 16px); opacity: 0; display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: #1c1b17; color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; transition: transform 420ms cubic-bezier(.22,1,.36,1), opacity 300ms ease; }
@@ -77,3 +77,25 @@
 .dm-notif { position: absolute; z-index: 9; left: 0; right: 0; top: 0; transform: translateY(-200px); transition: transform 520ms cubic-bezier(.22,1,.36,1); }
 .dm-notif[data-show] { transform: none; }
 .dm-notif__icon { width: 100%; height: 100%; border-radius: 9px; image-rendering: pixelated; background: #e3e6d8; }
+
+/* New Home: greeting card with Ming chest-up, quick actions. */
+.dm-gcard { position: relative; overflow: hidden; border-radius: 26px; background: #6b7255; color: #fff; min-height: 168px; padding: 16px 16px 16px 128px; box-shadow: 0 14px 30px -18px rgb(36 7 2 / .7); }
+.dm-gcard__ming { position: absolute; left: 4px; bottom: 0; width: 120px; image-rendering: pixelated; }
+.dm-gcard__dorm { font-size: 12px; color: rgb(255 255 255 / .75); }
+.dm-gcard__hi { font-weight: 800; font-size: 21px; line-height: 1.15; letter-spacing: -0.01em; }
+.dm-bubble { position: relative; margin-top: 10px; background: #fff; color: #1c1b17; border-radius: 16px 16px 16px 6px; padding: 9px 12px; display: flex; flex-direction: column; }
+.dm-bubble__who { font-size: 10px; font-weight: 800; letter-spacing: .06em; color: #6b7255; }
+.dm-bubble__text { font-size: 14px; font-weight: 800; line-height: 1.25; }
+.dm-bubble__sub { font-size: 12px; color: #6a6960; margin-top: 2px; }
+.dm-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.dm-quick__tile { display: flex; flex-direction: column; align-items: center; gap: 6px; background: #fff; border-radius: 18px; padding: 10px 4px; font-size: 11px; font-weight: 600; text-align: center; line-height: 1.15; box-shadow: 0 1px 2px rgb(36 7 2 / .04), 0 8px 24px -12px rgb(36 7 2 / .12); }
+.dm-quick__icon { width: 34px; height: 34px; border-radius: 50%; background: #e3e6d8; color: #6b7255; display: grid; place-items: center; }
+.dm-card { height: 128px; }
+.dm-home { padding-top: 60px; }
+/* The phone runs off the stage's foot behind a soft fade instead of into the next section. */
+.ss-stage.dm-stage, .dm-stage .ss-stage { overflow: hidden; -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent); }
+/* Film fixes: room between stacked lines, a real gap after ₱, even boxes, layers for sliding surfaces. */
+.dm-gcard__dorm, .dm-bubble__who { margin-bottom: 3px; }
+.dm-amount__peso { margin-right: 8px; }
+.dm-toast { height: 40px; padding-top: 0; padding-bottom: 0; }
+.dm-home, .dm-add, .dm-sheet, .dm-action, .dm-save, .dm-notif, .dm-toast { will-change: transform; }

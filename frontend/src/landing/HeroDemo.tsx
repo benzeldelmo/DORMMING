@@ -1,10 +1,9 @@
 import { Stage, Phone, Notification, Roll, type Act } from '../stageshow/kit'
-import { ArrowDownLeft, ArrowUpRight, CalendarDays, Check, CreditCard, House, Plus, ReceiptText, Wallet, Wifi } from 'lucide-react'
-import Ming from '@/components/Ming'
+import { ArrowDownLeft, ArrowUpRight, BellRing, CalendarDays, Check, CreditCard, House, Plus, ReceiptText, Wallet, WalletCards, Wifi } from 'lucide-react'
 import './hero-demo.css'
 
 // DormMing's landing hero, phone only. Story in four beats:
-// Home with Ming and the two balance cards (context), + opens "Add a record",
+// Home with Ming and the two balance cards (context), the Add expense quick action,
 // a shared ₱300 expense is added for Benzel and Vince (action), and back on Home
 // "Owed to you" rolls up while Ming celebrates (payoff). The loop resets with a
 // cause: Vince pays his ₱150 back, a banner says so, and the card rolls down.
@@ -20,11 +19,8 @@ const REST = { x: 300, y: 470 }
 const script = async (a: Act<S>) => {
   await a.wait(1200)
   a.mark('open')
-  await a.click('plus')
-  a.put({ sheet: true })
-  await a.wait(800)
-  await a.click('add-expense')
-  a.put({ sheet: false, screen: 'add' })
+  await a.click('quick-add')
+  a.put({ screen: 'add' })
   await a.wait(700)
   a.mark('type')
   await a.click('amount')
@@ -54,16 +50,22 @@ const peso = (n: number) => n.toLocaleString('en-US')
 function HomeScreen({ s }: { s: S }) {
   return (
     <div className="dm-home" data-back={s.screen !== 'home' || undefined}>
-      <div className="dm-greet">
-        <div className="dm-ming"><Ming mood={s.mood} badge={false} /></div>
-        <div className="dm-hello">
-          <div className="dm-hello__title">Hi, Benzel!</div>
-          <div className="dm-hello__sub">I am MING! Your Digital Dorm Companion.</div>
+      <div className="dm-gcard">
+        <img src="/brand/ming-bust.png" alt="" className={`dm-gcard__ming ming-${s.mood}`} />
+        <div className="dm-gcard__body">
+          <div className="dm-gcard__dorm">Mabini Hall 3B</div>
+          <div className="dm-gcard__hi">Good evening, Benzel!</div>
+          <div className="dm-bubble">
+            <span className="dm-bubble__who">MING</span>
+            <span className="dm-bubble__text">Your Internet is due tomorrow!</span>
+            <span className="dm-bubble__sub">Your share: ₱500.00</span>
+          </div>
         </div>
       </div>
-      <div className="dm-banner">
-        <span className="dm-sticker">Your Internet is due tomorrow!</span>
-        <span className="dm-banner__sub">Your share: ₱500.00</span>
+      <div className="dm-quick">
+        {[{ i: CreditCard, l: 'Add expense' }, { i: WalletCards, l: 'Record payment' }, { i: BellRing, l: 'Bill reminder' }, { i: ReceiptText, l: 'Split receipt' }].map(({ i: I, l }) => (
+          <span key={l} className="dm-quick__tile" data-target={l === 'Add expense' ? 'quick-add' : undefined}><span className="dm-quick__icon"><I size={17} /></span>{l}</span>
+        ))}
       </div>
       <div className="dm-cards">
         <div className="dm-card dm-card--olive">
@@ -94,7 +96,6 @@ function AddScreen({ s }: { s: S }) {
   return (
     <div className="dm-add" data-show={s.screen === 'add' || undefined}>
       <div className="dm-add__title">Add expense</div>
-      <div className="dm-seg"><span>Personal</span><span data-on>Shared</span></div>
       <div className="dm-label">Amount</div>
       <div className="dm-amount" data-target="amount" data-cursor="ibeam">
         <span className="dm-amount__peso">₱</span>
@@ -103,8 +104,8 @@ function AddScreen({ s }: { s: S }) {
       </div>
       <div className="dm-label">Split with</div>
       <div className="dm-chips">
-        <span className="dm-chip" data-on><Check size={13} strokeWidth={3} />Me</span>
-        <span className="dm-chip" data-on><Check size={13} strokeWidth={3} />Vince</span>
+        <span className="dm-chip" data-on><Check size={14} strokeWidth={3} />Me</span>
+        <span className="dm-chip" data-on><Check size={14} strokeWidth={3} />Vince</span>
         <span className="dm-chip">Sydney</span>
       </div>
       <div className="dm-each">₱150.00 each</div>
