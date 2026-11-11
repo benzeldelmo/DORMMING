@@ -23,7 +23,7 @@ function ProposalCard({ proposal, state, onConfirm, onCancel }) {
     f.note && ["Note", f.note],
   ].filter(Boolean);
   return (
-    <div className="mx-auto w-full max-w-[560px] ml-11 rounded-[20px] border-2 border-dashed border-olive/35 bg-olive-soft/50 p-4">
+    <div className="ml-11 rounded-[20px] border-2 border-dashed border-olive/35 bg-olive-soft/50 p-4">
       <p className="text-xs font-semibold tracking-wide text-olive uppercase">{TITLES[proposal.kind]}</p>
       <p className="mt-1 font-heading font-bold leading-snug">{proposal.summary}</p>
       <dl className="mt-2 space-y-0.5 text-sm">
@@ -96,7 +96,7 @@ export default function Assistant() {
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-7rem)] flex-col">
+    <div className="mx-auto flex min-h-[calc(100dvh-7rem)] w-full max-w-[560px] flex-col">
       <PageHeader title={`Ask ${mingName}`} back topLevel>
         {demo && <span className="rounded-full bg-sun px-2.5 py-1 text-xs font-bold text-brown">Demo mode</span>}
       </PageHeader>

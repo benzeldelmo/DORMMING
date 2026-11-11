@@ -37,9 +37,9 @@ export default function DigitalCard({ card }) {
           <Chip />
           <span className="font-heading text-lg font-semibold tracking-[0.12em] tabular-nums">{card.maskedNumber}</span>
           <span className="flex items-end justify-between">
-            <span>
-              <span className="block font-heading text-[15px] font-bold leading-tight">{card.displayName}</span>
-              <span className={cn("block text-[11px]", t.soft)}>{card.dormName}</span>
+            <span className="min-w-0 flex-1 pr-3">
+              <span className="block truncate font-heading text-[15px] font-bold leading-tight">{card.displayName}</span>
+              <span className={cn("block truncate text-[11px]", t.soft)}>{card.dormName}</span>
             </span>
             <span className="text-right">
               <span className={cn("block text-[10px] font-semibold tracking-wider", t.soft)}>BALANCE</span>

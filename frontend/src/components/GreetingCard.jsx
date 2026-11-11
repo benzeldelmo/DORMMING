@@ -13,8 +13,8 @@ export default function GreetingCard({ me, dormName, mood, banner, moodLine }) {
         <MingBust mood={mood} name={me.mingName} badge className="w-full" />
       </Link>
       <div className="relative min-h-[176px] py-5 pr-5 pl-[140px] sm:pl-[170px] lg:min-h-[200px] lg:py-7 lg:pl-[212px]">
-        <p className="text-[13px] text-white/75">{dormName}</p>
-        <h1 className="text-[24px] leading-tight font-extrabold lg:text-[30px]">{greetingFor()}, {first}!</h1>
+        <p className="truncate text-[13px] text-white/75">{dormName}</p>
+        <h1 className="truncate text-[24px] leading-tight font-extrabold lg:text-[30px]">{greetingFor()}, {first}!</h1>
         <Link to={banner ? "/bills" : "/balances"}
           className="relative mt-3 block max-w-[420px] rounded-2xl rounded-bl-md bg-white px-4 py-3 text-foreground shadow-sm">
           <span aria-hidden className="absolute -left-1.5 bottom-0 size-3 rotate-45 bg-white" />
