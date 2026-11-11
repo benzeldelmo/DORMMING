@@ -1,3 +1,100 @@
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { QRCodeSVG } from "qrcode.react";
+import { Copy, Users } from "lucide-react";
+import { toast } from "sonner";
+import { Column } from "@/components/AppShell";
+import { Field, FormError, PrimaryButton, Segmented } from "@/components/forms";
+import { useGet, useSend } from "@/lib/queries";
+import { isLoggedIn } from "@/lib/auth";
+
 export default function DormSetup() {
-  return <div className="p-6 font-heading text-2xl font-bold">DormSetup</div>;
+  const navigate = useNavigate();
+  const me = useGet("/me", { enabled: isLoggedIn(), refetchInterval: false });
+  const invites = useGet("/invites", { enabled: isLoggedIn() });
+  const send = useSend();
+  const [tab, setTab] = useState("join");
+  const [name, setName] = useState("");
+  const [code, setCode] = useState("");
+  const [created, setCreated] = useState(null);
+
+  if (!isLoggedIn()) return <Navigate to="/login" replace />;
+  if (me.data?.dormId && !created) return <Navigate to="/home" replace />;
+
+  const create = async (e) => {
+    e.preventDefault();
+    setCreated(await send.mutateAsync({ path: "/dorms", body: { name } }));
+  };
+  const join = async (e) => {
+    e.preventDefault();
+    await send.mutateAsync({ path: "/dorms/join", body: { code } });
+    navigate("/home", { replace: true });
+  };
+  const accept = async (id) => {
+    await send.mutateAsync({ path: `/invites/${id}/accept` });
+    navigate("/home", { replace: true });
+  };
+
+  if (created) {
+    return (
+      <Column className="items-center gap-6 text-center">
+        <img src="/brand/ming-mascot.png" alt="" className="pixelated size-24" />
+        <div>
+          <h1 className="font-heading text-[28px] font-extrabold leading-tight">{created.name} is ready!</h1>
+          <p className="mt-1 text-muted-foreground">Share this code or QR so your dormmates can join.</p>
+        </div>
+        <div className="w-full rounded-[28px] bg-olive-soft p-6">
+          <div className="mx-auto w-fit rounded-2xl bg-white p-4 shadow-sm">
+            <QRCodeSVG value={created.joinUrl} size={168} fgColor="#240702" />
+          </div>
+          <p className="mt-5 text-sm text-foreground/70">Dorm code</p>
+          <button type="button" onClick={() => { navigator.clipboard?.writeText(created.inviteCode); toast.success("Code copied"); }}
+            className="mx-auto mt-1 flex items-center gap-2 font-heading text-4xl font-extrabold tracking-[0.18em] tabular-nums">
+            {created.inviteCode}<Copy className="size-5 text-olive" aria-label="Copy code" />
+          </button>
+        </div>
+        <PrimaryButton onClick={() => navigate("/home", { replace: true })}>Go to my dorm</PrimaryButton>
+      </Column>
+    );
+  }
+
+  return (
+    <Column className="gap-6">
+      <p className="text-sm font-medium text-muted-foreground">Step 2 of 2</p>
+      <div>
+        <h1 className="font-heading text-[28px] font-extrabold leading-tight">Find your dorm</h1>
+        <p className="mt-1 text-muted-foreground">Join your dormmates with their code, or start a new dorm.</p>
+      </div>
+      <Segmented label="Join or create" value={tab} onChange={setTab}
+        options={[{ value: "join", label: "Join" }, { value: "create", label: "Create" }]} />
+
+      {tab === "join" ? (
+        <form onSubmit={join} className="space-y-4" noValidate>
+          {invites.data?.length > 0 && (
+            <ul className="space-y-2">
+              {invites.data.map((i) => (
+                <li key={i.id} className="flex items-center gap-3 rounded-2xl bg-cream p-3">
+                  <Users className="size-5 text-orange" />
+                  <p className="flex-1 text-sm"><b>{i.fromUser.displayName}</b> invited you to <b>{i.dormName}</b></p>
+                  <button type="button" onClick={() => accept(i.id)} className="rounded-full bg-olive px-4 py-2 text-sm font-semibold text-white">Join</button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Field label="Dorm code" value={code} maxLength={6} autoCapitalize="characters" autoComplete="off" spellCheck={false}
+            onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
+            inputClassName="text-center font-heading text-2xl font-bold tracking-[0.3em] uppercase" placeholder="AB3C9D"
+            hint="6 letters and numbers. Ask whoever made the dorm." />
+          <FormError>{send.error?.message}</FormError>
+          <PrimaryButton type="submit" busy={send.isPending} disabled={code.length !== 6}>Join dorm</PrimaryButton>
+        </form>
+      ) : (
+        <form onSubmit={create} className="space-y-4" noValidate>
+          <Field label="Dorm name" value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Mabini Hall 3B" />
+          <FormError>{send.error?.message}</FormError>
+          <PrimaryButton type="submit" busy={send.isPending} disabled={!name.trim()}>Create dorm</PrimaryButton>
+        </form>
+      )}
+    </Column>
+  );
 }
