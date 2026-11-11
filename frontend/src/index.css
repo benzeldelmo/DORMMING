@@ -115,3 +115,12 @@
 }
 
 ::selection { background: color-mix(in oklab, var(--sun) 70%, transparent); color: var(--brown) }
+
+/* Thermal receipt paper: zig-zag torn top and bottom edges. */
+.receipt-paper {
+  --z: 12px;
+  background: var(--paper);
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--z) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--z) 51% repeat-x;
+}

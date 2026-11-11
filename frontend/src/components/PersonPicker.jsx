@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export default function PersonPicker({ members, selected, onChange, meId, label = "Who shares it?" }) {
   const toggle = (id) => onChange(selected.includes(id) ? selected.filter((s) => s !== id) : [...selected, id]);
   return (
-    <fieldset className="space-y-1.5">
+    <fieldset className="min-w-0 space-y-1.5">
       <legend className="mb-1.5 text-[13px] font-medium text-foreground/80">{label}</legend>
       <div className="flex flex-wrap gap-2">
         {members.map(({ user }) => {
