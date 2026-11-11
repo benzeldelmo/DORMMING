@@ -56,7 +56,6 @@ Run the tests with `cd backend && mvn test` (Java) and `cd frontend && npx vites
 
 - DormMing records dorm expenses only. Every expense is split among dorm members.
 - Dorm spending for a month = shared expenses dated that month + bills due that month. Payments don't count.
-
 - Amounts are in Philippine pesos and stored as centavos.
 - When a split is uneven, the extra centavos go to people other than the payer.
 - Debts cancel out between two people. If you owe Vince ₱300 and he owes you ₱100, you owe him ₱200.
