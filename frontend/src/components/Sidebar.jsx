@@ -39,7 +39,7 @@ export default function Sidebar({ dorm, onAdd }) {
               <div className="mt-1 flex -space-x-1.5">
                 {dorm.members.slice(0, 5).map((m) => (
                   <span key={m.user.id} title={m.user.displayName}
-                    className="grid size-6 place-items-center rounded-full bg-white text-[10px] font-bold ring-2 ring-olive-soft">{m.user.initials}</span>
+                    className="grid size-6 place-items-center rounded-full bg-card text-[10px] font-bold ring-2 ring-olive-soft">{m.user.initials}</span>
                 ))}
               </div>
             </div>

@@ -63,7 +63,7 @@ export default function AddExpense() {
 
         {(
           <div className="space-y-4 rounded-[22px] bg-olive-soft/60 p-4">
-            <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)} inputClassName="bg-white">
+            <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)} inputClassName="bg-card">
               {members.map(({ user }) => <option key={user.id} value={user.id}>{user.id === me?.id ? "Me" : user.displayName}</option>)}
             </Field>
             <PersonPicker members={members} selected={chosen} onChange={setPeople} meId={me?.id} />

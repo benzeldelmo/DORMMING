@@ -21,6 +21,7 @@ import Settings from "@/pages/Settings";
 import Card from "@/pages/Card";
 import Assistant from "@/pages/Assistant";
 import Activity from "@/pages/Activity";
+import Legal from "@/pages/Legal";
 
 export default function App() {
   return (
@@ -34,6 +35,8 @@ export default function App() {
       <Route path="/setup/dorm" element={<DormSetup />} />
       <Route path="/join/:code" element={<JoinLink />} />
       <Route path="/add/:code" element={<AddFriend />} />
+      <Route path="/terms" element={<Legal doc="terms" />} />
+      <Route path="/privacy" element={<Legal doc="privacy" />} />
       <Route element={<AppShell />}>
         <Route path="/home" element={<Home />} />
         <Route path="/expenses" element={<Expenses />} />

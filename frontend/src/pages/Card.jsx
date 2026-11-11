@@ -46,10 +46,10 @@ export default function Card() {
           <ul className="space-y-2">
             {friends.data?.map((f) => (
               <li key={f.id} className="flex items-center gap-3 rounded-2xl bg-secondary px-3 py-2.5">
-                <span className="grid size-10 place-items-center rounded-full bg-white font-semibold">{f.initials}</span>
+                <span className="grid size-10 place-items-center rounded-full bg-card font-semibold">{f.initials}</span>
                 <span className="flex-1 font-semibold">{f.displayName}</span>
                 {dormmates.has(f.id)
-                  ? <span className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-muted-foreground">Dormmate</span>
+                  ? <span className="rounded-full bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground">Dormmate</span>
                   : <button type="button" onClick={() => invite(f)} className="rounded-full bg-olive-soft px-3 py-1.5 text-sm font-semibold text-olive">Invite to dorm</button>}
               </li>
             ))}

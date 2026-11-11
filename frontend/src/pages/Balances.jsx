@@ -24,7 +24,7 @@ export default function Balances() {
                 const iOwe = d.direction === "I_OWE";
                 return (
                   <li key={d.user.id + d.direction} className={`flex items-center gap-3 rounded-2xl px-3 py-3 ${iOwe ? "bg-cream" : "bg-olive-soft/70"}`}>
-                    <span className="grid size-10 place-items-center rounded-full bg-white font-semibold">{d.user.initials}</span>
+                    <span className="grid size-10 place-items-center rounded-full bg-card font-semibold">{d.user.initials}</span>
                     <span className="min-w-0 flex-1">
                       <span className="block font-semibold">{d.user.displayName}</span>
                       <span className="text-xs text-muted-foreground">{iOwe ? "You owe" : "Owes you"}</span>

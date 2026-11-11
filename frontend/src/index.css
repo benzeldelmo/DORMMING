@@ -2,9 +2,11 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
-  --font-heading: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
-  --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+  --font-heading: "Nunito", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Google Sans", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -82,9 +84,38 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
   h1, h2, h3 {
-    @apply font-heading tracking-tight;
+    @apply font-heading font-extrabold tracking-tight;
   }
 }
+
+/* Dark theme: warm near-black ground, lifted cards, brand tints darkened. */
+.dark {
+  --olive: #7d855f;
+  --olive-soft: #2c3024;
+  --orange: #e38a45;
+  --orange-soft: #3b2a1c;
+  --cream: #2f261b;
+  --paper: #f3eee2;
+  --background: #151512;
+  --foreground: #f1efe8;
+  --card: #201f1b;
+  --card-foreground: #f1efe8;
+  --popover: #201f1b;
+  --popover-foreground: #f1efe8;
+  --secondary: #2b2a25;
+  --secondary-foreground: #f1efe8;
+  --muted: #2b2a25;
+  --muted-foreground: #aba89c;
+  --border: #35342e;
+  --input: #35342e;
+  --destructive: #e0644e;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+/* Reduce motion setting (and the OS preference) stops Ming's loops. */
+.reduce-motion .ming-HAPPY, .reduce-motion .ming-WORRIED, .reduce-motion .ming-CELEBRATING, .reduce-motion .ming-SLEEPY, .reduce-motion .confetti-bit { animation: none; }
+.reduce-motion * { transition-duration: 0ms !important; }
 
 .pixelated {
   image-rendering: pixelated;
@@ -138,6 +169,3 @@
 
 .card-surface { background: var(--card); border-radius: 24px; box-shadow: var(--shadow-card); }
 
-/* The stageshow kit resets links and buttons inside a stage; the desktop demo
-   reuses app components, so give those elements back to Tailwind's layers. */
-.dm-desk :is(a, button, ul, li, p, h1, h2) { all: revert-layer; }

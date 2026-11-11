@@ -51,7 +51,7 @@ function HomeScreen({ s }: { s: S }) {
   return (
     <div className="dm-home" data-back={s.screen !== 'home' || undefined}>
       <div className="dm-gcard">
-        <img src="/brand/ming-bust.png" alt="" className={`dm-gcard__ming ming-${s.mood}`} />
+        <img src={`/brand/ming/bust-${s.mood === "CELEBRATING" ? "celebrating" : "happy"}.png`} alt="" className={`dm-gcard__ming ming-${s.mood}`} />
         <div className="dm-gcard__body">
           <div className="dm-gcard__dorm">Mabini Hall 3B</div>
           <div className="dm-gcard__hi">Good evening, Benzel!</div>

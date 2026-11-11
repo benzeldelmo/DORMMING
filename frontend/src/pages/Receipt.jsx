@@ -89,8 +89,8 @@ export default function Receipt() {
             <div key={index} className="space-y-2.5 rounded-[20px] bg-secondary p-3">
               <div className="flex gap-2">
                 <input aria-label={`Item ${index + 1} name`} value={item.name} onChange={(e) => update(index, { name: e.target.value })} placeholder="Item name"
-                  className="h-11 min-w-0 flex-1 rounded-xl bg-white px-3 text-[15px] outline-none focus:ring-2 focus:ring-olive/50" />
-                <label className="flex h-11 w-28 items-center rounded-xl bg-white px-3 focus-within:ring-2 focus-within:ring-olive/50">
+                  className="h-11 min-w-0 flex-1 rounded-xl bg-card px-3 text-[15px] outline-none focus:ring-2 focus:ring-olive/50" />
+                <label className="flex h-11 w-28 items-center rounded-xl bg-card px-3 focus-within:ring-2 focus-within:ring-olive/50">
                   <span className="font-semibold text-foreground/60">₱</span>
                   <span className="sr-only">Item {index + 1} price</span>
                   <input inputMode="decimal" value={item.price} onChange={(e) => update(index, { price: e.target.value })} placeholder="0.00"
@@ -98,7 +98,7 @@ export default function Receipt() {
                 </label>
                 {items.length > 1 && (
                   <button type="button" onClick={() => setItems(items.filter((_, i) => i !== index))} aria-label={`Remove item ${index + 1}`}
-                    className="grid size-11 shrink-0 place-items-center rounded-xl text-foreground/50 hover:bg-white hover:text-destructive"><Trash2 className="size-4" /></button>
+                    className="grid size-11 shrink-0 place-items-center rounded-xl text-foreground/50 hover:bg-card hover:text-destructive"><Trash2 className="size-4" /></button>
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={`Who had item ${index + 1}`}>
@@ -106,7 +106,7 @@ export default function Receipt() {
                   const on = item.sharerIds.includes(user.id);
                   return (
                     <button key={user.id} type="button" aria-pressed={on} onClick={() => toggle(index, user.id)}
-                      className={cn("h-8 rounded-full px-3 text-xs font-semibold transition-colors", on ? "bg-olive text-white" : "bg-white text-foreground/70")}>
+                      className={cn("h-8 rounded-full px-3 text-xs font-semibold transition-colors", on ? "bg-olive text-white" : "bg-card text-foreground/70")}>
                       {nameOf(user.id)}
                     </button>
                   );
@@ -126,7 +126,7 @@ export default function Receipt() {
           placeholder="0.00" error={extrasCentavos == null ? "Enter an amount like 50 or -20" : ""} />
         <AmountInput label="Receipt total" value={total} onChange={setTotal} size="sm" />
         {totalCentavos != null && extrasCentavos != null && !matches && (
-          <p role="status" className="flex items-center justify-between gap-3 rounded-xl bg-orange-soft px-4 py-3 text-sm text-[#8a4210]">
+          <p role="status" className="flex items-center justify-between gap-3 rounded-xl bg-orange-soft px-4 py-3 text-sm text-[#8a4210] dark:text-[#f0b483]">
             Items + extras must equal the total ({formatPeso(expected)}).
             <button type="button" onClick={() => setTotal(centavosToInput(expected))} className="shrink-0 font-semibold underline underline-offset-2">Use {formatPeso(expected)}</button>
           </p>

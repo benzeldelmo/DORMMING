@@ -1,148 +1,139 @@
-import { isoInDays } from "@/lib/dates";
 import { Link, Navigate } from "react-router-dom";
-import { CalendarDays, ShieldCheck, ShoppingBasket, Wallet } from "lucide-react";
+import { ArrowLeftRight, BellRing, Bot, ChartPie, CreditCard, History, QrCode, ReceiptText, ShieldCheck, Smile, Split, UserRound, Users } from "lucide-react";
 import HeroDemo from "@/landing/HeroDemo";
-import DesktopDemo from "@/landing/DesktopDemo";
-import MingBust from "@/components/MingBust";
-import ThermalReceipt from "@/components/ThermalReceipt";
-import { BillRow } from "@/components/Rows";
+import Ming from "@/components/Ming";
 import { isLoggedIn } from "@/lib/auth";
 
-const Chip = ({ icon: Icon, children }) => (
-  <span className="inline-flex items-center gap-1 rounded-full bg-olive-soft px-2.5 py-0.5 align-[2px] text-[0.9em] font-semibold text-olive">
-    <Icon className="size-[0.95em]" />{children}
-  </span>
-);
+const GROUPS = [
+  {
+    title: "Split",
+    line: "Exact to the centavo, every time.",
+    items: [
+      { icon: Split, name: "Shared expenses", text: "Split equally or by custom amounts." },
+      { icon: ReceiptText, name: "Thermal receipt", text: "Itemize who had what; tax and tips shared fairly." },
+      { icon: ChartPie, name: "Dorm spending", text: "What the dorm spent this month, by category." },
+    ],
+  },
+  {
+    title: "Track",
+    line: "Know what's due before it's late.",
+    items: [
+      { icon: BellRing, name: "Bills and reminders", text: "Due dates, weekly or monthly repeats, your share." },
+      { icon: History, name: "Activity history", text: "Every expense, bill and payment in one feed." },
+      { icon: Users, name: "Dorms", text: "Create one, or join with a code or QR." },
+    ],
+  },
+  {
+    title: "Settle",
+    line: "Who owes whom, without the math.",
+    items: [
+      { icon: ArrowLeftRight, name: "Payment tracking", text: "Partial payments count; debts net out between two people." },
+      { icon: CreditCard, name: "Digital card", text: "A simulated card that flips to your friend QR." },
+      { icon: QrCode, name: "Friends", text: "Scan a card to connect, then invite them in." },
+    ],
+  },
+  {
+    title: "Ming",
+    line: "A dormmate who never forgets.",
+    items: [
+      { icon: Smile, name: "Moods", text: "Happy, worried, celebrating or napping, drawn for each." },
+      { icon: Bot, name: "AI assistant", text: "Type \"I spent 150 on rice\". Ming fills it in; you confirm." },
+      { icon: UserRound, name: "Always there", text: "Ming greets you on Home and reacts to your balance." },
+    ],
+  },
+];
 
-const NAMES = { a: "Me", b: "Vince", c: "Sydney" };
-const RECEIPT_ITEMS = [{ name: "Samgyup set", priceCentavos: 90000, sharerIds: ["a", "b", "c"] }, { name: "Iced tea", priceCentavos: 15000, sharerIds: ["b"] }];
-
-function FeatureCard({ title, text, children }) {
-  return (
-    <article className="card-surface flex flex-col overflow-hidden">
-      <div className="relative h-[230px] overflow-hidden bg-[#efeee8] px-6 pt-6" aria-hidden>{children}</div>
-      <div className="p-6">
-        <h3 className="text-xl font-extrabold">{title}</h3>
-        <p className="mt-1 text-[15px] text-foreground/65">{text}</p>
-      </div>
-    </article>
-  );
-}
+const STEPS = ["Create or join a dorm", "Add expenses and bills", "Settle up and stay square"];
 
 export default function Landing() {
   if (isLoggedIn()) return <Navigate to="/home" replace />;
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-8">
-        <img src="/brand/dormming-logo.png" alt="DormMing" className="h-9 w-auto sm:h-10" />
-        <nav className="flex items-center gap-1 text-[15px] font-semibold sm:gap-2">
-          <a href="#features" className="hidden rounded-full px-3 py-2 text-foreground/70 hover:text-foreground sm:block">Features</a>
-          <a href="#how" className="hidden rounded-full px-3 py-2 text-foreground/70 hover:text-foreground sm:block">How it works</a>
-          <Link to="/login" className="rounded-full px-3 py-2 hover:bg-white">Log in</Link>
-          <Link to="/signup" className="rounded-full bg-[#1c1b17] px-4 py-2 text-white">Sign up</Link>
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+        <img src="/brand/dormming-logo.png" alt="DormMing" className="h-10 w-auto sm:h-12" />
+        <nav className="flex items-center gap-2">
+          <Link to="/login" className="rounded-full px-4 py-2 text-[15px] font-semibold hover:bg-card">Log in</Link>
+          <Link to="/signup" className="rounded-full bg-olive px-4 py-2 text-[15px] font-semibold text-white hover:bg-olive/90">Sign up</Link>
         </nav>
       </header>
 
-      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 pt-8 pb-14 sm:px-8 lg:grid-cols-[1fr_440px] lg:pt-14">
+      <section className="mx-auto grid max-w-6xl items-center gap-12 px-5 pt-10 pb-20 sm:px-8 lg:grid-cols-[1fr_440px] lg:gap-16 lg:pt-16 lg:pb-28">
         <div className="max-w-xl">
-          <h1 className="text-[46px] leading-[1] font-extrabold tracking-[-0.03em] text-balance sm:text-[64px]">
-            Your dorm's <span className="sticker-text">gastos</span>, sorted.
+          <h1 className="font-heading text-[46px] leading-[1.02] font-black tracking-[-0.025em] text-balance sm:text-[68px]">
+            Dorm money, minus the <span className="sticker-text">drama.</span>
           </h1>
-          <p className="mt-6 text-lg leading-[1.9] text-foreground/75">
-            Split <Chip icon={ShoppingBasket}>groceries</Chip>, track <Chip icon={CalendarDays}>bills</Chip>, and see{" "}
-            <Chip icon={Wallet}>who owes whom</Chip>, with Ming keeping count. No more group chat math.
+          <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-foreground/75 sm:text-xl">
+            Split groceries, track bills and see who owes whom, with Ming, your dorm's cat companion, keeping count. No group chat math.
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link to="/signup" className="flex h-12 items-center rounded-2xl bg-olive px-6 text-[17px] font-bold text-white shadow-[0_8px_20px_-10px_rgb(36_7_2/0.5)]">Get started, it's free</Link>
-            <Link to="/login" className="flex h-12 items-center rounded-2xl bg-white px-6 text-[17px] font-bold shadow-[var(--shadow-card)]">Log in</Link>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link to="/signup" className="flex h-[52px] items-center rounded-2xl bg-olive px-7 font-heading text-[17px] font-bold text-white shadow-[0_8px_20px_-10px_rgb(36_7_2/0.5)] transition-transform active:scale-[0.98]">Get started, it's free</Link>
+            <Link to="/login" className="flex h-[52px] items-center rounded-2xl bg-card px-6 font-heading text-[17px] font-bold shadow-[var(--shadow-card)]">I have an account</Link>
           </div>
-          <p className="mt-4 flex items-center gap-2 text-sm text-foreground/60"><ShieldCheck className="size-4" />Simulated banking only. No real money moves.</p>
+          <p className="mt-5 flex items-center gap-2 text-sm text-foreground/60"><ShieldCheck className="size-4" />Simulated banking only. No real money moves.</p>
         </div>
-        <div className="relative mx-auto w-full max-w-[440px]">
-          <MingBust className="absolute -top-16 -right-4 z-10 hidden w-[120px] rotate-[8deg] sm:block" />
+        <div className="mx-auto w-full max-w-[440px]">
           <HeroDemo />
         </div>
       </section>
 
-      <section id="features" aria-labelledby="features-title" className="mx-auto max-w-6xl px-4 pb-16 sm:px-8">
-        <h2 id="features-title" className="max-w-2xl text-[32px] leading-tight font-extrabold tracking-tight sm:text-[40px]">Everything your dorm spends on, in one place.</h2>
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          <FeatureCard title="Split a receipt" text="Itemize who had what. Tax and tips are shared fairly, to the centavo.">
-            <div className="mx-auto w-[260px] scale-[0.92] origin-top">
-              <ThermalReceipt title="Samgyup night" dormName="Mabini Hall 3B" items={RECEIPT_ITEMS} extras={0} total={105000}
-                shares={{ a: 30000, b: 45000, c: 30000 }} nameOf={(id) => NAMES[id]} payerName="Me" />
-            </div>
-          </FeatureCard>
-          <FeatureCard title="Bills and reminders" text="Internet, water, rent. See your share and get reminded before it's due.">
-            <div className="space-y-2.5 pt-6">
-              <BillRow bill={{ name: "Internet", category: "INTERNET_LOAD", amountCentavos: 150000, dueDate: isoInDays(1), myShareCentavos: 50000 }} />
-              <BillRow bill={{ name: "Water", category: "RENT_UTILITIES", amountCentavos: 100000, dueDate: "2026-11-17", myShareCentavos: 33334 }} />
-            </div>
-          </FeatureCard>
-          <FeatureCard title="Ask Ming" text={'Type "I spent 300 on pizza". Ming fills it in; you confirm before it saves.'}>
-            <div className="space-y-3 pt-4">
-              <p className="ml-auto w-fit rounded-[20px] rounded-br-md bg-olive px-4 py-2.5 text-[15px] text-white">I spent 300 on pizza</p>
-              <div className="flex items-end gap-2">
-                <MingBust className="w-10 shrink-0" />
-                <div className="rounded-[20px] rounded-bl-md border-2 border-dashed border-olive/35 bg-white px-4 py-3">
-                  <p className="text-[11px] font-bold tracking-wide text-olive uppercase">Shared expense</p>
-                  <p className="text-[15px] font-bold leading-snug">₱300.00 for pizza, split with Vince and Sydney</p>
+      <section aria-labelledby="features" className="bg-card">
+        <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
+          <h2 id="features" className="max-w-2xl font-heading text-[32px] leading-tight font-extrabold tracking-tight sm:text-[40px]">Everything a shared room spends on, in one place.</h2>
+          <div className="mt-12 divide-y divide-border border-y border-border">
+            {GROUPS.map((g) => (
+              <div key={g.title} className="grid gap-6 py-10 md:grid-cols-[240px_1fr] md:gap-10">
+                <div>
+                  <h3 className="font-heading text-2xl font-extrabold text-olive">{g.title}</h3>
+                  <p className="mt-1 text-foreground/65">{g.line}</p>
                 </div>
+                <ul className="grid gap-6 sm:grid-cols-3 sm:gap-8">
+                  {g.items.map(({ icon: Icon, name, text }) => (
+                    <li key={name} className="flex gap-3">
+                      <Icon className="mt-0.5 size-5 shrink-0 text-orange" />
+                      <span>
+                        <span className="block font-heading text-[17px] font-bold">{name}</span>
+                        <span className="mt-1 block text-[15px] leading-relaxed text-foreground/65">{text}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          </FeatureCard>
-        </div>
-      </section>
-
-      <section aria-labelledby="web-title" className="mx-auto max-w-6xl px-4 pb-16 sm:px-8">
-        <div className="card-surface grid items-center gap-6 overflow-hidden p-6 sm:p-10 lg:grid-cols-[320px_1fr]">
-          <div>
-            <h2 id="web-title" className="text-[30px] leading-tight font-extrabold tracking-tight">DormMing on the web, too.</h2>
-            <p className="mt-3 text-[17px] text-foreground/70">The same dorm on your laptop: bigger dashboard, the same balances. Changes show up on everyone's phone in seconds.</p>
-            <Link to="/signup" className="mt-5 inline-flex h-11 items-center rounded-2xl bg-olive px-5 font-bold text-white">Open DormMing</Link>
+            ))}
           </div>
-          <div className="-mr-6 sm:-mr-10"><DesktopDemo /></div>
         </div>
       </section>
 
-      <section id="how" aria-labelledby="how-title" className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 sm:px-8 md:grid-cols-[1fr_380px]">
+      <section aria-labelledby="how" className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 sm:px-8 md:grid-cols-[1fr_380px] lg:py-28">
         <div>
-          <h2 id="how-title" className="text-[32px] leading-tight font-extrabold tracking-tight sm:text-[40px]">Set up your dorm in a minute.</h2>
-          <p className="mt-3 max-w-[48ch] text-lg text-foreground/70">One person creates the dorm and shares the code. Everyone else scans it, and the balances keep themselves.</p>
+          <h2 id="how" className="font-heading text-[32px] leading-tight font-extrabold tracking-tight sm:text-[40px]">Set up your dorm in a minute.</h2>
+          <p className="mt-4 max-w-[46ch] text-lg leading-relaxed text-foreground/70">One person creates the dorm and shares the code. Everyone else scans it, and the balances start keeping themselves.</p>
+          <Link to="/signup" className="mt-8 inline-flex h-[52px] items-center rounded-2xl bg-orange px-7 font-heading text-[17px] font-bold text-white">Create your dorm</Link>
         </div>
         <figure className="receipt-paper mx-auto w-full max-w-[380px] px-7 py-9 font-mono text-[14px] text-brown drop-shadow-[0_12px_20px_rgb(36_7_2/0.12)]">
-          <p className="text-center text-lg font-extrabold tracking-[0.25em]">DORMMING</p>
+          <p className="text-center font-heading text-lg font-extrabold tracking-[0.25em]">DORMMING</p>
           <p className="text-center text-brown/70">HOW IT WORKS</p>
           <div className="my-3 border-t-2 border-dashed border-brown/25" />
           <ol className="space-y-2">
-            {["Create or join a dorm", "Add your dorm's gastos", "Settle up and stay square"].map((s, i) => (
+            {STEPS.map((s, i) => (
               <li key={s} className="flex justify-between gap-4"><span>{s.toUpperCase()}</span><span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span></li>
             ))}
           </ol>
           <div className="my-3 border-t-2 border-dashed border-brown/25" />
           <p className="flex justify-between font-bold"><span>MANUAL MATH</span><span>₱0.00</span></p>
+          <div className="my-3 border-t-2 border-dashed border-brown/25" />
+          <p className="text-center text-brown/70">Thank you, dormmates! — Ming</p>
         </figure>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-8">
-        <div className="card-surface flex flex-col items-center gap-4 overflow-hidden px-6 pt-10 text-center">
-          <h2 className="text-[30px] font-extrabold tracking-tight">Start your dorm today.</h2>
-          <p className="text-foreground/70">Free for every dormmate. Ming is waiting.</p>
-          <Link to="/signup" className="flex h-12 items-center rounded-2xl bg-[#1c1b17] px-7 text-[17px] font-bold text-white">Sign up</Link>
-          <MingBust className="mt-2 w-[150px]" />
-        </div>
-      </section>
-
-      <footer className="bg-brown text-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-8 md:grid-cols-[1fr_auto_auto]">
-          <div>
-            <img src="/brand/dormming-logo.png" alt="DormMing" className="h-10 w-auto" />
-            <p className="mt-3 max-w-sm text-sm text-white/70">Shared expenses, bills and balances for dormmates. Simulated banking only.</p>
+      <footer className="bg-olive text-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-5 py-12 sm:flex-row sm:items-center sm:px-8">
+          <Ming mood="CELEBRATING" className="size-24 shrink-0" />
+          <div className="flex-1">
+            <p className="font-heading text-xl font-bold">Ming is waiting for your dorm.</p>
+            <p className="text-sm text-white/75">© 2026 MING Dynasty · IT 2107 · OOP 101. Simulated banking only. <Link to="/terms" className="underline underline-offset-2">Terms</Link> · <Link to="/privacy" className="underline underline-offset-2">Privacy</Link></p>
           </div>
-          <div className="text-sm"><p className="mb-2 font-semibold text-white/50">Product</p><a href="#features" className="block py-1 text-white/85">Features</a><a href="#how" className="block py-1 text-white/85">How it works</a></div>
-          <div className="text-sm"><p className="mb-2 font-semibold text-white/50">Account</p><Link to="/signup" className="block py-1 text-white/85">Sign up</Link><Link to="/login" className="block py-1 text-white/85">Log in</Link></div>
+          <Link to="/signup" className="rounded-2xl bg-sun px-6 py-3 font-heading font-bold text-brown">Sign up</Link>
         </div>
-        <p className="mx-auto max-w-6xl border-t border-white/10 px-4 py-5 text-xs text-white/55 sm:px-8">© 2026 MING Dynasty · IT 2107 · OOP 101</p>
       </footer>
     </div>
   );

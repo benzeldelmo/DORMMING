@@ -53,7 +53,7 @@ export default function RecordPayment() {
                 <button key={d.user.id} type="button" aria-pressed={to === d.user.id} onClick={() => pick(d)}
                   className={cn("flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors",
                     to === d.user.id ? "bg-orange-soft ring-2 ring-orange/60" : "bg-secondary")}>
-                  <span className="grid size-10 place-items-center rounded-full bg-white font-semibold">{d.user.initials}</span>
+                  <span className="grid size-10 place-items-center rounded-full bg-card font-semibold">{d.user.initials}</span>
                   <span className="flex-1 font-semibold">{d.user.displayName}</span>
                   <span className="text-sm text-foreground/70">you owe <b className="tabular-nums text-foreground">{formatPeso(d.amountCentavos)}</b></span>
                 </button>

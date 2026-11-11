@@ -31,7 +31,7 @@ function ProposalCard({ proposal, state, onConfirm, onCancel }) {
       </dl>
       {state === "open" ? (
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <button type="button" onClick={onCancel} className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-white font-semibold"><X className="size-4" />Cancel</button>
+          <button type="button" onClick={onCancel} className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-card font-semibold"><X className="size-4" />Cancel</button>
           <button type="button" onClick={onConfirm} className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-olive font-semibold text-white"><Check className="size-4" />Confirm</button>
         </div>
       ) : (
@@ -122,7 +122,7 @@ export default function Assistant() {
       <div className="sticky bottom-24 space-y-2 bg-gradient-to-t from-background via-background to-background/0 px-5 pt-3 pb-2">
         <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none]">
           {SUGGESTIONS.map((s) => (
-            <button key={s} type="button" onClick={() => ask(s)} className="h-9 shrink-0 rounded-full bg-cream px-3.5 text-sm font-medium text-[#8a4210]">{s}</button>
+            <button key={s} type="button" onClick={() => ask(s)} className="h-9 shrink-0 rounded-full bg-cream px-3.5 text-sm font-medium text-[#8a4210] dark:text-[#f0b483]">{s}</button>
           ))}
         </div>
         <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="flex items-center gap-2 rounded-full bg-secondary p-1.5 pl-4 focus-within:ring-2 focus-within:ring-olive/50">

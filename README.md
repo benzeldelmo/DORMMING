@@ -65,9 +65,10 @@ Run the tests with `cd backend && mvn test` (Java) and `cd frontend && npx vites
 
 ## Design
 
-- Font: SF Pro Rounded on Apple devices (`ui-rounded`); Nunito on Windows and Android (Apple only licenses SF Rounded for its platforms).
-- Ming appears chest-up in the app (`public/brand/ming-bust.png`, a crop of the mascot art).
-- Layout patterns follow Tarsi's landing page and web sign-in; DormMing keeps its own olive, orange and Ming.
+- Fonts: Nunito for headings, Google Sans for body text (Google Fonts).
+- Ming has four moods (happy, worried, celebrating, sleepy) in `public/brand/ming/`; the app shows them chest-up (`bust-*.png`), the landing page full body.
+- Light, dark or system theme and reduce motion are in Settings → Appearance (saved per device).
+- Sign-in uses a split layout (art panel + form) on desktop and a card over the art on phones.
 
 ## Supabase and Gemini
 
