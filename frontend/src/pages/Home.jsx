@@ -1,10 +1,11 @@
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { ArrowDownLeft, ArrowUpRight, CreditCard, Settings } from "lucide-react";
 import { BalanceCard } from "@/components/BalanceCard";
-import Ming from "@/components/Ming";
+import GreetingCard from "@/components/GreetingCard";
+import QuickActions from "@/components/QuickActions";
+import SpendingCard from "@/components/SpendingCard";
 import { ActivityRow, BillRow, Empty, SectionHeader } from "@/components/Rows";
 import { useGet } from "@/lib/queries";
-import { formatPeso, formatPesoShort } from "@/lib/money";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,55 +15,44 @@ export default function Home() {
   if (error) return <p className="p-6 text-destructive">{error.message}</p>;
   if (!home) return <div className="p-6 text-muted-foreground">Loading…</div>;
 
-  const firstName = home.me.displayName.split(" ")[0];
   return (
-    <div className="px-5 pt-5">
-      <div className="flex justify-end gap-1">
-        <Link to="/card" aria-label="My card" className="grid size-10 place-items-center rounded-full hover:bg-secondary"><CreditCard className="size-6" /></Link>
-        <Link to="/settings" aria-label="Settings" className="grid size-10 place-items-center rounded-full hover:bg-secondary"><Settings className="size-6" /></Link>
+    <div className="space-y-5 px-5 pt-4 lg:space-y-6 lg:px-5 lg:pt-8">
+      <div className="flex items-center justify-between lg:hidden">
+        <img src="/brand/dormming-logo.png" alt="DormMing" className="h-8 w-auto" />
+        <div className="flex gap-1">
+          <Link to="/card" aria-label="My card" className="grid size-10 place-items-center rounded-full hover:bg-secondary"><CreditCard className="size-6" /></Link>
+          <Link to="/settings" aria-label="Settings" className="grid size-10 place-items-center rounded-full hover:bg-secondary"><Settings className="size-6" /></Link>
+        </div>
       </div>
 
-      <section aria-label="Ming" className="relative mt-1">
-        <div className="flex items-end">
-          <button type="button" onClick={() => navigate("/assistant")} aria-label={`Chat with ${home.me.mingName}`} className="relative z-10 -mb-16 w-[44%] shrink-0">
-            <Ming mood={home.mood} name={home.me.mingName} className="w-full" />
-          </button>
-          <div className="pb-3 pl-1">
-            <h1 className="font-heading text-[30px] font-extrabold leading-none">Hi, {firstName}!</h1>
-            <p className="mt-1 text-[11px] text-foreground/70">I am {home.me.mingName.toUpperCase()}! Your Digital Dorm Companion.</p>
-          </div>
-        </div>
-        <Link to={home.banner ? "/bills" : "/balances"}
-          className="flex min-h-[104px] items-center rounded-[22px] bg-olive py-4 pr-4 pl-[44%] shadow-[0_10px_24px_-14px_rgb(36_7_2/0.6)]">
-          <span>
-            <span className="sticker-text block font-heading text-[22px] font-extrabold leading-[1.05]">
-              {home.banner ? home.banner.text : home.moodLine}
-            </span>
-            {home.banner && <span className="mt-1 block text-[11px] text-white/85">Your share: {formatPeso(home.banner.myShareCentavos)}</span>}
-          </span>
-        </Link>
-      </section>
+      <GreetingCard me={home.me} dormName={home.dorm?.name} mood={home.mood} banner={home.banner} moodLine={home.moodLine} />
+      <QuickActions />
 
-      <section aria-label="Balances" className="mt-4 grid grid-cols-2 gap-3">
-        <BalanceCard tone="olive" icon={ArrowDownLeft} label="Owed to you" centavos={home.owedToMeCentavos} caption="To collect" to="/balances" />
-        <BalanceCard tone="orange" icon={ArrowUpRight} label="You Owe" centavos={home.iOweCentavos} caption="To repay" to="/balances" />
-      </section>
-
-      <section className="mt-6">
-        <SectionHeader title="Upcoming bills" to="/bills" />
-        <div className="space-y-2">
-          {home.upcomingBills.length ? home.upcomingBills.map((b) => <BillRow key={b.id} bill={b} onClick={() => navigate("/bills")} />)
-            : <Empty>No bills coming up. <button type="button" onClick={() => navigate("/bills/new")} className="font-semibold text-olive">Set a reminder</button></Empty>}
+      <div className="grid gap-5 lg:grid-cols-[1fr_380px] lg:gap-6">
+        <div className="space-y-5 lg:space-y-6">
+          <section aria-label="Balances" className="grid grid-cols-2 gap-3">
+            <BalanceCard tone="olive" icon={ArrowDownLeft} label="Owed to you" centavos={home.owedToMeCentavos} caption="To collect" to="/balances" />
+            <BalanceCard tone="orange" icon={ArrowUpRight} label="You Owe" centavos={home.iOweCentavos} caption="To repay" to="/balances" />
+          </section>
+          <SpendingCard />
         </div>
-      </section>
-
-      <section className="mt-6">
-        <SectionHeader title="Recent activities" to="/activity" />
-        <div className="space-y-2">
-          {home.recent.length ? home.recent.map((a) => <ActivityRow key={a.id} item={a} />)
-            : <Empty>Nothing yet. <button type="button" onClick={openAdd} className="font-semibold text-olive">Add your first record</button></Empty>}
+        <div className="space-y-5 lg:space-y-6">
+          <section>
+            <SectionHeader title="Upcoming bills" to="/bills" />
+            <div className="space-y-2">
+              {home.upcomingBills.length ? home.upcomingBills.map((b) => <BillRow key={b.id} bill={b} onClick={() => navigate("/bills")} />)
+                : <Empty>No bills coming up. <button type="button" onClick={() => navigate("/bills/new")} className="font-semibold text-olive">Set a reminder</button></Empty>}
+            </div>
+          </section>
+          <section>
+            <SectionHeader title="Recent activity" to="/activity" />
+            <div className="space-y-2">
+              {home.recent.length ? home.recent.map((a) => <ActivityRow key={a.id} item={a} />)
+                : <Empty>Nothing yet. <button type="button" onClick={openAdd} className="font-semibold text-olive">Add your first record</button></Empty>}
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
