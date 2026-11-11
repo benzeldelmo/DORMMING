@@ -51,7 +51,7 @@ export function Segmented({ options, value, onChange, tone = "olive", label }) {
         <button key={o.value} type="button" role="tab" aria-selected={value === o.value} onClick={() => onChange(o.value)}
           className={cn(
             "h-9 rounded-full text-sm font-semibold transition-colors",
-            value === o.value ? (tone === "orange" ? "bg-[#f7a948] text-white" : "bg-olive/60 text-white") : "text-foreground/80 hover:text-foreground",
+            value === o.value ? (tone === "orange" ? "bg-[#f7a948] text-brown shadow-sm" : "bg-olive text-white shadow-sm") : "text-foreground/80 hover:text-foreground",
           )}>
           {o.label}
         </button>

@@ -58,7 +58,7 @@
 .dm-add__title { font-family: Poppins, sans-serif; font-weight: 800; font-size: 26px; text-align: center; margin: 4px 0 16px; }
 .dm-seg { display: grid; grid-template-columns: 1fr 1fr; background: #f2f2ee; border-radius: 999px; padding: 4px; font-size: 13px; font-weight: 600; text-align: center; }
 .dm-seg span { padding: 8px 0; border-radius: 999px; color: #55544d; }
-.dm-seg span[data-on] { background: #a2a690; color: #fff; }
+.dm-seg span[data-on] { background: #6b7255; color: #fff; }
 .dm-label { font-size: 12px; font-weight: 500; color: #55544d; margin: 18px 2px 6px; }
 .dm-amount { display: flex; align-items: center; height: 56px; border-radius: 18px; background: #e4e3de; padding: 0 18px; font-family: Poppins, sans-serif; font-weight: 800; font-size: 24px; font-variant-numeric: tabular-nums; }
 .dm-amount__peso { color: #6a6960; margin-right: 4px; }
