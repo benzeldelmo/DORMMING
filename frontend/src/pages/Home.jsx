@@ -1,5 +1,5 @@
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { ArrowDownLeft, ArrowUpRight, Settings } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, CreditCard, Settings } from "lucide-react";
 import { BalanceCard } from "@/components/BalanceCard";
 import Ming from "@/components/Ming";
 import { ActivityRow, BillRow, Empty, SectionHeader } from "@/components/Rows";
@@ -17,7 +17,8 @@ export default function Home() {
   const firstName = home.me.displayName.split(" ")[0];
   return (
     <div className="px-5 pt-5">
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-1">
+        <Link to="/card" aria-label="My card" className="grid size-10 place-items-center rounded-full hover:bg-secondary"><CreditCard className="size-6" /></Link>
         <Link to="/settings" aria-label="Settings" className="grid size-10 place-items-center rounded-full hover:bg-secondary"><Settings className="size-6" /></Link>
       </div>
 
