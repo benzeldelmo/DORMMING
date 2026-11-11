@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { Copy, Users } from "lucide-react";
 import { toast } from "sonner";
-import { Column } from "@/components/AppShell";
+import AuthFrame from "@/components/AuthFrame";
 import { Field, FormError, PrimaryButton, Segmented } from "@/components/forms";
 import { useGet, useSend } from "@/lib/queries";
 import { isLoggedIn } from "@/lib/auth";
@@ -37,9 +37,8 @@ export default function DormSetup() {
 
   if (created) {
     return (
-      <Column className="items-center gap-6 text-center">
-        <img src="/brand/ming-mascot.png" alt="" className="pixelated size-24" />
-        <div>
+      <AuthFrame>
+        <div className="text-center">
           <h1 className="font-heading text-[28px] font-extrabold leading-tight">{created.name} is ready!</h1>
           <p className="mt-1 text-muted-foreground">Share this code or QR so your dormmates can join.</p>
         </div>
@@ -54,12 +53,12 @@ export default function DormSetup() {
           </button>
         </div>
         <PrimaryButton onClick={() => navigate("/home", { replace: true })}>Go to my dorm</PrimaryButton>
-      </Column>
+      </AuthFrame>
     );
   }
 
   return (
-    <Column className="gap-6">
+    <AuthFrame>
       <p className="text-sm font-medium text-muted-foreground">Step 2 of 2</p>
       <div>
         <h1 className="font-heading text-[28px] font-extrabold leading-tight">Find your dorm</h1>
@@ -95,6 +94,6 @@ export default function DormSetup() {
           <PrimaryButton type="submit" busy={send.isPending} disabled={!name.trim()}>Create dorm</PrimaryButton>
         </form>
       )}
-    </Column>
+    </AuthFrame>
   );
 }
