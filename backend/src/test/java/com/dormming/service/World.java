@@ -38,6 +38,9 @@ class World {
     final BalanceService balances = new BalanceService(transactions);
     final DormService dormService = new DormService(dorms, users, friends, invites, balances, random, clock);
 
+    final ExpenseService expenses = new ExpenseService(transactions, dormService, clock);
+    final ActivityService activity = new ActivityService(transactions, dormService);
+
     final UserId a = user("a", "Benzel");
     final UserId b = user("b", "Vince");
     final UserId c = user("c", "Sydney");
