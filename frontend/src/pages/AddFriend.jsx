@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import MingBust from "@/components/MingBust";
 import { api } from "@/lib/api";
 import { isLoggedIn, setPending } from "@/lib/auth";
 
@@ -24,5 +25,5 @@ export default function AddFriend() {
       .finally(() => navigate("/card", { replace: true }));
   }, [code, navigate]);
 
-  return <div className="grid min-h-dvh place-items-center"><img src="/brand/ming-mascot.png" alt="Adding friend…" className="pixelated size-20 animate-pulse" /></div>;
+  return <div className="grid min-h-dvh place-items-center"><MingBust name="Adding friend…" className="w-24 animate-pulse" /></div>;
 }

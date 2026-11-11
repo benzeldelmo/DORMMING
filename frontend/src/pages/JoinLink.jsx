@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import MingBust from "@/components/MingBust";
 import { api } from "@/lib/api";
 import { isLoggedIn, setPending } from "@/lib/auth";
 
@@ -26,5 +27,5 @@ export default function JoinLink() {
       });
   }, [code, navigate]);
 
-  return <div className="grid min-h-dvh place-items-center"><img src="/brand/ming-mascot.png" alt="Joining…" className="pixelated size-20 animate-pulse" /></div>;
+  return <div className="grid min-h-dvh place-items-center"><MingBust name="Joining…" className="w-24 animate-pulse" /></div>;
 }

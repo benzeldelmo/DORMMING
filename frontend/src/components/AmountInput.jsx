@@ -9,7 +9,7 @@ export default function AmountInput({ label = "Amount", value, onChange, autoFoc
   return (
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-[13px] font-medium text-foreground/80">{label}</label>
-      <div className={cn("flex items-center rounded-2xl bg-[#e4e3de] px-5 focus-within:ring-2 focus-within:ring-olive/50", invalid && "ring-2 ring-destructive/60", size === "lg" ? "h-[56px]" : "h-[48px]")}>
+      <div className={cn("flex items-center rounded-2xl bg-card px-5 ring-1 ring-border focus-within:ring-2 focus-within:ring-olive/50", invalid && "ring-2 ring-destructive/60", size === "lg" ? "h-[56px]" : "h-[48px]")}>
         <span className={cn("font-heading font-extrabold text-foreground/70", size === "lg" ? "text-2xl" : "text-lg")}>₱</span>
         <input id={id} inputMode="decimal" autoComplete="off" autoFocus={autoFocus} placeholder="0.00" value={value}
           onChange={(e) => onChange(e.target.value)} aria-invalid={invalid} aria-describedby={invalid ? `${id}-err` : undefined}

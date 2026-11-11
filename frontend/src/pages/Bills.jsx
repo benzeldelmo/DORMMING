@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Check, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/PageHeader";
@@ -13,6 +13,7 @@ const REPEAT = { NONE: "Doesn't repeat", WEEKLY: "Repeats weekly", MONTHLY: "Rep
 
 export default function Bills() {
   const navigate = useNavigate();
+  const { isDesktop } = useOutletContext();
   const [status, setStatus] = useState("upcoming");
   const [open, setOpen] = useState(null);
   const { data: bills = [], isPending } = useGet(`/bills?status=${status}`, { placeholderData: (p) => p });
@@ -47,7 +48,7 @@ export default function Bills() {
       </div>
 
       <Sheet open={Boolean(open)} onOpenChange={(v) => !v && setOpen(null)}>
-        <SheetContent side="bottom" className="mx-auto max-w-[480px] rounded-t-3xl border-0 px-5 pb-8">
+        <SheetContent side={isDesktop ? "right" : "bottom"} className={isDesktop ? "w-[420px] border-0 px-5 pt-6 sm:max-w-[420px]" : "mx-auto max-w-[640px] rounded-t-3xl border-0 px-5 pb-8"}>
           {open && (
             <>
               <SheetHeader className="px-0">

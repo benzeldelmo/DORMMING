@@ -46,7 +46,7 @@ export default function AddBill() {
   }
 
   return (
-    <div>
+    <div className="mx-auto w-full max-w-[560px]">
       <PageHeader title="Set bill reminder" back />
       <form onSubmit={save} className="space-y-4 px-5" noValidate>
         <Field label="Bill name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Internet" maxLength={40} />

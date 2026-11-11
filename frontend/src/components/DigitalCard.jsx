@@ -29,7 +29,7 @@ export default function DigitalCard({ card }) {
         aria-label={flipped ? "Card back with your friend QR. Press to flip back." : "Your DormMing card. Press to show your friend QR."}
         className="card-inner relative block aspect-[85.6/54] w-full rounded-[22px] text-left outline-offset-4" data-flipped={flipped}>
         <span className={cn("card-face card-front absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[22px] p-5 shadow-[0_18px_40px_-18px_rgb(36_7_2/0.55)]", t.face)}>
-          <img src="/brand/ming-mascot.png" alt="" aria-hidden className="pixelated pointer-events-none absolute -right-4 -bottom-14 size-40 opacity-15" />
+          <img src="/brand/ming-bust.png" alt="" aria-hidden className="pixelated pointer-events-none absolute -right-2 -bottom-1 w-40 opacity-15" />
           <span className="flex items-start justify-between">
             <img src="/brand/dormming-logo.png" alt="DormMing" className="h-7 w-auto" />
             <span className={cn("rounded-full border px-2 py-0.5 text-[9px] font-bold tracking-wider", card.cardColor === "YELLOW" ? "border-brown/30" : "border-white/40")}>SIMULATED</span>

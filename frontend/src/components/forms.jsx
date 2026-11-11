@@ -12,7 +12,7 @@ export function Field({ label, hint, error, className, inputClassName, as = "inp
       {children && as !== "select" ? children : (
         <Tag id={id} aria-invalid={Boolean(error)} aria-describedby={error || hint ? `${id}-msg` : undefined}
           className={cn(
-            "w-full rounded-2xl bg-secondary px-4 text-[17px] text-foreground outline-none transition-shadow placeholder:text-foreground/45 focus:ring-2 focus:ring-olive/50 aria-invalid:ring-2 aria-invalid:ring-destructive/60",
+            "w-full rounded-2xl bg-card px-4 ring-1 ring-border text-[17px] text-foreground outline-none transition-shadow placeholder:text-foreground/45 focus:ring-2 focus:ring-olive/50 aria-invalid:ring-2 aria-invalid:ring-destructive/60",
             Tag === "textarea" ? "min-h-28 py-3.5" : "h-[52px]",
             inputClassName,
           )}

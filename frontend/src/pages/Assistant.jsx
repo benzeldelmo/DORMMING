@@ -3,13 +3,14 @@ import { useOutletContext } from "react-router-dom";
 import { Check, SendHorizontal, X } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
+import MingBust from "@/components/MingBust";
 import { api } from "@/lib/api";
 import { formatPeso } from "@/lib/money";
 import { categoryById } from "@/lib/categories";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = ["I spent 150 on rice", "Who owes me?", "What's due this week?", "Paid Vince 200"];
-const TITLES = { ADD_PERSONAL_EXPENSE: "New expense", ADD_SHARED_EXPENSE: "Shared expense", CREATE_BILL: "New bill", RECORD_PAYMENT: "Payment" };
+const TITLES = { ADD_SHARED_EXPENSE: "Shared expense", CREATE_BILL: "New bill", RECORD_PAYMENT: "Payment" };
 
 function ProposalCard({ proposal, state, onConfirm, onCancel }) {
   const f = proposal.fields;
@@ -22,7 +23,7 @@ function ProposalCard({ proposal, state, onConfirm, onCancel }) {
     f.note && ["Note", f.note],
   ].filter(Boolean);
   return (
-    <div className="ml-11 rounded-[20px] border-2 border-dashed border-olive/35 bg-olive-soft/50 p-4">
+    <div className="mx-auto w-full max-w-[560px] ml-11 rounded-[20px] border-2 border-dashed border-olive/35 bg-olive-soft/50 p-4">
       <p className="text-xs font-semibold tracking-wide text-olive uppercase">{TITLES[proposal.kind]}</p>
       <p className="mt-1 font-heading font-bold leading-snug">{proposal.summary}</p>
       <dl className="mt-2 space-y-0.5 text-sm">
@@ -96,7 +97,7 @@ export default function Assistant() {
 
   return (
     <div className="flex min-h-[calc(100dvh-7rem)] flex-col">
-      <PageHeader title={`Ask ${mingName}`} back>
+      <PageHeader title={`Ask ${mingName}`} back topLevel>
         {demo && <span className="rounded-full bg-sun px-2.5 py-1 text-xs font-bold text-brown">Demo mode</span>}
       </PageHeader>
       <div className="flex-1 space-y-3 px-5 pb-4" aria-live="polite">
@@ -106,13 +107,13 @@ export default function Assistant() {
           <p key={i} className="ml-auto w-fit max-w-[80%] rounded-[20px] rounded-br-md bg-olive px-4 py-2.5 text-[15px] text-white">{m.text}</p>
         ) : (
           <div key={i} className="flex items-end gap-2">
-            <img src="/brand/ming-mascot.png" alt="" className="pixelated size-9 shrink-0" />
+            <MingBust className="w-10 shrink-0" />
             <p className={cn("max-w-[80%] rounded-[20px] rounded-bl-md px-4 py-2.5 text-[15px]", m.error ? "bg-destructive/10 text-destructive" : "bg-secondary")}>{m.text}</p>
           </div>
         ))}
         {busy && (
           <div className="flex items-end gap-2">
-            <img src="/brand/ming-mascot.png" alt="" className="pixelated ming-HAPPY size-9" />
+            <MingBust mood="HAPPY" className="w-10 shrink-0" />
             <p className="rounded-[20px] rounded-bl-md bg-secondary px-4 py-2.5 text-[15px] text-foreground/60">{mingName} is thinking…</p>
           </div>
         )}

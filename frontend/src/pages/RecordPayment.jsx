@@ -40,7 +40,7 @@ export default function RecordPayment() {
   }
 
   return (
-    <div>
+    <div className="mx-auto w-full max-w-[560px]">
       <PageHeader title="Record payment" back />
       <form onSubmit={save} className="space-y-4 px-5" noValidate>
         {balances && !owe.length ? (

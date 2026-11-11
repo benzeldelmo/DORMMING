@@ -9,7 +9,7 @@ import { formatPeso } from "@/lib/money";
 export default function Balances() {
   const { data } = useGet("/balances");
   return (
-    <div>
+    <div className="mx-auto max-w-[760px]">
       <PageHeader title="Balances" gear />
       {data && (
         <div className="space-y-5 px-5">

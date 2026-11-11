@@ -35,8 +35,8 @@ export default function Card() {
   }
 
   return (
-    <div>
-      <PageHeader title="My card" back />
+    <div className="mx-auto w-full max-w-[560px]">
+      <PageHeader title="My card" back topLevel />
       <div className="space-y-6 px-5">
         {card.data && <DigitalCard card={card.data} />}
         <p className="-mt-3 text-center text-xs text-muted-foreground">Tap the card to show your friend QR.</p>

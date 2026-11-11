@@ -3,7 +3,6 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { Pencil, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/PageHeader";
-import { Segmented } from "@/components/forms";
 import { ActivityRow, Empty } from "@/components/Rows";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useGet, useSend } from "@/lib/queries";
@@ -12,12 +11,11 @@ import { sharedLine } from "@/lib/people";
 
 export default function Expenses() {
   const navigate = useNavigate();
-  const { me } = useOutletContext();
+  const { me, isDesktop } = useOutletContext();
   const [q, setQ] = useState("");
-  const [scope, setScope] = useState("all");
   const [open, setOpen] = useState(null);
   const send = useSend();
-  const { data: expenses = [], isPending } = useGet(`/expenses?scope=${scope}&q=${encodeURIComponent(q)}`, { placeholderData: (prev) => prev });
+  const { data: expenses = [], isPending } = useGet(`/expenses?q=${encodeURIComponent(q)}`, { placeholderData: (prev) => prev });
 
   async function remove() {
     try {
@@ -38,8 +36,6 @@ export default function Expenses() {
           <span className="sr-only">Search expenses</span>
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search expenses..." className="w-full bg-transparent text-[15px] outline-none placeholder:text-foreground/45" />
         </label>
-        <Segmented label="Which expenses" value={scope} onChange={setScope}
-          options={[{ value: "all", label: "All" }, { value: "personal", label: "Personal" }, { value: "shared", label: "Shared" }]} />
         <div className="space-y-2 pt-1">
           {expenses.map((e) => (
             <ActivityRow key={e.id} onClick={() => setOpen(e)}
@@ -50,7 +46,7 @@ export default function Expenses() {
       </div>
 
       <Sheet open={Boolean(open)} onOpenChange={(v) => !v && setOpen(null)}>
-        <SheetContent side="bottom" className="mx-auto max-w-[480px] rounded-t-3xl border-0 px-5 pb-8">
+        <SheetContent side={isDesktop ? "right" : "bottom"} className={isDesktop ? "w-[420px] border-0 px-5 pt-6 sm:max-w-[420px]" : "mx-auto max-w-[640px] rounded-t-3xl border-0 px-5 pb-8"}>
           {open && (
             <>
               <SheetHeader className="px-0">
@@ -58,7 +54,7 @@ export default function Expenses() {
                 <SheetDescription>{open.categoryLabel} • {open.date}</SheetDescription>
               </SheetHeader>
               <p className="font-heading text-3xl font-extrabold tabular-nums">{formatPeso(open.amountCentavos)}</p>
-              {open.scope === "shared" && (
+              {open.shares.length > 0 && (
                 <ul className="mt-3 divide-y rounded-2xl bg-secondary px-4">
                   {open.shares.map((s) => (
                     <li key={s.user.id} className="flex justify-between py-2.5 text-[15px]">

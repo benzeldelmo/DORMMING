@@ -74,7 +74,8 @@ export default function Receipt() {
   return (
     <div>
       <PageHeader title="Split a receipt" back />
-      <form onSubmit={save} className="space-y-4 px-5" noValidate>
+      <div className="px-5 lg:flex lg:items-start lg:gap-8">
+      <form onSubmit={save} className="min-w-0 flex-1 space-y-4" noValidate>
         <div className="grid grid-cols-2 gap-3">
           <Field label="What's it for?" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Samgyup night" maxLength={60} />
           <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)}>
@@ -131,12 +132,18 @@ export default function Receipt() {
           </p>
         )}
 
-        <ThermalReceipt title={title} dormName={dorm.data?.name ?? ""} items={parsedItems} extras={extrasCentavos ?? 0}
-          total={totalCentavos ?? expected} shares={preview.shares} nameOf={nameOf} payerName={nameOf(payer)} />
+
+        <div className="lg:hidden"><ThermalReceipt title={title} dormName={dorm.data?.name ?? ""} items={parsedItems} extras={extrasCentavos ?? 0}
+          total={totalCentavos ?? expected} shares={preview.shares} nameOf={nameOf} payerName={nameOf(payer)} /></div>
 
         <FormError>{send.error?.message}</FormError>
         <PrimaryButton type="submit" busy={send.isPending} disabled={!matches || !itemsOk || extrasCentavos == null}>Save split</PrimaryButton>
       </form>
+      <aside className="hidden lg:sticky lg:top-8 lg:block lg:w-[380px] lg:shrink-0">
+        <ThermalReceipt title={title} dormName={dorm.data?.name ?? ""} items={parsedItems} extras={extrasCentavos ?? 0}
+          total={totalCentavos ?? expected} shares={preview.shares} nameOf={nameOf} payerName={nameOf(payer)} />
+      </aside>
+      </div>
     </div>
   );
 }

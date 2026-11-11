@@ -19,7 +19,6 @@ export default function AddExpense() {
   const members = dorm.data?.members ?? [];
   const send = useSend();
 
-  const [kind, setKind] = useState(editing?.scope ?? "personal");
   const [amount, setAmount] = useState(editing ? centavosToInput(editing.amountCentavos) : "");
   const [category, setCategory] = useState(editing?.category ?? "FOOD_GROCERIES");
   const [note, setNote] = useState(editing?.note ?? "");
@@ -38,15 +37,11 @@ export default function AddExpense() {
     e.preventDefault();
     const base = { amountCentavos: total, category, note, date };
     try {
-      if (kind === "personal") {
-        await send.mutateAsync(editing ? { path: `/expenses/personal/${editing.id}`, method: "PUT", body: base } : { path: "/expenses/personal", body: base });
-      } else {
         const body = {
           ...base, payerId: payer, participantIds: chosen,
           split: split === "EQUAL" ? { type: "EQUAL" } : { type: "CUSTOM", amounts: Object.fromEntries(chosen.map((id) => [id, parsePesos(custom[id] ?? "") ?? 0])) },
         };
         await send.mutateAsync(editing ? { path: `/expenses/shared/${editing.id}`, method: "PUT", body } : { path: "/expenses/shared", body });
-      }
       toast.success(editing ? "Expense updated" : "Expense saved");
       navigate("/expenses");
     } catch {
@@ -54,13 +49,11 @@ export default function AddExpense() {
     }
   }
 
-  const sharedReady = kind === "personal" || (chosen.length > 0 && (split === "EQUAL" || left === 0));
+  const sharedReady = (chosen.length > 0 && (split === "EQUAL" || left === 0));
   return (
-    <div>
+    <div className="mx-auto w-full max-w-[560px]">
       <PageHeader title={editing ? "Edit expense" : "Add expense"} back center />
       <form onSubmit={save} className="space-y-4 px-5" noValidate>
-        {!editing && <Segmented label="Expense type" value={kind} onChange={setKind}
-          options={[{ value: "personal", label: "Personal" }, { value: "shared", label: "Shared" }]} />}
         <AmountInput value={amount} onChange={setAmount} autoFocus={!editing} />
         <Field label="Category" as="select" value={category} onChange={(e) => setCategory(e.target.value)} inputClassName="appearance-none">
           {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
@@ -68,7 +61,7 @@ export default function AddExpense() {
         <Field label="Notes" as="textarea" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional..." maxLength={200} />
         <Field label="Date" type="date" value={date} max={todayIso()} onChange={(e) => setDate(e.target.value)} />
 
-        {kind === "shared" && (
+        {(
           <div className="space-y-4 rounded-[22px] bg-olive-soft/60 p-4">
             <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)} inputClassName="bg-white">
               {members.map(({ user }) => <option key={user.id} value={user.id}>{user.id === me?.id ? "Me" : user.displayName}</option>)}

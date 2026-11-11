@@ -33,7 +33,7 @@ export default function Settings() {
   const isCreator = dorm.data?.myRole === "CREATOR";
 
   return (
-    <div>
+    <div className="mx-auto w-full max-w-[560px]">
       <PageHeader title="Settings" back />
       <div className="space-y-7 px-5">
         <Link to="/card" className="flex items-center gap-3 rounded-2xl bg-olive-soft p-3">
