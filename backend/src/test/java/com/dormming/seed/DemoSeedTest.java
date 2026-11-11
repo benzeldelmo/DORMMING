@@ -6,6 +6,8 @@ import com.dormming.domain.ming.MingMood;
 import com.dormming.repo.UserRepository;
 import com.dormming.service.HomeData;
 import com.dormming.service.HomeService;
+import com.dormming.web.SpendingController;
+import java.time.YearMonth;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,9 @@ class DemoSeedTest {
     @Autowired
     HomeService home;
 
+    @Autowired
+    SpendingController spending;
+
     @Test
     void benzelSeesTheMockupNumbers() {
         var benzel = users.findByEmail("benzel@demo.ph").orElseThrow();
@@ -28,5 +33,13 @@ class DemoSeedTest {
         assertThat(h.bannerText()).contains("Internet");
         assertThat(h.mood()).isEqualTo(MingMood.WORRIED);
         assertThat(h.dorm().name()).isEqualTo("Mabini Hall 3B");
+    }
+
+    @Test
+    void benzelSeesThisMonthAgainstLastMonth() {
+        var benzel = users.findByEmail("benzel@demo.ph").orElseThrow();
+        var dto = spending.summary(benzel.id(), YearMonth.now(java.time.ZoneId.of("Asia/Manila")));
+        assertThat(dto.totalCentavos()).isEqualTo(720000);
+        assertThat(dto.previousTotalCentavos()).isEqualTo(250000);
     }
 }

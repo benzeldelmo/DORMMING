@@ -4,6 +4,7 @@ import com.dormming.auth.LocalAuthProvider;
 import com.dormming.domain.dorm.Dorm;
 import com.dormming.domain.money.Money;
 import com.dormming.domain.split.SplitType;
+import com.dormming.domain.transaction.Bill;
 import com.dormming.domain.transaction.Category;
 import com.dormming.domain.user.User;
 import com.dormming.domain.user.UserId;
@@ -65,9 +66,20 @@ public class DemoSeed implements CommandLineRunner {
         expenses.addShared(v, new SharedExpenseInput(Money.ofPesos("2700"), Category.FOOD_GROCERIES, "Grocery",
                 today.minusDays(1), v, List.of(b, v, s), SplitType.EQUAL, Map.of(), List.of(), null));
 
-        bills.create(b, new BillInput("Internet", Category.INTERNET_LOAD, Money.ofPesos("1500"), today.plusDays(1),
-                "MONTHLY", 1, SplitType.EQUAL, Map.of()));
-        bills.create(b, new BillInput("Water", Category.RENT_UTILITIES, Money.ofPesos("1000"), today.plusDays(5),
-                "MONTHLY", 1, SplitType.EQUAL, Map.of()));
+        // Last month's bills, all paid, so "vs last month" has a baseline; rollover then creates
+        // this month's Internet (due tomorrow) and Water (due in 5 days).
+        // shortcut: near month-ends the anchor day can shift by a few days, fine for a demo seed.
+        LocalDate internetDue = today.plusDays(1).minusMonths(1);
+        LocalDate waterDue = today.plusDays(5).minusMonths(1);
+        for (Bill bill : List.of(
+                bills.create(b, new BillInput("Internet", Category.INTERNET_LOAD, Money.ofPesos("1500"), internetDue,
+                        "MONTHLY", 1, SplitType.EQUAL, Map.of())),
+                bills.create(b, new BillInput("Water", Category.RENT_UTILITIES, Money.ofPesos("1000"), waterDue,
+                        "MONTHLY", 1, SplitType.EQUAL, Map.of())))) {
+            for (UserId member : List.of(b, v, s)) {
+                bills.pay(member, bill.id());
+            }
+        }
+        bills.rollover(dorm.id(), today);
     }
 }
