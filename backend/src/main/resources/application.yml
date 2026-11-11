@@ -6,7 +6,7 @@ spring:
   profiles:
     active: ${DORMMING_PROFILE:local}
 dormming:
-  app-base-url: ${APP_BASE_URL:http://localhost:5173}
+  app-base-url: ${APP_BASE_URL:http://localhost:5180}
   local-jwt-secret: ${LOCAL_JWT_SECRET:dormming-local-dev-secret-change-me-0123456789}
   gemini-model: ${GEMINI_MODEL:gemini-2.5-flash}
   seed: ${DORMMING_SEED:true}
