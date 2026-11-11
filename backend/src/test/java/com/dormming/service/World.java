@@ -23,58 +23,61 @@ import java.util.List;
 import java.util.Random;
 
 /** Services wired to in-memory storage with a fixed clock: Wed 11 Nov 2026, 4pm Manila. */
-class World {
+public class World {
 
-    final Clock clock = Clock.fixed(Instant.parse("2026-11-11T08:00:00Z"), ZoneId.of("Asia/Manila"));
-    final LocalDate today = LocalDate.now(clock);
-    final Random random = new Random(7);
+    public final Clock clock = Clock.fixed(Instant.parse("2026-11-11T08:00:00Z"), ZoneId.of("Asia/Manila"));
+    public final LocalDate today = LocalDate.now(clock);
+    public final Random random = new Random(7);
 
-    final InMemoryUserRepository users = new InMemoryUserRepository();
-    final InMemoryDormRepository dorms = new InMemoryDormRepository();
-    final InMemoryTransactionRepository transactions = new InMemoryTransactionRepository();
-    final InMemoryFriendRepository friends = new InMemoryFriendRepository();
-    final InMemoryInviteRepository invites = new InMemoryInviteRepository();
+    public final InMemoryUserRepository users = new InMemoryUserRepository();
+    public final InMemoryDormRepository dorms = new InMemoryDormRepository();
+    public final InMemoryTransactionRepository transactions = new InMemoryTransactionRepository();
+    public final InMemoryFriendRepository friends = new InMemoryFriendRepository();
+    public final InMemoryInviteRepository invites = new InMemoryInviteRepository();
 
-    final BalanceService balances = new BalanceService(transactions);
-    final DormService dormService = new DormService(dorms, users, friends, invites, balances, random, clock);
+    public final BalanceService balances = new BalanceService(transactions);
+    public final DormService dormService = new DormService(dorms, users, friends, invites, balances, random, clock);
 
-    final ExpenseService expenses = new ExpenseService(transactions, dormService, clock);
-    final ActivityService activity = new ActivityService(transactions, dormService);
+    public final ExpenseService expenses = new ExpenseService(transactions, dormService, clock);
+    public final ActivityService activity = new ActivityService(transactions, dormService);
 
-    final BillService bills = new BillService(transactions, dormService, clock);
-    final PaymentService payments = new PaymentService(transactions, dormService, balances, clock);
-    final HomeService home = new HomeService(dormService, balances, bills, activity, transactions, users, clock);
+    public final BillService bills = new BillService(transactions, dormService, clock);
+    public final PaymentService payments = new PaymentService(transactions, dormService, balances, clock);
+    public final HomeService home = new HomeService(dormService, balances, bills, activity, transactions, users, clock);
 
-    final FriendService friendService = new FriendService(users, friends);
+    public final FriendService friendService = new FriendService(users, friends);
 
-    final UserId a = user("a", "Benzel");
-    final UserId b = user("b", "Vince");
-    final UserId c = user("c", "Sydney");
+    public final com.dormming.ai.AssistantService assistant = new com.dormming.ai.AssistantService(new com.dormming.ai.DemoAssistant(), null,
+            expenses, bills, payments, dormService, balances, users, clock);
 
-    UserId user(String id, String name) {
+    public final UserId a = user("a", "Benzel");
+    public final UserId b = user("b", "Vince");
+    public final UserId c = user("c", "Sydney");
+
+    public UserId user(String id, String name) {
         UserId userId = new UserId(id);
         users.save(new User(userId, id + "@demo.ph", name, null, CardColor.OLIVE, FriendCode.generate(random)));
         return userId;
     }
 
     /** a creates the dorm; b then c join. */
-    Dorm dormOfThree() {
+    public Dorm dormOfThree() {
         Dorm dorm = dormService.create(a, "Mabini 3B");
         dormService.join(b, dorm.code().value().toLowerCase());
         dormService.join(c, dorm.code().value());
         return dorms.findById(dorm.id()).orElseThrow();
     }
 
-    static Money c(long centavos) {
+    public static Money c(long centavos) {
         return Money.ofCentavos(centavos);
     }
 
-    SharedExpense sharedEqual(Dorm dorm, UserId payer, long amount, List<UserId> people) {
+    public SharedExpense sharedEqual(Dorm dorm, UserId payer, long amount, List<UserId> people) {
         return (SharedExpense) transactions.save(SharedExpense.create(null, dorm.id(), payer, c(amount), today, "",
                 Category.OTHERS, payer, people, new EqualSplit(), clock.instant()));
     }
 
-    Payment payment(Dorm dorm, UserId from, UserId to, long amount) {
+    public Payment payment(Dorm dorm, UserId from, UserId to, long amount) {
         return (Payment) transactions.save(new Payment(null, dorm.id(), from, to, c(amount), today, "", clock.instant()));
     }
 }
