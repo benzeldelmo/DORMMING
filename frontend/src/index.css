@@ -3,8 +3,8 @@
 @import "shadcn/tailwind.css";
 
 @theme inline {
-  --font-heading: "Poppins", ui-rounded, system-ui, sans-serif;
-  --font-sans: ui-rounded, "SF Pro Rounded", "Poppins", system-ui, sans-serif;
+  --font-heading: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+  --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -52,7 +52,7 @@
   --brown: #240702;
   --paper: #fbf8f1;
 
-  --background: #ffffff;
+  --background: #f6f6f3;
   --foreground: #1c1b17;
   --card: #ffffff;
   --card-foreground: #1c1b17;
@@ -60,9 +60,9 @@
   --popover-foreground: #1c1b17;
   --primary: var(--olive);
   --primary-foreground: #ffffff;
-  --secondary: #f2f2ee;
+  --secondary: #ecebe6;
   --secondary-foreground: #1c1b17;
-  --muted: #f2f2ee;
+  --muted: #ecebe6;
   --muted-foreground: #6a6960;
   --accent: var(--orange);
   --accent-foreground: #ffffff;
@@ -71,14 +71,12 @@
   --input: #e7e5de;
   --ring: var(--olive);
   --radius: 1rem;
+  --shadow-card: 0 1px 2px rgb(36 7 2 / 0.04), 0 8px 24px -12px rgb(36 7 2 / 0.12);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-  }
-  html {
-    @apply bg-[#efeee8];
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
@@ -137,3 +135,5 @@
   .card-inner[data-flipped="true"] .card-front, .card-inner[data-flipped="false"] .card-back { opacity: 0 }
   .card-back { transform: none }
 }
+
+.card-surface { background: var(--card); border-radius: 24px; box-shadow: var(--shadow-card); }

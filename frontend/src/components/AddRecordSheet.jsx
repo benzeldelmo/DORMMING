@@ -10,11 +10,11 @@ const ACTIONS = [
   { to: "/assistant", icon: MessageCircleHeart, title: "Ask Ming", subtitle: "Type it, Ming fills it in." },
 ];
 
-export default function AddRecordSheet({ open, onOpenChange }) {
+export default function AddRecordSheet({ open, onOpenChange, side = "bottom" }) {
   const navigate = useNavigate();
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="mx-auto max-w-[480px] rounded-t-3xl border-0 px-5 pb-8">
+      <SheetContent side={side} className={side === "bottom" ? "mx-auto max-w-[640px] rounded-t-3xl border-0 px-5 pb-8" : "w-[420px] border-0 px-5 pt-6 sm:max-w-[420px]"}>
         <SheetHeader className="px-0">
           <SheetTitle className="font-heading text-2xl font-bold">Add a record</SheetTitle>
           <SheetDescription className="sr-only">Choose what to add</SheetDescription>

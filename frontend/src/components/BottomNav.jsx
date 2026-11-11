@@ -10,7 +10,7 @@ const item = ({ isActive }) =>
 
 export default function BottomNav({ onAdd }) {
   return (
-    <nav aria-label="Main" className="pointer-events-none fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[480px] px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+    <nav aria-label="Main" className="pointer-events-none fixed inset-x-0 bottom-0 z-40 mx-auto max-w-[640px] lg:hidden px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <div className="pointer-events-auto flex items-center justify-between rounded-full bg-secondary/95 px-4 py-2 shadow-[0_8px_30px_-12px_rgb(0_0_0/0.25)] backdrop-blur">
         <NavLink to="/home" className={item} aria-label="Home"><House className="size-5" /></NavLink>
         <NavLink to="/expenses" className={item} aria-label="Expenses"><ReceiptText className="size-5" /></NavLink>

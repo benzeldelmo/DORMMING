@@ -40,8 +40,8 @@ export function ActivityRow({ item, onClick }) {
   const Icon = item.type === "PAYMENT" ? ArrowLeftRight : item.type === "BILL" ? billIcon(item.title, item.category) : categoryById(item.category).icon;
   const Tag = onClick ? "button" : "div";
   return (
-    <Tag type={onClick ? "button" : undefined} onClick={onClick} className="flex w-full items-center gap-3 rounded-2xl bg-secondary px-3 py-3 text-left">
-      <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-white/80 text-foreground/80"><Icon className="size-5" /></span>
+    <Tag type={onClick ? "button" : undefined} onClick={onClick} className="flex w-full items-center gap-3 rounded-2xl bg-card px-3 py-3 text-left shadow-[var(--shadow-card)]">
+      <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-secondary text-foreground/80"><Icon className="size-5" /></span>
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[17px] font-semibold leading-tight">{item.title}</span>
         <span className="line-clamp-2 text-xs text-muted-foreground">{item.subtitle ?? item.text}</span>
