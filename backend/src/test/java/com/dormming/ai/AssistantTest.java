@@ -19,11 +19,20 @@ class AssistantTest {
     }
 
     @Test
-    void personalExpense() {
+    void spentWithNoNamesSplitsWithWholeDorm() {
         w.dormOfThree();
         var p = ask("I spent 150 on rice").proposal().orElseThrow();
-        assertThat(p.kind()).isEqualTo(ActionKind.ADD_PERSONAL_EXPENSE);
-        assertThat(p.fields()).containsEntry("amountCentavos", 15000L).containsEntry("category", "FOOD_GROCERIES");
+        assertThat(p.kind()).isEqualTo(ActionKind.ADD_SHARED_EXPENSE);
+        assertThat(p.fields()).containsEntry("amountCentavos", 15000L).containsEntry("category", "FOOD_GROCERIES")
+                .containsEntry("participantIds", List.of("a", "b", "c")).containsEntry("payerId", "a");
+    }
+
+    @Test
+    void soloDormExpense() {
+        w.dormService.create(w.a, "Solo");
+        var p = ask("I spent 150 on rice").proposal().orElseThrow();
+        assertThat(p.fields()).containsEntry("participantIds", List.of("a"));
+        assertThat(w.assistant.confirm(w.a, p)).startsWith("Saved:");
     }
 
     @Test
@@ -66,7 +75,7 @@ class AssistantTest {
         Dorm dorm = w.dormOfThree();
         ask("I spent 150 on rice");
         ask("paid Vince 200");
-        assertThat(w.transactions.personalByUser(w.a)).isEmpty();
+        assertThat(w.transactions.sharedByDorm(dorm.id())).isEmpty();
         assertThat(w.transactions.paymentsByDorm(dorm.id())).isEmpty();
     }
 
@@ -75,11 +84,11 @@ class AssistantTest {
         Dorm dorm = w.dormOfThree();
         String saved = w.assistant.confirm(w.a, ask("I spent 150 on rice").proposal().orElseThrow());
         assertThat(saved).startsWith("Saved:");
-        assertThat(w.transactions.personalByUser(w.a)).hasSize(1);
-        w.sharedEqual(dorm, w.b, 20000, List.of(w.a, w.b)); // a owes b 100
+        assertThat(w.transactions.sharedByDorm(dorm.id())).hasSize(1);
+        w.sharedEqual(dorm, w.b, 20000, List.of(w.a, w.b)); // a owes b 100, minus the 50 b owes a for rice
         var tooMuch = new ProposedAction(ActionKind.RECORD_PAYMENT, "",
                 Map.of("toUserId", "b", "amountCentavos", 50000L));
-        assertThatThrownBy(() -> w.assistant.confirm(w.a, tooMuch)).hasMessage("That's more than you owe (₱100.00)");
+        assertThatThrownBy(() -> w.assistant.confirm(w.a, tooMuch)).hasMessage("That's more than you owe (₱50.00)");
     }
 
     @Test

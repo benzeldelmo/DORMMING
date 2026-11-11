@@ -82,7 +82,6 @@ public class AssistantService {
     public String confirm(UserId me, ProposedAction action) {
         Map<String, Object> f = action.fields();
         Transaction saved = switch (action.kind()) {
-            case ADD_PERSONAL_EXPENSE -> expenses.addPersonal(me, money(f), category(f), str(f, "note"), date(f, "date"));
             case ADD_SHARED_EXPENSE -> expenses.addShared(me, new SharedExpenseInput(money(f), category(f),
                     str(f, "note"), date(f, "date"), new UserId(str(f, "payerId")), ids(f.get("participantIds")),
                     SplitType.EQUAL, Map.of(), List.of(), null));

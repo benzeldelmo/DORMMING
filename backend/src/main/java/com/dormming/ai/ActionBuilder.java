@@ -23,16 +23,6 @@ final class ActionBuilder {
         return note == null || note.isBlank() ? "" : note.substring(0, 1).toUpperCase(Locale.ROOT) + note.substring(1);
     }
 
-    static ProposedAction personal(Money amount, Category category, String note, LocalDate date) {
-        Map<String, Object> f = new LinkedHashMap<>();
-        f.put("amountCentavos", amount.centavos());
-        f.put("category", category.name());
-        f.put("note", title(note));
-        f.put("date", date.toString());
-        String what = note == null || note.isBlank() ? category.label() : note + " (" + category.label() + ")";
-        return new ProposedAction(ActionKind.ADD_PERSONAL_EXPENSE, "Add " + amount.format() + " for " + what, f);
-    }
-
     static ProposedAction shared(Money amount, Category category, String note, LocalDate date, UserId payer,
             List<UserId> participants, AssistantContext ctx) {
         Map<String, Object> f = new LinkedHashMap<>();

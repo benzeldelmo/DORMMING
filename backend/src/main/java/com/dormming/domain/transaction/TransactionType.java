@@ -1,3 +1,3 @@
 package com.dormming.domain.transaction;
 
-public enum TransactionType { PERSONAL_EXPENSE, SHARED_EXPENSE, PAYMENT, BILL }
+public enum TransactionType { SHARED_EXPENSE, PAYMENT, BILL }

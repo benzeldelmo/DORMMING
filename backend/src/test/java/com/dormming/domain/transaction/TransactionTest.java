@@ -34,8 +34,6 @@ class TransactionTest {
 
     @Test
     void describesEachKind() {
-        assertThat(new PersonalExpense(null, A, c(12000), TODAY, "", Category.FOOD_GROCERIES, NOW).describe(NAMES))
-                .isEqualTo("Benzel spent ₱120.00 on Food & Groceries");
         SharedExpense grocery = SharedExpense.create(null, "d1", B, c(270000), TODAY, "Grocery", Category.FOOD_GROCERIES,
                 B, List.of(A, B, C), new EqualSplit(), NOW);
         assertThat(grocery.describe(NAMES)).isEqualTo("Vince paid ₱2,700.00 for Grocery, shared with Benzel and Sydney");
@@ -56,7 +54,7 @@ class TransactionTest {
     void rejectsPayingYourselfAndNonPositiveAmounts() {
         assertThatThrownBy(() -> new Payment(null, "d1", A, A, c(100), TODAY, "", NOW))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new PersonalExpense(null, A, c(0), TODAY, "", Category.OTHERS, NOW))
+        assertThatThrownBy(() -> new Payment(null, "d1", A, B, c(0), TODAY, "", NOW))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

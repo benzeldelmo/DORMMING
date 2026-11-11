@@ -64,7 +64,6 @@ public class DemoSeed implements CommandLineRunner {
                 today.minusDays(2), b, List.of(b, s), SplitType.EQUAL, Map.of(), List.of(), null));
         expenses.addShared(v, new SharedExpenseInput(Money.ofPesos("2700"), Category.FOOD_GROCERIES, "Grocery",
                 today.minusDays(1), v, List.of(b, v, s), SplitType.EQUAL, Map.of(), List.of(), null));
-        expenses.addPersonal(b, Money.ofPesos("85"), Category.TRANSPORTATION, "Jeep fare", today);
 
         bills.create(b, new BillInput("Internet", Category.INTERNET_LOAD, Money.ofPesos("1500"), today.plusDays(1),
                 "MONTHLY", 1, SplitType.EQUAL, Map.of()));

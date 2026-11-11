@@ -67,18 +67,16 @@ class ExpenseServiceTest {
         w.expenses.addShared(w.a, equal(30000, "Grocery", w.a, List.of(w.a, w.b)));
         w.expenses.addShared(w.a, new SharedExpenseInput(c(5000), Category.TRANSPORTATION, "Grab", w.today, w.a,
                 List.of(w.a, w.b), SplitType.EQUAL, Map.of(), List.of(), null));
-        w.expenses.addPersonal(w.a, c(8500), Category.TRANSPORTATION, "Jeep fare", w.today);
-        assertThat(w.expenses.list(w.a, "shared", "groc")).extracting(t -> t.note()).containsExactly("Grocery");
-        assertThat(w.expenses.list(w.a, "all", "transport")).hasSize(2);
-        assertThat(w.expenses.list(w.a, "personal", null)).hasSize(1);
+        assertThat(w.expenses.list(w.a, "groc")).extracting(t -> t.note()).containsExactly("Grocery");
+        assertThat(w.expenses.list(w.a, "transport")).extracting(t -> t.note()).containsExactly("Grab");
+        assertThat(w.expenses.list(w.a, null)).hasSize(2);
     }
 
     @Test
     void activityShowsDormRecordsNewestFirst() {
         Dorm dorm = w.dormOfThree();
-        w.expenses.addPersonal(w.b, c(100), Category.OTHERS, "B's own", w.today);
         w.sharedEqual(dorm, w.a, 20000, List.of(w.a, w.b));
         w.payment(dorm, w.b, w.a, 5000);
-        assertThat(w.activity.recent(w.a, 10)).hasSize(2); // b's personal expense is private
+        assertThat(w.activity.recent(w.a, 10)).hasSize(2);
     }
 }

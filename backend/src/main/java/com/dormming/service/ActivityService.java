@@ -21,7 +21,7 @@ public class ActivityService {
     }
 
     public List<Transaction> recent(UserId user, int limit) {
-        List<Transaction> all = new ArrayList<>(transactions.personalByUser(user));
+        List<Transaction> all = new ArrayList<>();
         dorms.current(user).ifPresent(d -> {
             all.addAll(transactions.sharedByDorm(d.id()));
             all.addAll(transactions.paymentsByDorm(d.id()));

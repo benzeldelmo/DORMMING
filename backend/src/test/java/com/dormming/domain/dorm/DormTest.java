@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.dormming.domain.money.Money;
 import com.dormming.domain.transaction.Category;
-import com.dormming.domain.transaction.PersonalExpense;
+import com.dormming.domain.transaction.Payment;
 import com.dormming.domain.transaction.Transaction;
 import com.dormming.domain.user.FriendCode;
 import com.dormming.domain.user.UserId;
@@ -22,7 +22,8 @@ class DormTest {
     static final Instant T0 = Instant.parse("2026-11-11T08:00:00Z");
 
     static Transaction createdBy(UserId user) {
-        return new PersonalExpense(null, user, Money.ofCentavos(100), LocalDate.of(2026, 11, 11), "", Category.OTHERS, T0);
+        UserId other = user.equals(new UserId("z")) ? new UserId("y") : new UserId("z");
+        return new Payment(null, "d1", user, other, Money.ofCentavos(100), LocalDate.of(2026, 11, 11), "", T0);
     }
 
     static Dorm dorm() {

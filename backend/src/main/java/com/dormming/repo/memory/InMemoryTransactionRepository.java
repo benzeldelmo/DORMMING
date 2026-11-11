@@ -2,7 +2,6 @@ package com.dormming.repo.memory;
 
 import com.dormming.domain.transaction.Bill;
 import com.dormming.domain.transaction.Payment;
-import com.dormming.domain.transaction.PersonalExpense;
 import com.dormming.domain.transaction.SharedExpense;
 import com.dormming.domain.transaction.Transaction;
 import com.dormming.domain.user.UserId;
@@ -40,12 +39,6 @@ public class InMemoryTransactionRepository implements TransactionRepository {
     private <T extends Transaction> List<T> ofType(Class<T> type, String dormId) {
         return transactions.values().stream().filter(type::isInstance).map(type::cast)
                 .filter(t -> Objects.equals(t.dormId(), dormId)).toList();
-    }
-
-    @Override
-    public List<PersonalExpense> personalByUser(UserId user) {
-        return transactions.values().stream().filter(PersonalExpense.class::isInstance).map(PersonalExpense.class::cast)
-                .filter(t -> t.createdBy().equals(user)).toList();
     }
 
     @Override

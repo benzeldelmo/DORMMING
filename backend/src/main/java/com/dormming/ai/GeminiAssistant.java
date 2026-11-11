@@ -71,8 +71,8 @@ public class GeminiAssistant implements AiAssistant {
                 Owed to the user: %s. The user owes: %s. Debts: %s.
                 Upcoming bills: %s.
                 Reply briefly and warmly. If the user wants to record something, also fill "action" with one of:
-                ADD_PERSONAL_EXPENSE (amountPesos, category, note), ADD_SHARED_EXPENSE (amountPesos, category, note,
-                participantNames: dormmates sharing it, the user is added automatically), CREATE_BILL (name,
+                ADD_SHARED_EXPENSE (amountPesos, category, note,
+                participantNames: dormmates sharing it, empty means the whole dorm; the user is added automatically), CREATE_BILL (name,
                 amountPesos, category, dueDate as YYYY-MM-DD, recurrence), RECORD_PAYMENT (toName, amountPesos).
                 Never claim something is saved: the user confirms it in the app.
                 """.formatted(ctx.me().mingName(), ctx.today(), ctx.me().displayName(),
@@ -122,7 +122,6 @@ public class GeminiAssistant implements AiAssistant {
         Category category = a.hasNonNull("category") ? Category.valueOf(a.path("category").asString()) : Category.OTHERS;
         String note = a.path("note").asString("");
         return Optional.of(switch (kind) {
-            case ADD_PERSONAL_EXPENSE -> ActionBuilder.personal(amount, category, note, ctx.today());
             case ADD_SHARED_EXPENSE -> {
                 List<UserId> named = new ArrayList<>();
                 for (JsonNode n : a.path("participantNames")) {
@@ -130,7 +129,7 @@ public class GeminiAssistant implements AiAssistant {
                             () -> new IllegalArgumentException(n.asString() + " isn't in your dorm")));
                 }
                 yield ActionBuilder.shared(amount, category, note, ctx.today(), ctx.me().id(),
-                        ActionBuilder.withMeFirst(ctx.me().id(), named), ctx);
+                        ActionBuilder.withMeFirst(ctx.me().id(), named.isEmpty() ? List.copyOf(ctx.dormmates().keySet()) : named), ctx);
             }
             case CREATE_BILL -> ActionBuilder.bill(ActionBuilder.title(a.path("name").asString("Bill")), category, amount,
                     a.hasNonNull("dueDate") ? LocalDate.parse(a.path("dueDate").asString()) : ctx.today().plusDays(7),

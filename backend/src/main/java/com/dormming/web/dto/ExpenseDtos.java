@@ -8,9 +8,6 @@ public final class ExpenseDtos {
     private ExpenseDtos() {
     }
 
-    public record PersonalRequest(Long amountCentavos, String category, String note, LocalDate date) {
-    }
-
     public record ItemRequest(String name, Long priceCentavos, List<String> sharerIds) {
     }
 
@@ -27,7 +24,7 @@ public final class ExpenseDtos {
     public record ItemDto(String name, long priceCentavos, List<UserRef> sharers) {
     }
 
-    public record ExpenseDto(String id, String scope, long amountCentavos, String category, String categoryLabel,
+    public record ExpenseDto(String id, long amountCentavos, String category, String categoryLabel,
             String note, LocalDate date, UserRef createdBy, UserRef payer, String splitType, List<ShareDto> shares,
             List<ItemDto> items, long extrasCentavos, boolean canEdit, String text) {
     }

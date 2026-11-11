@@ -27,17 +27,23 @@ class ExpenseApiTest {
     }
 
     @Test
-    void rejectsZeroAmountAndUnknownCategory() throws Exception {
+    void personalEndpointIsGoneAndSharedValidates() throws Exception {
         String auth = "Bearer " + token();
+        String me = JsonPath.read(mvc.perform(post("/api/dorms").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Test Dorm\"}")).andReturn().getResponse().getContentAsString(), "$.members[0].user.id");
         mvc.perform(post("/api/expenses/personal").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"amountCentavos\":0,\"category\":\"OTHERS\",\"note\":\"\",\"date\":\"2026-11-11\"}"))
+                        .content("{\"amountCentavos\":100,\"category\":\"OTHERS\"}"))
+                .andExpect(status().is4xxClientError());
+        String body = "{\"amountCentavos\":%d,\"category\":\"%s\",\"note\":\"Lunch\",\"date\":\"2026-11-11\",\"payerId\":\"%s\",\"participantIds\":[\"%s\"],\"split\":{\"type\":\"EQUAL\"}}";
+        mvc.perform(post("/api/expenses/shared").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted(0, "OTHERS", me, me)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("Amount must be more than ₱0.00"));
-        mvc.perform(post("/api/expenses/personal").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"amountCentavos\":100,\"category\":\"NOPE\",\"note\":\"\",\"date\":\"2026-11-11\"}"))
+        mvc.perform(post("/api/expenses/shared").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted(100, "NOPE", me, me)))
                 .andExpect(status().isBadRequest());
-        mvc.perform(post("/api/expenses/personal").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"amountCentavos\":12000,\"category\":\"FOOD_GROCERIES\",\"note\":\"Lunch\",\"date\":\"2026-11-11\"}"))
+        mvc.perform(post("/api/expenses/shared").header("Authorization", auth).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted(12000, "FOOD_GROCERIES", me, me)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.amountCentavos").value(12000));
     }

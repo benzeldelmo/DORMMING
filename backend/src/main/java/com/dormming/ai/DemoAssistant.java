@@ -64,14 +64,12 @@ public class DemoAssistant implements AiAssistant {
                     dueDateIn(text, ctx.today()), recurrence));
         }
         boolean spent = text.contains("spent") || text.contains("bought") || text.contains("paid");
-        if (spent && amount.isPresent() && mentionsSplit && !named.isEmpty()) {
-            List<UserId> people = ActionBuilder.withMeFirst(ctx.me().id(), named);
+        if (spent && amount.isPresent()) {
+            // No names: a dorm expense is split with the whole dorm.
+            List<UserId> people = ActionBuilder.withMeFirst(ctx.me().id(),
+                    mentionsSplit && !named.isEmpty() ? named : List.copyOf(ctx.dormmates().keySet()));
             return propose("Split it like this?", ActionBuilder.shared(amount.get(), categoryOf(text), noteIn(text),
                     ctx.today(), ctx.me().id(), people, ctx));
-        }
-        if (spent && amount.isPresent()) {
-            return propose("Got it! Save this expense?", ActionBuilder.personal(amount.get(), categoryOf(text),
-                    noteIn(text), ctx.today()));
         }
         return answer("Meow! I'm " + ctx.me().mingName() + ". Try \"I spent 150 on rice\", \"Paid Vince 200\" or \"Who owes me?\"");
     }

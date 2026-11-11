@@ -7,7 +7,6 @@ import com.dormming.domain.split.EqualSplit;
 import com.dormming.domain.split.ItemizedSplit;
 import com.dormming.domain.split.SplitStrategy;
 import com.dormming.domain.transaction.Category;
-import com.dormming.domain.transaction.PersonalExpense;
 import com.dormming.domain.transaction.SharedExpense;
 import com.dormming.domain.transaction.Transaction;
 import com.dormming.domain.user.UserId;
@@ -15,7 +14,6 @@ import com.dormming.repo.TransactionRepository;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -36,21 +34,6 @@ public class ExpenseService {
 
     private LocalDate orToday(LocalDate date) {
         return date == null ? LocalDate.now(clock) : date;
-    }
-
-    public PersonalExpense addPersonal(UserId user, Money amount, Category category, String note, LocalDate date) {
-        return (PersonalExpense) transactions.save(
-                new PersonalExpense(null, user, amount, orToday(date), note, category, clock.instant()));
-    }
-
-    public PersonalExpense updatePersonal(UserId user, String id, Money amount, Category category, String note,
-            LocalDate date) {
-        Transaction existing = find(id);
-        if (!(existing instanceof PersonalExpense) || !existing.createdBy().equals(user)) {
-            throw new NotAllowedException("You can only edit your own expenses");
-        }
-        return (PersonalExpense) transactions.save(
-                new PersonalExpense(id, user, amount, orToday(date), note, category, existing.createdAt()));
     }
 
     public SharedExpense addShared(UserId actor, SharedExpenseInput in) {
@@ -92,11 +75,7 @@ public class ExpenseService {
 
     public void delete(UserId actor, String id) {
         Transaction existing = find(id);
-        if (existing instanceof PersonalExpense) {
-            if (!existing.createdBy().equals(actor)) {
-                throw new NotAllowedException("You can only delete your own expenses");
-            }
-        } else if (existing instanceof SharedExpense) {
+        if (existing instanceof SharedExpense) {
             Dorm dorm = dorms.require(actor);
             if (!dorm.id().equals(existing.dormId())) {
                 throw new NotFoundException("Expense not found");
@@ -110,21 +89,14 @@ public class ExpenseService {
         transactions.delete(id);
     }
 
-    /** scope: personal, shared or all. q matches the note or category, ignoring case. Newest first. */
-    public List<Transaction> list(UserId user, String scope, String q) {
-        String s = scope == null ? "all" : scope;
-        List<Transaction> result = new ArrayList<>();
-        if (!s.equals("shared")) {
-            result.addAll(transactions.personalByUser(user));
-        }
-        if (!s.equals("personal")) {
-            dorms.current(user).ifPresent(d -> result.addAll(transactions.sharedByDorm(d.id())));
-        }
+    /** The dorm's expenses; q matches the note or category, ignoring case. Newest first. */
+    public List<SharedExpense> list(UserId user, String q) {
+        List<SharedExpense> result = dorms.current(user).map(d -> transactions.sharedByDorm(d.id())).orElse(List.of());
         String needle = q == null ? "" : q.strip().toLowerCase(Locale.ROOT);
         return result.stream()
                 .filter(t -> needle.isEmpty() || t.note().toLowerCase(Locale.ROOT).contains(needle)
                         || categoryOf(t).label().toLowerCase(Locale.ROOT).contains(needle))
-                .sorted(Comparator.comparing(Transaction::createdAt).reversed())
+                .sorted(Comparator.comparing(SharedExpense::createdAt).reversed())
                 .toList();
     }
 
@@ -134,7 +106,6 @@ public class ExpenseService {
 
     public static Category categoryOf(Transaction t) {
         return switch (t) {
-            case PersonalExpense p -> p.category();
             case SharedExpense s -> s.category();
             default -> Category.OTHERS;
         };

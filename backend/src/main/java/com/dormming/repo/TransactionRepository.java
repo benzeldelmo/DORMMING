@@ -2,7 +2,6 @@ package com.dormming.repo;
 
 import com.dormming.domain.transaction.Bill;
 import com.dormming.domain.transaction.Payment;
-import com.dormming.domain.transaction.PersonalExpense;
 import com.dormming.domain.transaction.SharedExpense;
 import com.dormming.domain.transaction.Transaction;
 import com.dormming.domain.user.UserId;
@@ -15,8 +14,6 @@ public interface TransactionRepository {
     Optional<Transaction> findById(String id);
 
     void delete(String id);
-
-    List<PersonalExpense> personalByUser(UserId user);
 
     List<SharedExpense> sharedByDorm(String dormId);
 
