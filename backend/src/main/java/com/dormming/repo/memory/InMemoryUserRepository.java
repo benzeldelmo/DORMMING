@@ -40,6 +40,11 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public void delete(UserId id) {
+        users.remove(id);
+    }
+
+    @Override
     public List<User> findAllById(Collection<UserId> ids) {
         return ids.stream().map(users::get).filter(u -> u != null).toList();
     }

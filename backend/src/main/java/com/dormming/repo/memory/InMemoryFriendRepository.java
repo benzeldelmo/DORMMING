@@ -23,6 +23,12 @@ public class InMemoryFriendRepository implements FriendRepository {
     }
 
     @Override
+    public void removeAll(UserId user) {
+        friends.remove(user);
+        friends.values().forEach(set -> set.remove(user));
+    }
+
+    @Override
     public List<UserId> friendsOf(UserId user) {
         return List.copyOf(friends.getOrDefault(user, Set.of()));
     }

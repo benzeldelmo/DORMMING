@@ -22,10 +22,12 @@ public class MeController {
 
     private final UserService users;
     private final DormRepository dorms;
+    private final com.dormming.service.AccountService accounts;
 
-    public MeController(UserService users, DormRepository dorms) {
+    public MeController(UserService users, DormRepository dorms, com.dormming.service.AccountService accounts) {
         this.users = users;
         this.dorms = dorms;
+        this.accounts = accounts;
     }
 
     private MeDto dto(User user) {
@@ -35,6 +37,12 @@ public class MeController {
     @GetMapping
     MeDto me(@AuthenticationPrincipal Jwt jwt) {
         return dto(users.get(CurrentUser.id(jwt)));
+    }
+
+    @org.springframework.web.bind.annotation.DeleteMapping
+    org.springframework.http.ResponseEntity<Void> delete(@AuthenticationPrincipal Jwt jwt) {
+        accounts.delete(CurrentUser.id(jwt));
+        return org.springframework.http.ResponseEntity.noContent().build();
     }
 
     @PatchMapping

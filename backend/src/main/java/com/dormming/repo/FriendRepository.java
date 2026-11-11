@@ -8,4 +8,7 @@ public interface FriendRepository {
     void connect(UserId a, UserId b);
 
     List<UserId> friendsOf(UserId user);
+
+    /** Removes the user from everyone's friends. */
+    void removeAll(UserId user);
 }

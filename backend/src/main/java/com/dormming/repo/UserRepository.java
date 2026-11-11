@@ -17,4 +17,6 @@ public interface UserRepository {
     Optional<User> findByFriendCode(FriendCode code);
 
     List<User> findAllById(Collection<UserId> ids);
+
+    void delete(UserId id);
 }

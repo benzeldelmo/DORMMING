@@ -46,6 +46,8 @@ public class World {
     public final HomeService home = new HomeService(dormService, balances, bills, activity, transactions, users, clock);
 
     public final FriendService friendService = new FriendService(users, friends);
+    public final com.dormming.auth.CredentialStore credentials = new com.dormming.auth.CredentialStore();
+    public final AccountService accounts = new AccountService(dormService, users, friends, invites, java.util.Optional.of(credentials));
 
     public final com.dormming.ai.AssistantService assistant = new com.dormming.ai.AssistantService(new com.dormming.ai.DemoAssistant(), null,
             expenses, bills, payments, dormService, balances, users, clock);

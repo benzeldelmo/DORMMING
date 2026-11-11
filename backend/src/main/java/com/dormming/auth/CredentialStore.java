@@ -26,6 +26,10 @@ public class CredentialStore {
         hashes.put(email.toLowerCase(), hash);
     }
 
+    public void remove(String email) {
+        hashes.remove(email.toLowerCase());
+    }
+
     public void saveReset(String token, ResetToken reset) {
         resets.put(token, reset);
     }
