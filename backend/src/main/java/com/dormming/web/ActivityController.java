@@ -3,6 +3,7 @@ package com.dormming.web;
 import com.dormming.auth.CurrentUser;
 import com.dormming.domain.transaction.Transaction;
 import com.dormming.service.ActivityService;
+import com.dormming.service.ExpenseService;
 import com.dormming.web.dto.ExpenseDtos.ActivityDto;
 import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +29,13 @@ public class ActivityController {
     }
 
     ActivityDto dto(Transaction t) {
-        return new ActivityDto(t.id(), t.type().name(), t.describe(views.names()), t.amount().centavos(), t.date(),
-                views.ref(t.createdBy()));
+        String title = switch (t) {
+            case com.dormming.domain.transaction.Bill b -> b.name() + " bill";
+            case com.dormming.domain.transaction.Payment p -> "Payment";
+            default -> t.note().isEmpty() ? ExpenseService.categoryOf(t).label() : t.note();
+        };
+        String category = t instanceof com.dormming.domain.transaction.Bill b ? b.category().name() : ExpenseService.categoryOf(t).name();
+        return new ActivityDto(t.id(), t.type().name(), title, category, t.describe(views.names()), t.amount().centavos(),
+                t.date(), views.ref(t.createdBy()));
     }
 }

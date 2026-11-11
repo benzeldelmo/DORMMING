@@ -32,7 +32,7 @@ public final class ExpenseDtos {
             List<ItemDto> items, long extrasCentavos, boolean canEdit, String text) {
     }
 
-    public record ActivityDto(String id, String type, String text, long amountCentavos, LocalDate date,
-            UserRef createdBy) {
+    public record ActivityDto(String id, String type, String title, String category, String text, long amountCentavos,
+            LocalDate date, UserRef createdBy) {
     }
 }

@@ -21,3 +21,9 @@ export function parsePesos(text) {
 export function centavosToInput(centavos) {
   return centavos % 100 === 0 ? String(centavos / 100) : (centavos / 100).toFixed(2);
 }
+
+/** 100000 → "₱1,000"; keeps centavos only when there are some. For big display numbers. */
+export function formatPesoShort(centavos) {
+  const full = formatPeso(centavos);
+  return full.endsWith(".00") ? full.slice(0, -3) : full;
+}

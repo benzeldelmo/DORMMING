@@ -1,11 +1,16 @@
 import { describe, expect, test } from "vitest";
-import { formatPeso, parsePesos } from "./money";
+import { formatPeso, formatPesoShort, parsePesos } from "./money";
 
 describe("money", () => {
   test("formats centavos as pesos", () => {
     expect(formatPeso(100000)).toBe("₱1,000.00");
     expect(formatPeso(-500)).toBe("-₱5.00");
     expect(formatPeso(0)).toBe("₱0.00");
+  });
+
+  test("short format drops zero centavos", () => {
+    expect(formatPesoShort(100000)).toBe("₱1,000");
+    expect(formatPesoShort(90050)).toBe("₱900.50");
   });
 
   test("parses what people type", () => {

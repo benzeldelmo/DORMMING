@@ -91,3 +91,27 @@
 .pixelated {
   image-rendering: pixelated;
 }
+
+/* Ming's moods. One gentle loop each; off when the viewer prefers less motion. */
+@keyframes ming-bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
+@keyframes ming-shake { 0%, 84%, 100% { transform: rotate(0) } 87% { transform: rotate(-6deg) } 90% { transform: rotate(5deg) } 93% { transform: rotate(-4deg) } 96% { transform: rotate(2deg) } }
+@keyframes ming-bounce { 0%, 100% { transform: translateY(0) scale(1) } 30% { transform: translateY(-12px) scale(1.03, 0.97) } 55% { transform: translateY(0) scale(0.98, 1.02) } }
+@keyframes ming-sway { 0%, 100% { transform: rotate(-2deg) } 50% { transform: rotate(2deg) } }
+@keyframes confetti { from { transform: translate(0, 0) scale(1); opacity: 1 } to { transform: translate(var(--dx), var(--dy)) scale(0.4); opacity: 0 } }
+.ming-HAPPY { animation: ming-bob 2.8s ease-in-out infinite }
+.ming-WORRIED { animation: ming-shake 4s ease-in-out infinite; transform-origin: 50% 90% }
+.ming-CELEBRATING { animation: ming-bounce 1.1s cubic-bezier(.22,1,.36,1) infinite }
+.ming-SLEEPY { animation: ming-sway 5s ease-in-out infinite; transform-origin: 50% 95% }
+.confetti-bit { animation: confetti 900ms cubic-bezier(.16,1,.3,1) forwards }
+@media (prefers-reduced-motion: reduce) {
+  .ming-HAPPY, .ming-WORRIED, .ming-CELEBRATING, .ming-SLEEPY, .confetti-bit { animation: none }
+}
+
+/* The logo's sticker lettering: yellow fill with a dark brown outline. */
+.sticker-text {
+  color: var(--sun);
+  -webkit-text-stroke: 5px var(--brown);
+  paint-order: stroke fill;
+}
+
+::selection { background: color-mix(in oklab, var(--sun) 70%, transparent); color: var(--brown) }
