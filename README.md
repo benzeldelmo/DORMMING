@@ -1,6 +1,6 @@
 # DormMing
 
-A dorm companion for shared money: personal and shared expenses, receipt-style bill splitting, bills with reminders, payment tracking and a digital card, with Ming the cat keeping count. Built by MING Dynasty, Team 3 (IT 2107) for OOP 101.
+A dorm companion for shared money: the dorm's expenses (gastos), receipt-style bill splitting, bills with reminders, payment tracking, a monthly dorm spending report and a digital card, with Ming the cat keeping count. It works on phones (bottom bar) and laptops (sidebar dashboard). Built by MING Dynasty, Team 3 (IT 2107) for OOP 101.
 
 Simulated banking only. No real money moves.
 
@@ -45,14 +45,17 @@ All money rules live in Java under `backend/src/main/java/com/dormming/domain`. 
 
 | Concept | Where to look |
 |---|---|
-| **Abstraction** | `transaction/Transaction.java` is abstract. `PersonalExpense`, `SharedExpense`, `Bill` and `Payment` extend it, and each one writes its own `describe()` for the activity feed. |
+| **Abstraction** | `transaction/Transaction.java` is abstract. `SharedExpense`, `Bill` and `Payment` extend it, and each one writes its own `describe()` for the activity feed. |
 | **Polymorphism** | `split/SplitStrategy.java` has three versions: `EqualSplit`, `CustomSplit` and `ItemizedSplit` (the thermal receipt). `recurrence/Recurrence.java` has `NoRecurrence`, `WeeklyRecurrence` and `MonthlyRecurrence`. `ai/AiAssistant.java` has `DemoAssistant` and `GeminiAssistant`. Storage (`repo/`) and login (`auth/AuthProvider.java`) are interfaces too. |
-| **Encapsulation** | `money/Money.java` keeps whole centavos in one private field, so ₱100 ÷ 3 never drifts. `ledger/Ledger.java` is the only class that works out who owes whom. Constructors reject bad input. |
+| **Encapsulation** | `money/Money.java` keeps whole centavos in one private field, so ₱100 ÷ 3 never drifts. `ledger/Ledger.java` is the only class that works out who owes whom. `spending/SpendingReport.java` is built once and read-only. Constructors reject bad input. |
 | **Inheritance** | `dorm/DormCreator.java` extends `dorm/DormMember.java` and overrides what a creator may do: edit any record, remove members and make a new code. |
 
 Run the tests with `cd backend && mvn test` (Java) and `cd frontend && npx vitest run` (frontend).
 
 ## Money rules
+
+- DormMing records dorm expenses only. Every expense is split among dorm members.
+- Dorm spending for a month = shared expenses dated that month + bills due that month. Payments don't count.
 
 - Amounts are in Philippine pesos and stored as centavos.
 - When a split is uneven, the extra centavos go to people other than the payer.
@@ -60,6 +63,12 @@ Run the tests with `cd backend && mvn test` (Java) and `cd frontend && npx vites
 - A payment can't be more than you owe.
 - Bills are paid straight to the provider. Each member marks their own share paid, and bills never show in Balances.
 - You can't leave a dorm while you owe or are owed money.
+
+## Design
+
+- Font: SF Pro Rounded on Apple devices (`ui-rounded`); Nunito on Windows and Android (Apple only licenses SF Rounded for its platforms).
+- Ming appears chest-up in the app (`public/brand/ming-bust.png`, a crop of the mascot art).
+- Layout patterns follow Tarsi's landing page and web sign-in; DormMing keeps its own olive, orange and Ming.
 
 ## Supabase and Gemini
 

@@ -121,6 +121,8 @@ A Gemini-powered AI Assistant simplifies expense recording, bill creation, payme
 - **Demo scope:** All 13 core features.
 - **Backend:** Java is required by the course. Java holds the core logic as classes (splitting, balances, payments, Gemini calls). Supabase provides login, database, storage and realtime.
 - **Mascot:** Ming is a cat.
+- **Dorm-only expenses (12 Nov):** DormMing records what the dorm spends (gastos). Personal expenses were removed; Home shows the dorm's spending this month by category.
+- **Responsive redesign (12 Nov):** works on phones and laptops, after Tarsi's layout patterns (landing, split sign-in, sidebar dashboard). Ming shown chest-up. Font SF Pro Rounded.
 - **Starting point:** Designs exist. Code lives in `~/DormMing` (this folder), built fresh. The older scaffold in `~/App & Web Development/DormMing` is not used.
 
 ## 12. Open questions
