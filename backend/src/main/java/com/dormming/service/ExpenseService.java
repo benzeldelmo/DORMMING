@@ -1,7 +1,6 @@
 package com.dormming.service;
 
 import com.dormming.controller.dto.SharedExpenseInput;
-import com.dormming.model.Category;
 import com.dormming.model.Dorm;
 import com.dormming.model.SharedExpense;
 import com.dormming.model.Transaction;
@@ -64,17 +63,18 @@ public class ExpenseService {
     }
 
     public void delete(UserId actor, String id) {
-        Transaction existing = find(id);
-        if (existing instanceof SharedExpense) {
-            Dorm dorm = dorms.require(actor);
-            if (!dorm.id().equals(existing.dormId())) {
-                throw new NotFoundException("Expense not found");
-            }
-            if (!dorms.memberOf(dorm, actor).canEdit(existing)) {
-                throw new NotAllowedException("Only the person who added this or the dorm creator can delete it");
-            }
-        } else {
+        Dorm dorm = dorms.require(actor);
+        if (!(find(id) instanceof SharedExpense expense) || !dorm.id().equals(expense.dormId())) {
             throw new NotFoundException("Expense not found");
+        }
+        if (!dorms.memberOf(dorm, actor).canEdit(expense)) {
+            throw new NotAllowedException("Only the person who added this or the dorm creator can delete it");
+        }
+        // Deleting would leave a debt to (or from) someone who can no longer pay or be paid.
+        boolean someoneLeft = !dorm.hasMember(expense.payer())
+                || !expense.participants().stream().allMatch(dorm::hasMember);
+        if (someoneLeft) {
+            throw new NotAllowedException("Someone in this expense left the dorm, so it can't be deleted");
         }
         transactions.delete(id);
     }
@@ -85,19 +85,12 @@ public class ExpenseService {
         String needle = q == null ? "" : q.strip().toLowerCase(Locale.ROOT);
         return result.stream()
                 .filter(t -> needle.isEmpty() || t.note().toLowerCase(Locale.ROOT).contains(needle)
-                        || categoryOf(t).label().toLowerCase(Locale.ROOT).contains(needle))
+                        || t.category().label().toLowerCase(Locale.ROOT).contains(needle))
                 .sorted(Comparator.comparing(SharedExpense::createdAt).reversed())
                 .toList();
     }
 
-    public Transaction find(String id) {
+    private Transaction find(String id) {
         return transactions.findById(id).orElseThrow(() -> new NotFoundException("Expense not found"));
-    }
-
-    public static Category categoryOf(Transaction t) {
-        return switch (t) {
-            case SharedExpense s -> s.category();
-            default -> Category.OTHERS;
-        };
     }
 }

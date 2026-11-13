@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.dormming.controller.dto.SharedExpenseInput;
 import com.dormming.model.Category;
+import com.dormming.model.Dorm;
 import com.dormming.model.SharedExpense;
 import com.dormming.model.UserId;
 import com.dormming.model.split.ReceiptItem;
@@ -69,5 +70,16 @@ class ExpenseServiceTest {
         assertThat(w.expenses.list(w.a, "groc")).extracting(t -> t.note()).containsExactly("Grocery");
         assertThat(w.expenses.list(w.a, "transport")).extracting(t -> t.note()).containsExactly("Grab");
         assertThat(w.expenses.list(w.a, null)).hasSize(2);
+    }
+
+    @Test
+    void deleteRefusedWhenSomeoneInItLeft() {
+        Dorm dorm = w.dormOfThree();
+        SharedExpense dinner = w.expenses.addShared(w.a, equal(30000, "Dinner", w.a, List.of(w.a, w.b)));
+        w.payment(dorm, w.b, w.a, 15000);
+        w.dormService.leave(w.b);
+        assertThatThrownBy(() -> w.expenses.delete(w.a, dinner.id()))
+                .isInstanceOf(NotAllowedException.class)
+                .hasMessage("Someone in this expense left the dorm, so it can't be deleted");
     }
 }
