@@ -34,11 +34,6 @@ public class Payment extends Transaction {
     }
 
     @Override
-    public TransactionType type() {
-        return TransactionType.PAYMENT;
-    }
-
-    @Override
     public String describe(Function<UserId, String> nameOf) {
         return nameOf.apply(from) + " paid " + nameOf.apply(to) + " " + amount().format();
     }

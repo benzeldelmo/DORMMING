@@ -7,7 +7,6 @@ import com.dormming.domain.money.Money;
 import com.dormming.domain.transaction.Category;
 import com.dormming.domain.transaction.Payment;
 import com.dormming.domain.transaction.Transaction;
-import com.dormming.domain.user.FriendCode;
 import com.dormming.domain.user.UserId;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -39,7 +38,6 @@ class DormTest {
         assertThatThrownBy(() -> InviteCode.parse("ABC")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> InviteCode.parse("ABCD1O")).isInstanceOf(IllegalArgumentException.class);
         assertThat(InviteCode.generate(new Random(1)).value()).matches("[A-HJ-NP-Z2-9]{6}");
-        assertThat(FriendCode.generate(new Random(1)).value()).matches("[A-HJ-NP-Z2-9]{8}");
     }
 
     @Test
@@ -49,8 +47,6 @@ class DormTest {
         assertThat(dorm.memberOf(B).orElseThrow().canEdit(createdBy(A))).isFalse();
         assertThat(dorm.memberOf(B).orElseThrow().canEdit(createdBy(B))).isTrue();
         assertThat(dorm.memberOf(A).orElseThrow().canEdit(createdBy(B))).isTrue();
-        assertThat(dorm.memberOf(B).orElseThrow().canRemoveMembers()).isFalse();
-        assertThat(dorm.memberOf(A).orElseThrow().canRemoveMembers()).isTrue();
     }
 
     @Test

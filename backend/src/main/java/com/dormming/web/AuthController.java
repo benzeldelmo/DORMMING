@@ -2,11 +2,8 @@ package com.dormming.web;
 
 import com.dormming.auth.LocalAuthProvider;
 import com.dormming.web.dto.AuthDtos.AuthResponse;
-import com.dormming.web.dto.AuthDtos.ForgotRequest;
-import com.dormming.web.dto.AuthDtos.ForgotResponse;
 import com.dormming.web.dto.AuthDtos.LoginRequest;
 import com.dormming.web.dto.AuthDtos.RegisterRequest;
-import com.dormming.web.dto.AuthDtos.ResetRequest;
 import com.dormming.web.dto.MeDto;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +34,5 @@ public class AuthController {
     AuthResponse login(@RequestBody LoginRequest req) {
         var result = auth.login(req.email(), req.password());
         return new AuthResponse(result.token(), MeDto.of(result.user(), null));
-    }
-
-    @PostMapping("/forgot")
-    ForgotResponse forgot(@RequestBody ForgotRequest req) {
-        return new ForgotResponse(auth.startReset(req.email()));
-    }
-
-    @PostMapping("/reset")
-    ResponseEntity<Void> reset(@RequestBody ResetRequest req) {
-        auth.finishReset(req.resetToken(), req.password());
-        return ResponseEntity.noContent().build();
     }
 }

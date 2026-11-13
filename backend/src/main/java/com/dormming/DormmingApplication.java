@@ -9,5 +9,4 @@ public class DormmingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DormmingApplication.class, args);
 	}
-
 }

@@ -41,18 +41,6 @@ public class ExpenseService {
         return (SharedExpense) transactions.save(build(dorm, null, actor, in, clock.instant()));
     }
 
-    public SharedExpense updateShared(UserId actor, String id, SharedExpenseInput in) {
-        Dorm dorm = dorms.require(actor);
-        Transaction existing = find(id);
-        if (!(existing instanceof SharedExpense) || !dorm.id().equals(existing.dormId())) {
-            throw new NotFoundException("Expense not found");
-        }
-        if (!dorms.memberOf(dorm, actor).canEdit(existing)) {
-            throw new NotAllowedException("Only the person who added this or the dorm creator can change it");
-        }
-        return (SharedExpense) transactions.save(build(dorm, id, existing.createdBy(), in, existing.createdAt()));
-    }
-
     private SharedExpense build(Dorm dorm, String id, UserId createdBy, SharedExpenseInput in, Instant createdAt) {
         if (in.payer() == null || in.participants() == null || in.type() == null) {
             throw new IllegalArgumentException("Pick who paid, who shares it, and how to split");

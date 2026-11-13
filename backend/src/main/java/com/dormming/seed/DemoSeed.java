@@ -4,15 +4,11 @@ import com.dormming.auth.LocalAuthProvider;
 import com.dormming.domain.dorm.Dorm;
 import com.dormming.domain.money.Money;
 import com.dormming.domain.split.SplitType;
-import com.dormming.domain.transaction.Bill;
 import com.dormming.domain.transaction.Category;
 import com.dormming.domain.user.User;
 import com.dormming.domain.user.UserId;
-import com.dormming.service.BillInput;
-import com.dormming.service.BillService;
 import com.dormming.service.DormService;
 import com.dormming.service.ExpenseService;
-import com.dormming.service.FriendService;
 import com.dormming.service.SharedExpenseInput;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -23,7 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-/** Demo data matching the Figma mockups: Benzel is owed ₱1,000 and owes ₱900. Password: dormming123. */
+/** Demo data: Benzel is owed ₱1,000 (by Sydney) and owes ₱900 (to Vince). Password: dormming123. */
 @Component
 @Profile("local")
 @ConditionalOnProperty(name = "dormming.seed", havingValue = "true")
@@ -32,17 +28,12 @@ public class DemoSeed implements CommandLineRunner {
     private final LocalAuthProvider auth;
     private final DormService dorms;
     private final ExpenseService expenses;
-    private final BillService bills;
-    private final FriendService friends;
     private final Clock clock;
 
-    public DemoSeed(LocalAuthProvider auth, DormService dorms, ExpenseService expenses, BillService bills,
-            FriendService friends, Clock clock) {
+    public DemoSeed(LocalAuthProvider auth, DormService dorms, ExpenseService expenses, Clock clock) {
         this.auth = auth;
         this.dorms = dorms;
         this.expenses = expenses;
-        this.bills = bills;
-        this.friends = friends;
         this.clock = clock;
     }
 
@@ -56,7 +47,6 @@ public class DemoSeed implements CommandLineRunner {
         UserId v = vince.id();
         UserId s = sydney.id();
 
-        friends.connect(b, vince.friendCode().value());
         Dorm dorm = dorms.create(b, "Mabini Hall 3B");
         dorms.join(v, dorm.code().value());
         dorms.join(s, dorm.code().value());
@@ -66,20 +56,5 @@ public class DemoSeed implements CommandLineRunner {
         expenses.addShared(v, new SharedExpenseInput(Money.ofPesos("2700"), Category.FOOD_GROCERIES, "Grocery",
                 today.minusDays(1), v, List.of(b, v, s), SplitType.EQUAL, Map.of(), List.of(), null));
 
-        // Last month's bills, all paid, so "vs last month" has a baseline; rollover then creates
-        // this month's Internet (due tomorrow) and Water (due in 5 days).
-        // shortcut: near month-ends the anchor day can shift by a few days, fine for a demo seed.
-        LocalDate internetDue = today.plusDays(1).minusMonths(1);
-        LocalDate waterDue = today.plusDays(5).minusMonths(1);
-        for (Bill bill : List.of(
-                bills.create(b, new BillInput("Internet", Category.INTERNET_LOAD, Money.ofPesos("1500"), internetDue,
-                        "MONTHLY", 1, SplitType.EQUAL, Map.of())),
-                bills.create(b, new BillInput("Water", Category.RENT_UTILITIES, Money.ofPesos("1000"), waterDue,
-                        "MONTHLY", 1, SplitType.EQUAL, Map.of())))) {
-            for (UserId member : List.of(b, v, s)) {
-                bills.pay(member, bill.id());
-            }
-        }
-        bills.rollover(dorm.id(), today);
     }
 }

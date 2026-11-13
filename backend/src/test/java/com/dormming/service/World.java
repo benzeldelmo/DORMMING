@@ -6,13 +6,9 @@ import com.dormming.domain.split.EqualSplit;
 import com.dormming.domain.transaction.Category;
 import com.dormming.domain.transaction.Payment;
 import com.dormming.domain.transaction.SharedExpense;
-import com.dormming.domain.user.CardColor;
-import com.dormming.domain.user.FriendCode;
 import com.dormming.domain.user.User;
 import com.dormming.domain.user.UserId;
 import com.dormming.repo.memory.InMemoryDormRepository;
-import com.dormming.repo.memory.InMemoryFriendRepository;
-import com.dormming.repo.memory.InMemoryInviteRepository;
 import com.dormming.repo.memory.InMemoryTransactionRepository;
 import com.dormming.repo.memory.InMemoryUserRepository;
 import java.time.Clock;
@@ -32,25 +28,12 @@ public class World {
     public final InMemoryUserRepository users = new InMemoryUserRepository();
     public final InMemoryDormRepository dorms = new InMemoryDormRepository();
     public final InMemoryTransactionRepository transactions = new InMemoryTransactionRepository();
-    public final InMemoryFriendRepository friends = new InMemoryFriendRepository();
-    public final InMemoryInviteRepository invites = new InMemoryInviteRepository();
 
     public final BalanceService balances = new BalanceService(transactions);
-    public final DormService dormService = new DormService(dorms, users, friends, invites, balances, random, clock);
+    public final DormService dormService = new DormService(dorms, balances, random, clock);
 
     public final ExpenseService expenses = new ExpenseService(transactions, dormService, clock);
-    public final ActivityService activity = new ActivityService(transactions, dormService);
-
-    public final BillService bills = new BillService(transactions, dormService, clock);
     public final PaymentService payments = new PaymentService(transactions, dormService, balances, clock);
-    public final HomeService home = new HomeService(dormService, balances, bills, activity, transactions, users, clock);
-
-    public final FriendService friendService = new FriendService(users, friends);
-    public final com.dormming.auth.CredentialStore credentials = new com.dormming.auth.CredentialStore();
-    public final AccountService accounts = new AccountService(dormService, users, friends, invites, java.util.Optional.of(credentials));
-
-    public final com.dormming.ai.AssistantService assistant = new com.dormming.ai.AssistantService(new com.dormming.ai.DemoAssistant(), null,
-            expenses, bills, payments, dormService, balances, users, clock);
 
     public final UserId a = user("a", "Benzel");
     public final UserId b = user("b", "Vince");
@@ -58,7 +41,7 @@ public class World {
 
     public UserId user(String id, String name) {
         UserId userId = new UserId(id);
-        users.save(new User(userId, id + "@demo.ph", name, null, CardColor.OLIVE, FriendCode.generate(random)));
+        users.save(new User(userId, id + "@demo.ph", name));
         return userId;
     }
 

@@ -1,6 +1,5 @@
 package com.dormming.repo.memory;
 
-import com.dormming.domain.user.FriendCode;
 import com.dormming.domain.user.User;
 import com.dormming.domain.user.UserId;
 import com.dormming.repo.UserRepository;
@@ -32,11 +31,6 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         return users.values().stream().filter(u -> u.email().equalsIgnoreCase(email.strip())).findFirst();
-    }
-
-    @Override
-    public Optional<User> findByFriendCode(FriendCode code) {
-        return users.values().stream().filter(u -> u.friendCode().equals(code)).findFirst();
     }
 
     @Override

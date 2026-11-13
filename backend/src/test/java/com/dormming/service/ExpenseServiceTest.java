@@ -41,16 +41,14 @@ class ExpenseServiceTest {
     }
 
     @Test
-    void onlyAuthorOrCreatorCanEdit() {
+    void onlyAuthorOrCreatorCanDelete() {
         w.dormOfThree();
         SharedExpense byA = w.expenses.addShared(w.a, equal(30000, "", w.a, List.of(w.a, w.b)));
         SharedExpense byB = w.expenses.addShared(w.b, equal(30000, "", w.b, List.of(w.a, w.b)));
-        assertThatThrownBy(() -> w.expenses.updateShared(w.b, byA.id(), equal(20000, "", w.a, List.of(w.a, w.b))))
-                .isInstanceOf(NotAllowedException.class);
-        SharedExpense edited = w.expenses.updateShared(w.a, byB.id(), equal(20000, "", w.b, List.of(w.a, w.b)));
-        assertThat(edited.amount()).isEqualTo(c(20000));
-        assertThat(edited.createdBy()).isEqualTo(w.b);
+        assertThatThrownBy(() -> w.expenses.delete(w.b, byA.id())).isInstanceOf(NotAllowedException.class);
         assertThatThrownBy(() -> w.expenses.delete(w.c, byB.id())).isInstanceOf(NotAllowedException.class);
+        w.expenses.delete(w.a, byB.id());
+        assertThat(w.transactions.findById(byB.id())).isEmpty();
     }
 
     @Test
@@ -70,13 +68,5 @@ class ExpenseServiceTest {
         assertThat(w.expenses.list(w.a, "groc")).extracting(t -> t.note()).containsExactly("Grocery");
         assertThat(w.expenses.list(w.a, "transport")).extracting(t -> t.note()).containsExactly("Grab");
         assertThat(w.expenses.list(w.a, null)).hasSize(2);
-    }
-
-    @Test
-    void activityShowsDormRecordsNewestFirst() {
-        Dorm dorm = w.dormOfThree();
-        w.sharedEqual(dorm, w.a, 20000, List.of(w.a, w.b));
-        w.payment(dorm, w.b, w.a, 5000);
-        assertThat(w.activity.recent(w.a, 10)).hasSize(2);
     }
 }

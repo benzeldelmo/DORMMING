@@ -4,7 +4,7 @@ import com.dormming.domain.transaction.Transaction;
 import com.dormming.domain.user.UserId;
 import java.time.Instant;
 
-/** Someone in a dorm. Members can add records, edit their own, and invite friends. */
+/** Someone in a dorm. Members can add records and delete their own. */
 public class DormMember {
 
     private final UserId userId;
@@ -25,18 +25,6 @@ public class DormMember {
 
     public boolean canEdit(Transaction transaction) {
         return transaction.createdBy().equals(userId);
-    }
-
-    public boolean canRemoveMembers() {
-        return false;
-    }
-
-    public boolean canRegenerateCode() {
-        return false;
-    }
-
-    public boolean canInviteFriends() {
-        return true;
     }
 
     public String role() {

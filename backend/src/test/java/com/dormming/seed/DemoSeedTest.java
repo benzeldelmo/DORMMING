@@ -2,12 +2,9 @@ package com.dormming.seed;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.dormming.domain.ming.MingMood;
+import com.dormming.repo.DormRepository;
 import com.dormming.repo.UserRepository;
-import com.dormming.service.HomeData;
-import com.dormming.service.HomeService;
-import com.dormming.web.SpendingController;
-import java.time.YearMonth;
+import com.dormming.service.BalanceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,27 +16,18 @@ class DemoSeedTest {
     UserRepository users;
 
     @Autowired
-    HomeService home;
+    DormRepository dorms;
 
     @Autowired
-    SpendingController spending;
+    BalanceService balances;
 
     @Test
-    void benzelSeesTheMockupNumbers() {
+    void benzelIsOwedOneThousandAndOwesNineHundred() {
         var benzel = users.findByEmail("benzel@demo.ph").orElseThrow();
-        HomeData h = home.home(benzel.id());
-        assertThat(h.owedToMe().centavos()).isEqualTo(100000);
-        assertThat(h.iOwe().centavos()).isEqualTo(90000);
-        assertThat(h.bannerText()).contains("Internet");
-        assertThat(h.mood()).isEqualTo(MingMood.WORRIED);
-        assertThat(h.dorm().name()).isEqualTo("Mabini Hall 3B");
-    }
-
-    @Test
-    void benzelSeesThisMonthAgainstLastMonth() {
-        var benzel = users.findByEmail("benzel@demo.ph").orElseThrow();
-        var dto = spending.summary(benzel.id(), YearMonth.now(java.time.ZoneId.of("Asia/Manila")));
-        assertThat(dto.totalCentavos()).isEqualTo(720000);
-        assertThat(dto.previousTotalCentavos()).isEqualTo(250000);
+        var dorm = dorms.findByMember(benzel.id()).orElseThrow();
+        var ledger = balances.ledgerFor(dorm.id());
+        assertThat(dorm.name()).isEqualTo("Mabini Hall 3B");
+        assertThat(ledger.totalOwedTo(benzel.id()).centavos()).isEqualTo(100000);
+        assertThat(ledger.totalOwedBy(benzel.id()).centavos()).isEqualTo(90000);
     }
 }

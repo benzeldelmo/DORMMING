@@ -1,7 +1,5 @@
 package com.dormming.auth;
 
-import com.dormming.domain.user.CardColor;
-import com.dormming.domain.user.FriendCode;
 import com.dormming.domain.user.User;
 import com.dormming.domain.user.UserId;
 import com.dormming.repo.UserRepository;
@@ -73,8 +71,7 @@ public class LocalAuthProvider implements AuthProvider {
         if (email == null || users.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException(email == null ? "Enter your email" : "That email already has an account");
         }
-        User user = users.save(new User(new UserId(UUID.randomUUID().toString()), email, displayName, null,
-                CardColor.OLIVE, FriendCode.generate(random)));
+        User user = users.save(new User(new UserId(UUID.randomUUID().toString()), email, displayName));
         credentials.setHash(user.email(), passwords.encode(password));
         return new AuthResult(tokenFor(user), user);
     }
@@ -89,24 +86,6 @@ public class LocalAuthProvider implements AuthProvider {
             throw new UnauthorizedException(WRONG);
         }
         return new AuthResult(tokenFor(user), user);
-    }
-
-    /** Demo mode: the token is returned instead of emailed. Unknown emails still get a (useless) token. */
-    public String startReset(String email) {
-        String token = UUID.randomUUID().toString();
-        if (email != null && users.findByEmail(email).isPresent()) {
-            credentials.saveReset(token, new CredentialStore.ResetToken(email.strip().toLowerCase(),
-                    clock.instant().plus(Duration.ofMinutes(30))));
-        }
-        return token;
-    }
-
-    public void finishReset(String resetToken, String newPassword) {
-        checkPassword(newPassword);
-        CredentialStore.ResetToken reset = credentials.takeReset(resetToken)
-                .filter(r -> r.expiresAt().isAfter(clock.instant()))
-                .orElseThrow(() -> new IllegalArgumentException("That reset link has expired or was already used"));
-        credentials.setHash(reset.email(), passwords.encode(newPassword));
     }
 
     private static void checkPassword(String password) {

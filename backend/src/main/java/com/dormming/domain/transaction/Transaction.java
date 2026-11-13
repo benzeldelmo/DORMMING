@@ -45,8 +45,6 @@ public abstract class Transaction {
         this.createdAt = createdAt == null ? Instant.now() : createdAt;
     }
 
-    public abstract TransactionType type();
-
     public abstract String describe(Function<UserId, String> nameOf);
 
     public String id() {

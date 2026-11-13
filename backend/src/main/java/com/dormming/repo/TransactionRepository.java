@@ -1,6 +1,5 @@
 package com.dormming.repo;
 
-import com.dormming.domain.transaction.Bill;
 import com.dormming.domain.transaction.Payment;
 import com.dormming.domain.transaction.SharedExpense;
 import com.dormming.domain.transaction.Transaction;
@@ -17,7 +16,4 @@ public interface TransactionRepository {
 
     List<SharedExpense> sharedByDorm(String dormId);
 
-    List<Payment> paymentsByDorm(String dormId);
-
-    List<Bill> billsByDorm(String dormId);
-}
+    List<Payment> paymentsByDorm(String dormId);}

@@ -53,8 +53,7 @@ class AuthFlowTest {
         String token = register("benz1@demo.ph", "dormming123");
         mvc.perform(get("/api/me").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.displayName").value("Benzel"))
-                .andExpect(jsonPath("$.mingName").value("Ming"));
+                .andExpect(jsonPath("$.displayName").value("Benzel"));
     }
 
     @Test
@@ -91,31 +90,5 @@ class AuthFlowTest {
     void tokenForUnknownUserIs401() throws Exception {
         String ghost = tokenSignedWith(secret, Instant.now().plusSeconds(600));
         mvc.perform(get("/api/me").header("Authorization", "Bearer " + ghost)).andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void forgotAndResetPasswordOnce() throws Exception {
-        register("benz5@demo.ph", "dormming123");
-        String body = mvc.perform(post("/api/auth/forgot").contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"benz5@demo.ph\"}"))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        String resetToken = JsonPath.read(body, "$.resetToken");
-        String reset = "{\"resetToken\":\"%s\",\"password\":\"newpass123\"}".formatted(resetToken);
-        mvc.perform(post("/api/auth/reset").contentType(MediaType.APPLICATION_JSON).content(reset))
-                .andExpect(status().isNoContent());
-        mvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"benz5@demo.ph\",\"password\":\"newpass123\"}"))
-                .andExpect(status().isOk());
-        mvc.perform(post("/api/auth/reset").contentType(MediaType.APPLICATION_JSON).content(reset))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void renamesMing() throws Exception {
-        String token = register("benz6@demo.ph", "dormming123");
-        mvc.perform(patch("/api/me").header("Authorization", "Bearer " + token).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"mingName\":\"Mingky\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.mingName").value("Mingky"));
     }
 }

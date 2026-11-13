@@ -28,8 +28,4 @@ public final class ExpenseDtos {
             String note, LocalDate date, UserRef createdBy, UserRef payer, String splitType, List<ShareDto> shares,
             List<ItemDto> items, long extrasCentavos, boolean canEdit, String text) {
     }
-
-    public record ActivityDto(String id, String type, String title, String category, String text, long amountCentavos,
-            LocalDate date, UserRef createdBy) {
-    }
 }

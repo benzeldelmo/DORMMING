@@ -97,11 +97,6 @@ public class SharedExpense extends Transaction {
     }
 
     @Override
-    public TransactionType type() {
-        return TransactionType.SHARED_EXPENSE;
-    }
-
-    @Override
     public String describe(Function<UserId, String> nameOf) {
         String what = note().isEmpty() ? category.label() : note();
         List<String> others = shares.keySet().stream().filter(p -> !p.equals(payer)).map(nameOf).toList();

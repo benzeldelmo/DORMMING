@@ -1,6 +1,5 @@
 package com.dormming.repo.memory;
 
-import com.dormming.domain.transaction.Bill;
 import com.dormming.domain.transaction.Payment;
 import com.dormming.domain.transaction.SharedExpense;
 import com.dormming.domain.transaction.Transaction;
@@ -49,10 +48,5 @@ public class InMemoryTransactionRepository implements TransactionRepository {
     @Override
     public List<Payment> paymentsByDorm(String dormId) {
         return ofType(Payment.class, dormId);
-    }
-
-    @Override
-    public List<Bill> billsByDorm(String dormId) {
-        return ofType(Bill.class, dormId);
     }
 }

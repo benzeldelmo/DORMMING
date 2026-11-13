@@ -54,36 +54,4 @@ class DormServiceTest {
         w.dormService.leave(w.a);
         assertThat(w.dorms.findById(dorm.id())).isEmpty();
     }
-
-    @Test
-    void onlyCreatorRemovesMembersOrRegeneratesCode() {
-        Dorm dorm = w.dormOfThree();
-        String oldCode = dorm.code().value();
-        assertThatThrownBy(() -> w.dormService.removeMember(w.b, w.c)).isInstanceOf(NotAllowedException.class);
-        assertThatThrownBy(() -> w.dormService.regenerateCode(w.b)).isInstanceOf(NotAllowedException.class);
-        Dorm after = w.dormService.removeMember(w.a, w.c);
-        assertThat(after.hasMember(w.c)).isFalse();
-        assertThat(w.dormService.regenerateCode(w.a).code().value()).isNotEqualTo(oldCode);
-    }
-
-    @Test
-    void removingMemberWithOpenBalanceIsBlocked() {
-        Dorm dorm = w.dormOfThree();
-        w.sharedEqual(dorm, w.a, 20000, List.of(w.a, w.c));
-        assertThatThrownBy(() -> w.dormService.removeMember(w.a, w.c)).hasMessageContaining("balance");
-    }
-
-    @Test
-    void invitesGoToFriendsOnly() {
-        w.dormOfThree();
-        var d = w.user("d", "Dana");
-        assertThatThrownBy(() -> w.dormService.inviteFriend(w.b, d)).isInstanceOf(IllegalArgumentException.class);
-        w.friends.connect(w.b, d);
-        w.dormService.inviteFriend(w.b, d);
-        var invites = w.dormService.invitesFor(d);
-        assertThat(invites).hasSize(1);
-        Dorm joined = w.dormService.acceptInvite(d, invites.getFirst().id());
-        assertThat(joined.hasMember(d)).isTrue();
-        assertThat(w.dormService.invitesFor(d)).isEmpty();
-    }
 }

@@ -4,13 +4,8 @@ import static com.dormming.service.World.c;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.dormming.domain.dorm.Dorm;
-import com.dormming.domain.split.SplitType;
-import com.dormming.domain.transaction.Bill;
-import com.dormming.domain.transaction.Category;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,17 +35,6 @@ class ConcurrencyTest {
             }
         }
         pool.shutdown();
-    }
-
-    @RepeatedTest(5)
-    void overlappingPollsRollABillOverOnce() throws Exception {
-        World w = new World();
-        Dorm dorm = w.dormOfThree();
-        w.bills.create(w.a, new BillInput("Internet", Category.INTERNET_LOAD, c(150000), LocalDate.of(2026, 11, 1),
-                "MONTHLY", 1, SplitType.EQUAL, Map.of()));
-        together(16, () -> w.bills.list(w.a, "upcoming", LocalDate.of(2026, 11, 11)));
-        assertThat(w.transactions.billsByDorm(dorm.id())).extracting(Bill::dueDate)
-                .containsExactlyInAnyOrder(LocalDate.of(2026, 11, 1), LocalDate.of(2026, 12, 1));
     }
 
     @RepeatedTest(5)

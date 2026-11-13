@@ -9,5 +9,4 @@ class DormmingApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
