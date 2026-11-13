@@ -3,7 +3,7 @@ package com.dormming.service;
 import static com.dormming.service.World.c;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.dormming.domain.dorm.Dorm;
+import com.dormming.model.Dorm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;

@@ -1,36 +1,34 @@
 package com.dormming.seed;
 
-import com.dormming.auth.LocalAuthProvider;
-import com.dormming.domain.dorm.Dorm;
-import com.dormming.domain.money.Money;
-import com.dormming.domain.split.SplitType;
-import com.dormming.domain.transaction.Category;
-import com.dormming.domain.user.User;
-import com.dormming.domain.user.UserId;
+import com.dormming.controller.dto.SharedExpenseInput;
+import com.dormming.model.Category;
+import com.dormming.model.Dorm;
+import com.dormming.model.Money;
+import com.dormming.model.User;
+import com.dormming.model.UserId;
+import com.dormming.model.split.SplitType;
+import com.dormming.service.AuthService;
 import com.dormming.service.DormService;
 import com.dormming.service.ExpenseService;
-import com.dormming.service.SharedExpenseInput;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /** Demo data: Benzel is owed ₱1,000 (by Sydney) and owes ₱900 (to Vince). Password: dormming123. */
 @Component
-@Profile("local")
 @ConditionalOnProperty(name = "dormming.seed", havingValue = "true")
 public class DemoSeed implements CommandLineRunner {
 
-    private final LocalAuthProvider auth;
+    private final AuthService auth;
     private final DormService dorms;
     private final ExpenseService expenses;
     private final Clock clock;
 
-    public DemoSeed(LocalAuthProvider auth, DormService dorms, ExpenseService expenses, Clock clock) {
+    public DemoSeed(AuthService auth, DormService dorms, ExpenseService expenses, Clock clock) {
         this.auth = auth;
         this.dorms = dorms;
         this.expenses = expenses;

@@ -1,16 +1,16 @@
 package com.dormming.service;
 
-import com.dormming.domain.dorm.Dorm;
-import com.dormming.domain.money.Money;
-import com.dormming.domain.split.EqualSplit;
-import com.dormming.domain.transaction.Category;
-import com.dormming.domain.transaction.Payment;
-import com.dormming.domain.transaction.SharedExpense;
-import com.dormming.domain.user.User;
-import com.dormming.domain.user.UserId;
-import com.dormming.repo.memory.InMemoryDormRepository;
-import com.dormming.repo.memory.InMemoryTransactionRepository;
-import com.dormming.repo.memory.InMemoryUserRepository;
+import com.dormming.model.Category;
+import com.dormming.model.Dorm;
+import com.dormming.model.Money;
+import com.dormming.model.Payment;
+import com.dormming.model.SharedExpense;
+import com.dormming.model.User;
+import com.dormming.model.UserId;
+import com.dormming.model.split.EqualSplit;
+import com.dormming.repository.memory.InMemoryDormRepository;
+import com.dormming.repository.memory.InMemoryTransactionRepository;
+import com.dormming.repository.memory.InMemoryUserRepository;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;

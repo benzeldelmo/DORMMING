@@ -3,8 +3,6 @@ server:
 spring:
   application:
     name: dormming
-  profiles:
-    active: ${DORMMING_PROFILE:local}
 dormming:
   local-jwt-secret: ${LOCAL_JWT_SECRET:dormming-local-dev-secret-change-me-0123456789}
   seed: ${DORMMING_SEED:true}

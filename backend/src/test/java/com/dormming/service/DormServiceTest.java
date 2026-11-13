@@ -3,8 +3,9 @@ package com.dormming.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.dormming.domain.dorm.Dorm;
-import com.dormming.domain.dorm.DormCreator;
+import com.dormming.model.Dorm;
+import com.dormming.model.DormCreator;
+import com.dormming.service.exception.NotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

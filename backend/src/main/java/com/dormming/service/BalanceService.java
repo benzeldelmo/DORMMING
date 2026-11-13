@@ -1,7 +1,7 @@
 package com.dormming.service;
 
-import com.dormming.domain.ledger.Ledger;
-import com.dormming.repo.TransactionRepository;
+import com.dormming.model.Ledger;
+import com.dormming.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 @Service

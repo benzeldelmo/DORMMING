@@ -1,10 +1,12 @@
 package com.dormming.service;
 
-import com.dormming.domain.dorm.Dorm;
-import com.dormming.domain.dorm.DormMember;
-import com.dormming.domain.dorm.InviteCode;
-import com.dormming.domain.user.UserId;
-import com.dormming.repo.DormRepository;
+import com.dormming.model.Dorm;
+import com.dormming.model.DormMember;
+import com.dormming.model.InviteCode;
+import com.dormming.model.UserId;
+import com.dormming.repository.DormRepository;
+import com.dormming.service.exception.NotAllowedException;
+import com.dormming.service.exception.NotFoundException;
 import java.time.Clock;
 import java.util.Optional;
 import java.util.random.RandomGenerator;

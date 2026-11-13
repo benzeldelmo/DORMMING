@@ -1,10 +1,10 @@
 package com.dormming.service;
 
-import com.dormming.domain.dorm.Dorm;
-import com.dormming.domain.money.Money;
-import com.dormming.domain.transaction.Payment;
-import com.dormming.domain.user.UserId;
-import com.dormming.repo.TransactionRepository;
+import com.dormming.model.Dorm;
+import com.dormming.model.Money;
+import com.dormming.model.Payment;
+import com.dormming.model.UserId;
+import com.dormming.repository.TransactionRepository;
 import java.time.Clock;
 import java.time.LocalDate;
 import org.springframework.stereotype.Service;
