@@ -27,7 +27,7 @@ export default function SignUp() {
   }
 
   return (
-    <AuthFrame title="Hi! I'm Ming." subtitle="Make an account and I'll keep your dorm's money in order."
+    <AuthFrame mood="CELEBRATING" title="Hi! I'm Ming." subtitle="Make an account and I'll keep your dorm's money in order."
       footer={<>Already have an account? <Link to="/login" className="font-semibold text-olive underline-offset-4 hover:underline">Log in</Link></>}>
       <form onSubmit={submit} className="space-y-4" noValidate>
         <Field label="Your name" autoComplete="name" value={form.displayName} onChange={set("displayName")} required maxLength={40} placeholder="Benzel" />

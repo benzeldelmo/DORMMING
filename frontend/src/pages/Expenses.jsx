@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useOutletContext } from "react-router-dom";
-import { Plus, Search, Trash2 } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
+import { Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/PageHeader";
 import { ExpenseRow, Empty } from "@/components/Rows";
@@ -28,23 +28,19 @@ export default function Expenses() {
 
   return (
     <div>
-      <PageHeader title="Expenses">
-        <Link to="/expenses/new" className="flex h-10 items-center gap-1.5 rounded-full bg-olive px-4 text-sm font-semibold text-white">
-          <Plus className="size-4" strokeWidth={2.5} />Add expense
-        </Link>
-      </PageHeader>
+      <PageHeader title="Expenses" gear />
       <div className="space-y-3 px-5">
         <label className="flex h-11 items-center gap-2 rounded-xl bg-secondary px-3">
           <Search className="size-5 text-foreground/50" />
           <span className="sr-only">Search expenses</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search expenses..." className="w-full bg-transparent text-[15px] outline-none placeholder:text-foreground/45" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search expenses…" className="w-full bg-transparent text-[15px] outline-none placeholder:text-foreground/45" />
         </label>
         <div className="space-y-2 pt-1">
           {expenses.map((e) => (
             <ExpenseRow key={e.id} onClick={() => setOpen(e)} title={e.note || e.categoryLabel} category={e.category}
               subtitle={sharedLine(e, me?.id)} amountCentavos={e.amountCentavos} />
           ))}
-          {!isPending && !expenses.length && <Empty>{q ? `No expenses match "${q}".` : "No expenses yet. Tap Add expense to record one."}</Empty>}
+          {!isPending && !expenses.length && <Empty>{q ? `No expenses match "${q}".` : "No expenses yet. Tap + to add one."}</Empty>}
         </div>
       </div>
 

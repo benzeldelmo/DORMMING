@@ -152,7 +152,8 @@ SplitStrategy strategy = switch (in.type()) {
 | `service/AuthService.java` | Register and log in. Hashes passwords and signs tokens. |
 | `service/DormService.java` | Create, join and leave a dorm. |
 | `controller/AuthController.java`, `DormController.java`, `MeController.java` | The API for the above. |
-| `frontend/src/pages/LogIn.jsx`, `SignUp.jsx`, `DormSetup.jsx`, `Settings.jsx` | The matching screens. |
+| `frontend/src/pages/Landing.jsx`, `LogIn.jsx`, `SignUp.jsx`, `DormSetup.jsx`, `Settings.jsx` | The matching screens. |
+| `frontend/src/pages/Home.jsx`, `components/Ming.jsx`, `lib/mood.js` | Home: Ming's mood follows your balance (worried if you owe, happy if you're owed, celebrating when everyone is square, sleepy before any expense). |
 
 ### OOP concepts: Inheritance and Interfaces
 

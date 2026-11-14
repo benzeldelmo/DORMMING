@@ -50,16 +50,16 @@ export default function AddExpense() {
   const sharedReady = (chosen.length > 0 && (split === "EQUAL" || left === 0));
   return (
     <div className="mx-auto w-full max-w-[560px]">
-      <PageHeader title="Add expense" back center />
+      <PageHeader title="Add expense" back />
       <form onSubmit={save} className="space-y-4 px-5" noValidate>
-        <AmountInput value={amount} onChange={setAmount} autoFocus />
+        <AmountInput value={amount} onChange={setAmount} />
         <Field label="Category" as="select" value={category} onChange={(e) => setCategory(e.target.value)} inputClassName="appearance-none">
           {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
         </Field>
-        <Field label="Notes" as="textarea" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional..." maxLength={200} />
+        <Field label="Notes" as="textarea" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional…" maxLength={200} />
         <Field label="Date" type="date" value={date} max={todayIso()} onChange={(e) => setDate(e.target.value)} />
 
-        <div className="space-y-4 rounded-[22px] bg-olive-soft/60 p-4">
+        <div className="space-y-4 rounded-3xl bg-olive-soft/60 p-4">
           <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)} inputClassName="bg-card">
             {members.map(({ user }) => <option key={user.id} value={user.id}>{user.id === me?.id ? "Me" : user.displayName}</option>)}
           </Field>

@@ -17,7 +17,7 @@ export default function LogIn() {
     setBusy(true);
     try {
       await logIn(form);
-      navigate("/balances", { replace: true }); // AppShell sends people without a dorm to /setup/dorm
+      navigate("/home", { replace: true }); // AppShell sends people without a dorm to /setup/dorm
     } catch (err) {
       setError(err.message);
     } finally {

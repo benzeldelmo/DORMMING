@@ -3,8 +3,8 @@
 @import "shadcn/tailwind.css";
 
 @theme inline {
-  --font-heading: "Nunito", ui-rounded, system-ui, sans-serif;
-  --font-sans: "Google Sans", system-ui, sans-serif;
+  --font-heading: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+  --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -32,46 +32,52 @@
   --color-sun: var(--sun);
   --color-brown: var(--brown);
   --color-paper: var(--paper);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  /* One corner scale: controls 16, rows and tiles 20, cards 24, pills full. */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-4xl: 32px;
+  --color-olive-ink: var(--olive-ink);
+  --color-orange-ink: var(--orange-ink);
 }
 
-/* DormMing brand (light theme only, matching the mockups). */
+/* DormMing brand. Green taken from Ming's hoodie and lanyard, deep enough for white text (5.4:1);
+   "ink" shades are for text and numbers on the soft tints (both ≥ 6:1). */
 :root {
-  --olive: #6b7255;
-  --olive-soft: #e3e6d8;
-  --orange: #dd7b2f;
-  --orange-soft: #fde6cf;
-  --cream: #fff6ec;
-  --sun: #ffde59;
-  --brown: #240702;
-  --paper: #fbf8f1;
+  --olive: #3f7a3d;
+  --olive-soft: #e2efd9;
+  --olive-ink: #24521f;
+  --orange: #e5701f;
+  --orange-soft: #ffe6cf;
+  --orange-ink: #8f3f0b;
+  --cream: #fff4e6;
+  --sun: #ffd84a;
+  --brown: #1f0904;
+  --paper: #fffdf6;
 
-  --background: #f6f6f3;
-  --foreground: #1c1b17;
+  --background: #f3f5f0;
+  --foreground: #12160f;
   --card: #ffffff;
-  --card-foreground: #1c1b17;
+  --card-foreground: #12160f;
   --popover: #ffffff;
-  --popover-foreground: #1c1b17;
+  --popover-foreground: #12160f;
   --primary: var(--olive);
   --primary-foreground: #ffffff;
-  --secondary: #ecebe6;
-  --secondary-foreground: #1c1b17;
-  --muted: #ecebe6;
-  --muted-foreground: #6a6960;
+  --secondary: #e9ece4;
+  --secondary-foreground: #12160f;
+  --muted: #e9ece4;
+  --muted-foreground: #545b50;
   --accent: var(--orange);
   --accent-foreground: #ffffff;
-  --destructive: #c2412d;
-  --border: #e7e5de;
-  --input: #e7e5de;
+  --destructive: #b8341f;
+  --border: #dfe4d8;
+  --input: #d6dccd;
   --ring: var(--olive);
-  --radius: 1rem;
-  --shadow-card: 0 1px 2px rgb(36 7 2 / 0.04), 0 8px 24px -12px rgb(36 7 2 / 0.12);
+  --radius: 14px;
+  --shadow-card: 0 1px 2px rgb(18 22 15 / 0.06), 0 10px 28px -14px rgb(18 22 15 / 0.22);
 }
 
 @layer base {
@@ -86,12 +92,30 @@
   }
 }
 
+/* The logo's sticker lettering: yellow fill with a dark brown outline. */
+.sticker-text {
+  color: var(--sun);
+  -webkit-text-stroke: 5px var(--brown);
+  paint-order: stroke fill;
+}
+
+/* One visible keyboard focus ring for every link and button. */
+:where(a, button, [role="button"], input, select, textarea):focus-visible {
+  outline: 2px solid var(--olive);
+  outline-offset: 3px;
+}
+
+/* No grey flash or double-tap zoom delay on tap; no rubber-band on mouse devices (phones keep pull-to-refresh). */
+/* pan-x pan-y: scrolling only, so no pinch-zoom and no double-tap zoom (browsers that honour touch-action). */
+html { -webkit-tap-highlight-color: transparent; touch-action: pan-x pan-y; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (pointer: fine) { html { overscroll-behavior-y: none; } }
+
 ::selection { background: color-mix(in oklab, var(--sun) 70%, transparent); color: var(--brown) }
 
 /* Thermal receipt paper: zig-zag torn top and bottom edges. */
 .receipt-paper {
   --z: 12px;
-  background: var(--paper);
+  background: #fffdf6;
   mask:
     conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--z) 51% repeat-x,
     conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--z) 51% repeat-x;

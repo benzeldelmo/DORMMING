@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/brand/icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Zoom is locked on purpose (app-like on phones). Trade-off: people who need to zoom to read cannot. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="DormMing" />
+    <link rel="apple-touch-icon" href="/brand/icon.png" />
     <title>DormMing</title>
-    <meta name="theme-color" content="#6b7255" />
+    <meta name="theme-color" content="#f6f6f3" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

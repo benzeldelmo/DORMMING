@@ -10,12 +10,12 @@ export default function Balances() {
   const { data } = useGet("/balances");
   return (
     <div className="mx-auto max-w-[760px]">
-      <PageHeader title="Balances" />
+      <PageHeader title="Balances" gear />
       {data && (
         <div className="space-y-5 px-5">
           <div className="grid grid-cols-2 gap-3">
             <BalanceCard tone="olive" icon={ArrowDownLeft} label="Owed to you" centavos={data.owedToMeCentavos} caption="To collect" />
-            <BalanceCard tone="orange" icon={ArrowUpRight} label="You Owe" centavos={data.iOweCentavos} caption="To repay" to="/payments/new" />
+            <BalanceCard tone="orange" icon={ArrowUpRight} label="You owe" centavos={data.iOweCentavos} caption="To repay" to="/payments/new" />
           </div>
           <section>
             <h2 className="mb-2 px-1 font-heading text-[17px] font-bold">Who owes whom</h2>
@@ -29,8 +29,8 @@ export default function Balances() {
                       <span className="block font-semibold">{d.user.displayName}</span>
                       <span className="text-xs text-muted-foreground">{iOwe ? "You owe" : "Owes you"}</span>
                     </span>
-                    <span className={`font-heading text-lg font-bold tabular-nums ${iOwe ? "text-orange" : "text-olive"}`}>{formatPeso(d.amountCentavos)}</span>
-                    {iOwe && <Link to={`/payments/new?to=${d.user.id}`} className="rounded-full bg-orange px-4 py-2 text-sm font-semibold text-white">Pay</Link>}
+                    <span className={`font-heading text-lg font-bold tabular-nums ${iOwe ? "text-orange-ink" : "text-olive-ink"}`}>{formatPeso(d.amountCentavos)}</span>
+                    {iOwe && <Link to={`/payments/new?to=${d.user.id}`} className="flex h-11 items-center rounded-full bg-olive px-5 text-[15px] font-bold text-white">Pay</Link>}
                   </li>
                 );
               })}

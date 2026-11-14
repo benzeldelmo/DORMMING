@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { Copy, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
+import DormQr from "@/components/DormQr";
 import { useGet, useSend } from "@/lib/queries";
 import { logOut } from "@/lib/auth";
 
@@ -31,7 +32,7 @@ export default function Settings() {
 
   return (
     <div>
-      <PageHeader title="Settings" />
+      <PageHeader title="Settings" back />
       <div className="mx-auto max-w-[640px] space-y-6 px-5 pb-10">
         {me.data && (
           <section className="card-surface flex items-center gap-3 p-5">
@@ -46,13 +47,7 @@ export default function Settings() {
         {dorm.data && (
           <section aria-labelledby="dorm-title" className="card-surface p-5">
             <h2 id="dorm-title" className="truncate font-heading text-lg font-extrabold">{dorm.data.name}</h2>
-            <div className="mt-4 rounded-2xl bg-secondary p-4">
-              <p className="text-xs text-muted-foreground">Dorm code: share it so dormmates can join</p>
-              <button type="button" onClick={() => { navigator.clipboard?.writeText(dorm.data.inviteCode); toast.success("Code copied"); }}
-                className="mt-1 flex items-center gap-2 font-heading text-2xl font-extrabold tracking-[0.18em]">
-                {dorm.data.inviteCode}<Copy className="size-4 text-olive" aria-label="Copy code" />
-              </button>
-            </div>
+            <div className="mt-4"><DormQr code={dorm.data.inviteCode} size={148} /></div>
             <ul className="mt-4 divide-y">
               {dorm.data.members.map((m) => (
                 <li key={m.user.id} className="flex items-center gap-3 py-2.5">

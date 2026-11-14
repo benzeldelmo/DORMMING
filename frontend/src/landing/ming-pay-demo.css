@@ -1,0 +1,104 @@
+/* DormMing's Home screen inside the Stageshow phone. Scoped to the demo. */
+.mpd .ss-stage {
+  background: transparent;
+  --ss-canvas: transparent; /* the landing section is the ground: no plate behind the phone */
+  overflow: hidden; /* the crop is ours */
+  --ss-font: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+}
+
+/* The mask lives on a wrapper with room around the phone, so its shadow stays soft on
+   the top and sides; only the foot fades, over the filler row. (Stageshow's fade-crop.) */
+.mpd .mpd-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 97%);
+}
+
+.mpd .mpd-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 6px 18px 0;
+  font-family: var(--ss-font);
+  color: var(--foreground);
+  background: var(--background);
+  min-height: 100%;
+}
+
+.mpd .mpd-logo { height: 26px; width: auto; align-self: flex-start; margin-top: 2px; }
+
+/* The greeting card: Ming flush with the card's bottom edge, the bubble beside him */
+.mpd .mpd-greeting {
+  position: relative;
+  display: flex;
+  min-height: 168px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--olive);
+  color: #fff;
+  box-shadow: 0 14px 30px -18px rgb(36 7 2 / 0.7);
+}
+.mpd .mpd-ming {
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  width: 128px;
+  aspect-ratio: 480 / 371;
+}
+.mpd .mpd-ming img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 420ms ease; /* both moods share one box, so only the face changes */
+}
+.mpd .mpd-ming img[data-on] { opacity: 1; }
+
+.mpd .mpd-greeting__text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  padding: 16px 16px 16px 146px;
+  min-width: 0;
+}
+.mpd .mpd-hello { font-size: 20px; font-weight: 800; line-height: 1.15; }
+.mpd .mpd-bubble { margin-top: 6px; font-size: 14px; font-weight: 700; line-height: 1.3; }
+
+.mpd .mpd-section { margin-top: 4px; }
+
+/* A balance row, as the app's Balances screen draws it */
+.mpd .mpd-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--orange-soft);
+  transition: background-color 500ms ease;
+}
+.mpd .mpd-row[data-paid] { background: var(--olive-soft); }
+.mpd .mpd-row--filler { grid-template-columns: 40px minmax(0, 1fr) auto; background: #fff; }
+.mpd .mpd-row--filler .mpd-row__who { gap: 8px; }
+.mpd .mpd-row__who { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.mpd .mpd-row__name { font-size: 16px; font-weight: 700; line-height: 1.3; }
+.mpd .mpd-row__sub { font-size: 13px; line-height: 1.3; color: var(--muted-foreground); }
+.mpd .mpd-row__amount {
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--orange-ink);
+  transition: color 500ms ease;
+}
+.mpd .mpd-row[data-paid] .mpd-row__amount { color: var(--foreground); }
+.mpd .mpd-pay { --ss-radius-control: 999px; }
+
+/* Compact (phone column): the stage scales down, so the small lines go up a step */
+.mpd .ss-stage[data-layout="compact"] .mpd-row__sub { font-size: 15px; }
+.mpd .ss-stage[data-layout="compact"] .mpd-row__name { font-size: 18px; }
+.mpd .ss-stage[data-layout="compact"] .mpd-bubble { font-size: 15px; }

@@ -70,7 +70,7 @@ export default function SplitBill() {
 
   return (
     <div>
-      <PageHeader title="Split a bill" />
+      <PageHeader title="Split a bill" gear />
       <div className="px-5 lg:flex lg:items-start lg:gap-8">
       <form onSubmit={save} className="min-w-0 flex-1 space-y-4" noValidate>
         <div className="grid grid-cols-2 gap-3">
@@ -83,7 +83,7 @@ export default function SplitBill() {
         <fieldset className="min-w-0 space-y-3">
           <legend className="mb-2 font-heading text-[17px] font-bold">Items</legend>
           {items.map((item, index) => (
-            <div key={index} className="space-y-2.5 rounded-[20px] bg-secondary p-3">
+            <div key={index} className="space-y-2.5 rounded-2xl bg-secondary p-3">
               <div className="flex gap-2">
                 <input aria-label={`Item ${index + 1} name`} value={item.name} onChange={(e) => update(index, { name: e.target.value })} placeholder="Item name"
                   className="h-11 min-w-0 flex-1 rounded-xl bg-card px-3 text-[15px] outline-none focus:ring-2 focus:ring-olive/50" />
@@ -123,7 +123,7 @@ export default function SplitBill() {
           placeholder="0.00" error={extrasCentavos == null ? "Enter an amount like 50 or -20" : ""} />
         <AmountInput label="Receipt total" value={total} onChange={setTotal} size="sm" />
         {totalCentavos != null && extrasCentavos != null && !matches && (
-          <p role="status" className="flex items-center justify-between gap-3 rounded-xl bg-orange-soft px-4 py-3 text-sm text-[#8a4210]">
+          <p role="status" className="flex items-center justify-between gap-3 rounded-xl bg-orange-soft px-4 py-3 text-sm text-orange-ink">
             Items + extras must equal the total ({formatPeso(expected)}).
             <button type="button" onClick={() => setTotal(centavosToInput(expected))} className="shrink-0 font-semibold underline underline-offset-2">Use {formatPeso(expected)}</button>
           </p>

@@ -41,7 +41,7 @@ export default function RecordPayment() {
 
   return (
     <div className="mx-auto w-full max-w-[560px]">
-      <PageHeader title="Record payment" />
+      <PageHeader title="Record payment" back />
       <form onSubmit={save} className="space-y-4 px-5" noValidate>
         {balances && !owe.length ? (
           <Empty>You don't owe anyone right now. All square!</Empty>
@@ -60,7 +60,7 @@ export default function RecordPayment() {
               ))}
             </fieldset>
             <AmountInput value={amount} onChange={setAmount} />
-            <Field label="Note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="GCash, cash..." maxLength={200} />
+            <Field label="Note" value={note} onChange={(e) => setNote(e.target.value)} placeholder="GCash, cash…" maxLength={200} />
             <p className="text-xs text-muted-foreground">DormMing only records it. No real money moves.</p>
             <FormError>{send.error?.message}</FormError>
             <PrimaryButton type="submit" busy={send.isPending} disabled={!to || !parsePesos(amount)}>Record payment</PrimaryButton>

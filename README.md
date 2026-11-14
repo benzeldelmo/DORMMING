@@ -68,9 +68,11 @@ backend/src/main/java/com/dormming/
 └── seed/         demo accounts loaded on start
 
 frontend/src/
-├── pages/        one file per screen: LogIn, SignUp, DormSetup, Balances, Expenses, AddExpense, SplitBill, RecordPayment, Settings
-├── components/   pieces the pages share (navigation, forms, rows, the receipt)
-└── lib/          helpers: API calls, login token, money formatting, receipt preview
+├── pages/        one file per screen: Landing, LogIn, SignUp, DormSetup, Home, Balances, Expenses, AddExpense, SplitBill, RecordPayment, Settings
+├── components/   pieces the pages share (Ming, navigation, the + sheet, forms, rows, the receipt)
+├── lib/          helpers: API calls, login token, money formatting, receipt preview, Ming's mood
+├── landing/      the landing page's animated phone demo (MingPayDemo)
+└── stageshow/kit/ a copied UI-animation kit the demo is built with (third-party, not our code)
 ```
 
 A request goes **page → controller → service → model**, and the service saves the result through a **repository**.
@@ -102,7 +104,7 @@ All money rules are in Java under `backend/src/main/java/com/dormming/model`. Re
 |---|---|---|
 | Member 1 | Split bills and Add expenses: `model/split/`, `model/Money.java`, `model/SharedExpense.java`, `service/ExpenseService.java`, `controller/ExpenseController.java`, `pages/AddExpense.jsx`, `pages/SplitBill.jsx` | Polymorphism, centavos |
 | Member 2 | Record payments and View balances: `model/Transaction.java`, `model/Payment.java`, `model/Ledger.java`, `model/Debt.java`, `service/PaymentService.java`, `service/BalanceService.java`, `controller/PaymentController.java`, `controller/BalanceController.java`, `pages/RecordPayment.jsx`, `pages/Balances.jsx` | Abstraction, encapsulation |
-| Member 3 | Users, dorms and login: `model/User.java`, `model/Dorm.java`, `model/DormMember.java`, `model/DormCreator.java`, `repository/`, `config/`, `service/AuthService.java`, `service/DormService.java`, their controllers, `pages/LogIn.jsx`, `pages/SignUp.jsx`, `pages/DormSetup.jsx`, `pages/Settings.jsx` | Inheritance, interfaces |
+| Member 3 | Users, dorms and login: `model/User.java`, `model/Dorm.java`, `model/DormMember.java`, `model/DormCreator.java`, `repository/`, `config/`, `service/AuthService.java`, `service/DormService.java`, their controllers, `pages/Landing.jsx`, `pages/LogIn.jsx`, `pages/SignUp.jsx`, `pages/DormSetup.jsx`, `pages/Home.jsx`, `pages/Settings.jsx` | Inheritance, interfaces |
 
 See [docs/DEFENSE-GUIDE.md](docs/DEFENSE-GUIDE.md) for each member's study guide.
 
