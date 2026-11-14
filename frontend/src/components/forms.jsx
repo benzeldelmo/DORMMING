@@ -43,7 +43,7 @@ export function PrimaryButton({ busy, children, className, tone = "olive", ...pr
   );
 }
 
-/** Pill toggle: gray track, filled active pill (olive by default, orange for Bills). */
+/** Pill toggle: gray track, filled active pill (olive by default, or orange). */
 export function Segmented({ options, value, onChange, tone = "olive", label }) {
   return (
     <div role="tablist" aria-label={label} className="grid auto-cols-fr grid-flow-col rounded-full bg-secondary p-1">

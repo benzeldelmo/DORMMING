@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthFrame from "@/components/AuthFrame";
 import { Field, FormError, PrimaryButton } from "@/components/forms";
-import { signUp, takePending } from "@/lib/auth";
+import { signUp } from "@/lib/auth";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -18,8 +18,7 @@ export default function SignUp() {
     setBusy(true);
     try {
       await signUp(form);
-      const pending = takePending();
-      navigate(pending ? `/setup/profile?next=${encodeURIComponent(pending)}` : "/setup/profile", { replace: true });
+      navigate("/setup/dorm", { replace: true });
     } catch (err) {
       setError(err.message);
     } finally {

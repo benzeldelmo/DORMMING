@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/PageHeader";
@@ -23,21 +23,18 @@ function parseExtras(text) {
   return value == null ? null : negative ? -value : value;
 }
 
-export default function Receipt() {
+export default function SplitBill() {
   const navigate = useNavigate();
   const { me } = useOutletContext();
-  const editing = useLocation().state?.expense ?? null;
   const dorm = useGet("/dorms/current", { refetchInterval: false });
   const members = dorm.data?.members ?? [];
   const send = useSend();
 
-  const [title, setTitle] = useState(editing?.note ?? "");
-  const [payer, setPayer] = useState(editing?.payer?.id ?? me?.id);
-  const [items, setItems] = useState(editing?.items?.length
-    ? editing.items.map((i) => ({ name: i.name, price: centavosToInput(i.priceCentavos), sharerIds: i.sharers.map((s) => s.id) }))
-    : [blank()]);
-  const [extras, setExtras] = useState(editing?.extrasCentavos ? String(editing.extrasCentavos / 100) : "");
-  const [total, setTotal] = useState(editing ? centavosToInput(editing.amountCentavos) : "");
+  const [title, setTitle] = useState("");
+  const [payer, setPayer] = useState(me?.id);
+  const [items, setItems] = useState([blank()]);
+  const [extras, setExtras] = useState("");
+  const [total, setTotal] = useState("");
 
   const ids = members.map((m) => m.user.id);
   const nameOf = (id) => (id === me?.id ? "Me" : members.find((m) => m.user.id === id)?.user.displayName ?? "?");
@@ -63,8 +60,8 @@ export default function Receipt() {
       split: { type: "ITEMIZED", items: parsedItems.map(({ name, priceCentavos, sharerIds }) => ({ name, priceCentavos, sharerIds })), extrasCentavos },
     };
     try {
-      await send.mutateAsync(editing ? { path: `/expenses/shared/${editing.id}`, method: "PUT", body } : { path: "/expenses/shared", body });
-      toast.success("Receipt split saved");
+      await send.mutateAsync({ path: "/expenses/shared", body });
+      toast.success("Bill split saved");
       navigate("/expenses");
     } catch {
       /* shown below */
@@ -73,7 +70,7 @@ export default function Receipt() {
 
   return (
     <div>
-      <PageHeader title="Split a receipt" back />
+      <PageHeader title="Split a bill" />
       <div className="px-5 lg:flex lg:items-start lg:gap-8">
       <form onSubmit={save} className="min-w-0 flex-1 space-y-4" noValidate>
         <div className="grid grid-cols-2 gap-3">
@@ -126,7 +123,7 @@ export default function Receipt() {
           placeholder="0.00" error={extrasCentavos == null ? "Enter an amount like 50 or -20" : ""} />
         <AmountInput label="Receipt total" value={total} onChange={setTotal} size="sm" />
         {totalCentavos != null && extrasCentavos != null && !matches && (
-          <p role="status" className="flex items-center justify-between gap-3 rounded-xl bg-orange-soft px-4 py-3 text-sm text-[#8a4210] dark:text-[#f0b483]">
+          <p role="status" className="flex items-center justify-between gap-3 rounded-xl bg-orange-soft px-4 py-3 text-sm text-[#8a4210]">
             Items + extras must equal the total ({formatPeso(expected)}).
             <button type="button" onClick={() => setTotal(centavosToInput(expected))} className="shrink-0 font-semibold underline underline-offset-2">Use {formatPeso(expected)}</button>
           </p>

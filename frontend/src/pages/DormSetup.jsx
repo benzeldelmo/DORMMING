@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { QRCodeSVG } from "qrcode.react";
-import { Copy, Users } from "lucide-react";
+import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import AuthFrame from "@/components/AuthFrame";
 import { Field, FormError, PrimaryButton, Segmented } from "@/components/forms";
@@ -11,7 +10,6 @@ import { isLoggedIn } from "@/lib/auth";
 export default function DormSetup() {
   const navigate = useNavigate();
   const me = useGet("/me", { enabled: isLoggedIn(), refetchInterval: false });
-  const invites = useGet("/invites", { enabled: isLoggedIn() });
   const send = useSend();
   const [tab, setTab] = useState("join");
   const [name, setName] = useState("");
@@ -19,7 +17,7 @@ export default function DormSetup() {
   const [created, setCreated] = useState(null);
 
   if (!isLoggedIn()) return <Navigate to="/login" replace />;
-  if (me.data?.dormId && !created) return <Navigate to="/home" replace />;
+  if (me.data?.dormId && !created) return <Navigate to="/balances" replace />;
 
   const create = async (e) => {
     e.preventDefault();
@@ -28,11 +26,7 @@ export default function DormSetup() {
   const join = async (e) => {
     e.preventDefault();
     await send.mutateAsync({ path: "/dorms/join", body: { code } });
-    navigate("/home", { replace: true });
-  };
-  const accept = async (id) => {
-    await send.mutateAsync({ path: `/invites/${id}/accept` });
-    navigate("/home", { replace: true });
+    navigate("/balances", { replace: true });
   };
 
   if (created) {
@@ -40,26 +34,22 @@ export default function DormSetup() {
       <AuthFrame>
         <div className="text-center">
           <h1 className="font-heading text-[28px] font-extrabold leading-tight">{created.name} is ready!</h1>
-          <p className="mt-1 text-muted-foreground">Share this code or QR so your dormmates can join.</p>
+          <p className="mt-1 text-muted-foreground">Share this code so your dormmates can join.</p>
         </div>
         <div className="w-full rounded-[28px] bg-olive-soft p-6">
-          <div className="mx-auto w-fit rounded-2xl bg-white p-4 shadow-sm">
-            <QRCodeSVG value={created.joinUrl} size={168} fgColor="#240702" />
-          </div>
-          <p className="mt-5 text-sm text-foreground/70">Dorm code</p>
+          <p className="text-sm text-foreground/70">Dorm code</p>
           <button type="button" onClick={() => { navigator.clipboard?.writeText(created.inviteCode); toast.success("Code copied"); }}
             className="mx-auto mt-1 flex items-center gap-2 font-heading text-4xl font-extrabold tracking-[0.18em] tabular-nums">
             {created.inviteCode}<Copy className="size-5 text-olive" aria-label="Copy code" />
           </button>
         </div>
-        <PrimaryButton onClick={() => navigate("/home", { replace: true })}>Go to my dorm</PrimaryButton>
+        <PrimaryButton onClick={() => navigate("/balances", { replace: true })}>Go to my dorm</PrimaryButton>
       </AuthFrame>
     );
   }
 
   return (
     <AuthFrame>
-      <p className="text-sm font-medium text-muted-foreground">Step 2 of 2</p>
       <div>
         <h1 className="font-heading text-[28px] font-extrabold leading-tight">Find your dorm</h1>
         <p className="mt-1 text-muted-foreground">Join your dormmates with their code, or start a new dorm.</p>
@@ -69,17 +59,6 @@ export default function DormSetup() {
 
       {tab === "join" ? (
         <form onSubmit={join} className="space-y-4" noValidate>
-          {invites.data?.length > 0 && (
-            <ul className="space-y-2">
-              {invites.data.map((i) => (
-                <li key={i.id} className="flex items-center gap-3 rounded-2xl bg-cream p-3">
-                  <Users className="size-5 text-orange" />
-                  <p className="flex-1 text-sm"><b>{i.fromUser.displayName}</b> invited you to <b>{i.dormName}</b></p>
-                  <button type="button" onClick={() => accept(i.id)} className="rounded-full bg-olive px-4 py-2 text-sm font-semibold text-white">Join</button>
-                </li>
-              ))}
-            </ul>
-          )}
           <Field label="Dorm code" value={code} maxLength={6} autoCapitalize="characters" autoComplete="off" spellCheck={false}
             onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
             inputClassName="text-center font-heading text-2xl font-bold tracking-[0.3em] uppercase" placeholder="AB3C9D"

@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { Pencil, Search, Trash2 } from "lucide-react";
+import { Link, useOutletContext } from "react-router-dom";
+import { Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import PageHeader from "@/components/PageHeader";
-import { ActivityRow, Empty } from "@/components/Rows";
+import { ExpenseRow, Empty } from "@/components/Rows";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useGet, useSend } from "@/lib/queries";
 import { formatPeso } from "@/lib/money";
 import { sharedLine } from "@/lib/people";
 
 export default function Expenses() {
-  const navigate = useNavigate();
   const { me, isDesktop } = useOutletContext();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(null);
@@ -29,7 +28,11 @@ export default function Expenses() {
 
   return (
     <div>
-      <PageHeader title="Expenses" gear />
+      <PageHeader title="Expenses">
+        <Link to="/expenses/new" className="flex h-10 items-center gap-1.5 rounded-full bg-olive px-4 text-sm font-semibold text-white">
+          <Plus className="size-4" strokeWidth={2.5} />Add expense
+        </Link>
+      </PageHeader>
       <div className="space-y-3 px-5">
         <label className="flex h-11 items-center gap-2 rounded-xl bg-secondary px-3">
           <Search className="size-5 text-foreground/50" />
@@ -38,10 +41,10 @@ export default function Expenses() {
         </label>
         <div className="space-y-2 pt-1">
           {expenses.map((e) => (
-            <ActivityRow key={e.id} onClick={() => setOpen(e)}
-              item={{ type: "EXPENSE", title: e.note || e.categoryLabel, category: e.category, subtitle: sharedLine(e, me?.id), amountCentavos: e.amountCentavos }} />
+            <ExpenseRow key={e.id} onClick={() => setOpen(e)} title={e.note || e.categoryLabel} category={e.category}
+              subtitle={sharedLine(e, me?.id)} amountCentavos={e.amountCentavos} />
           ))}
-          {!isPending && !expenses.length && <Empty>{q ? `No expenses match "${q}".` : "No expenses yet. Tap + to add one."}</Empty>}
+          {!isPending && !expenses.length && <Empty>{q ? `No expenses match "${q}".` : "No expenses yet. Tap Add expense to record one."}</Empty>}
         </div>
       </div>
 
@@ -65,13 +68,9 @@ export default function Expenses() {
                 </ul>
               )}
               {open.canEdit ? (
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <button type="button" onClick={() => navigate(open.splitType === "ITEMIZED" ? "/expenses/receipt" : "/expenses/new", { state: { expense: open } })}
-                    className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-secondary font-semibold"><Pencil className="size-4" />Edit</button>
-                  <button type="button" onClick={remove} disabled={send.isPending}
-                    className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-destructive/10 font-semibold text-destructive"><Trash2 className="size-4" />Delete</button>
-                </div>
-              ) : <p className="mt-4 text-sm text-muted-foreground">Only the person who added this or the dorm creator can change it.</p>}
+                <button type="button" onClick={remove} disabled={send.isPending}
+                  className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-destructive/10 font-semibold text-destructive"><Trash2 className="size-4" />Delete</button>
+              ) : <p className="mt-4 text-sm text-muted-foreground">Only the person who added this or the dorm creator can delete it.</p>}
             </>
           )}
         </SheetContent>

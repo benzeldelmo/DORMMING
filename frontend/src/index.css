@@ -2,8 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --font-heading: "Nunito", ui-rounded, system-ui, sans-serif;
   --font-sans: "Google Sans", system-ui, sans-serif;
@@ -88,61 +86,6 @@
   }
 }
 
-/* Dark theme: warm near-black ground, lifted cards, brand tints darkened. */
-.dark {
-  --olive: #7d855f;
-  --olive-soft: #2c3024;
-  --orange: #e38a45;
-  --orange-soft: #3b2a1c;
-  --cream: #2f261b;
-  --paper: #f3eee2;
-  --background: #151512;
-  --foreground: #f1efe8;
-  --card: #201f1b;
-  --card-foreground: #f1efe8;
-  --popover: #201f1b;
-  --popover-foreground: #f1efe8;
-  --secondary: #2b2a25;
-  --secondary-foreground: #f1efe8;
-  --muted: #2b2a25;
-  --muted-foreground: #aba89c;
-  --border: #35342e;
-  --input: #35342e;
-  --destructive: #e0644e;
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.6);
-  color-scheme: dark;
-}
-
-/* Reduce motion setting (and the OS preference) stops Ming's loops. */
-.reduce-motion .ming-HAPPY, .reduce-motion .ming-WORRIED, .reduce-motion .ming-CELEBRATING, .reduce-motion .ming-SLEEPY, .reduce-motion .confetti-bit { animation: none; }
-.reduce-motion * { transition-duration: 0ms !important; }
-
-.pixelated {
-  image-rendering: pixelated;
-}
-
-/* Ming's moods. One gentle loop each; off when the viewer prefers less motion. */
-@keyframes ming-bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
-@keyframes ming-shake { 0%, 84%, 100% { transform: rotate(0) } 87% { transform: rotate(-6deg) } 90% { transform: rotate(5deg) } 93% { transform: rotate(-4deg) } 96% { transform: rotate(2deg) } }
-@keyframes ming-bounce { 0%, 100% { transform: translateY(0) scale(1) } 30% { transform: translateY(-12px) scale(1.03, 0.97) } 55% { transform: translateY(0) scale(0.98, 1.02) } }
-@keyframes ming-sway { 0%, 100% { transform: rotate(-2deg) } 50% { transform: rotate(2deg) } }
-@keyframes confetti { from { transform: translate(0, 0) scale(1); opacity: 1 } to { transform: translate(var(--dx), var(--dy)) scale(0.4); opacity: 0 } }
-.ming-HAPPY { animation: ming-bob 2.8s ease-in-out infinite }
-.ming-WORRIED { animation: ming-shake 4s ease-in-out infinite; transform-origin: 50% 90% }
-.ming-CELEBRATING { animation: ming-bounce 1.1s cubic-bezier(.22,1,.36,1) infinite }
-.ming-SLEEPY { animation: ming-sway 5s ease-in-out infinite; transform-origin: 50% 95% }
-.confetti-bit { animation: confetti 900ms cubic-bezier(.16,1,.3,1) forwards }
-@media (prefers-reduced-motion: reduce) {
-  .ming-HAPPY, .ming-WORRIED, .ming-CELEBRATING, .ming-SLEEPY, .confetti-bit { animation: none }
-}
-
-/* The logo's sticker lettering: yellow fill with a dark brown outline. */
-.sticker-text {
-  color: var(--sun);
-  -webkit-text-stroke: 5px var(--brown);
-  paint-order: stroke fill;
-}
-
 ::selection { background: color-mix(in oklab, var(--sun) 70%, transparent); color: var(--brown) }
 
 /* Thermal receipt paper: zig-zag torn top and bottom edges. */
@@ -152,19 +95,6 @@
   mask:
     conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--z) 51% repeat-x,
     conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--z) 51% repeat-x;
-}
-
-/* Digital card flip. */
-.card-3d { perspective: 1200px }
-.card-inner { transform-style: preserve-3d; transition: transform 700ms cubic-bezier(.22,1,.36,1) }
-.card-inner[data-flipped="true"] { transform: rotateY(180deg) }
-.card-face { backface-visibility: hidden; -webkit-backface-visibility: hidden }
-.card-back { transform: rotateY(180deg) }
-@media (prefers-reduced-motion: reduce) {
-  .card-inner { transition: none; transform: none !important }
-  .card-face { transition: opacity 200ms ease }
-  .card-inner[data-flipped="true"] .card-front, .card-inner[data-flipped="false"] .card-back { opacity: 0 }
-  .card-back { transform: none }
 }
 
 .card-surface { background: var(--card); border-radius: 24px; box-shadow: var(--shadow-card); }

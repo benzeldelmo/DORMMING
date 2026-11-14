@@ -41,7 +41,7 @@ export default function RecordPayment() {
 
   return (
     <div className="mx-auto w-full max-w-[560px]">
-      <PageHeader title="Record payment" back />
+      <PageHeader title="Record payment" />
       <form onSubmit={save} className="space-y-4 px-5" noValidate>
         {balances && !owe.length ? (
           <Empty>You don't owe anyone right now. All square!</Empty>

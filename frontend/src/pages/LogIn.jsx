@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthFrame from "@/components/AuthFrame";
 import { Field, FormError, PrimaryButton } from "@/components/forms";
 import { logIn } from "@/lib/auth";
-import { afterLogin } from "@/lib/afterLogin";
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ export default function LogIn() {
     setBusy(true);
     try {
       await logIn(form);
-      await afterLogin(navigate);
+      navigate("/balances", { replace: true }); // AppShell sends people without a dorm to /setup/dorm
     } catch (err) {
       setError(err.message);
     } finally {
@@ -32,9 +31,6 @@ export default function LogIn() {
       <form onSubmit={submit} className="space-y-4" noValidate>
         <Field label="Email" type="email" autoComplete="email" value={form.email} onChange={set("email")} required />
         <Field label="Password" type="password" autoComplete="current-password" value={form.password} onChange={set("password")} required />
-        <div className="-mt-1 text-right">
-          <Link to="/forgot" className="text-sm font-medium text-olive underline-offset-4 hover:underline">Forgot password?</Link>
-        </div>
         <FormError>{error}</FormError>
         <PrimaryButton type="submit" busy={busy}>Log in</PrimaryButton>
       </form>

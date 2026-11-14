@@ -10,11 +10,11 @@ export default function Balances() {
   const { data } = useGet("/balances");
   return (
     <div className="mx-auto max-w-[760px]">
-      <PageHeader title="Balances" gear />
+      <PageHeader title="Balances" />
       {data && (
         <div className="space-y-5 px-5">
           <div className="grid grid-cols-2 gap-3">
-            <BalanceCard tone="olive" icon={ArrowDownLeft} label="Owed to you" centavos={data.owedToMeCentavos} caption="To collect" to="/balances" />
+            <BalanceCard tone="olive" icon={ArrowDownLeft} label="Owed to you" centavos={data.owedToMeCentavos} caption="To collect" />
             <BalanceCard tone="orange" icon={ArrowUpRight} label="You Owe" centavos={data.iOweCentavos} caption="To repay" to="/payments/new" />
           </div>
           <section>
@@ -37,7 +37,7 @@ export default function Balances() {
               {!data.debts.length && <Empty>Everyone's square. Ming approves.</Empty>}
             </ul>
           </section>
-          <p className="px-1 text-xs text-muted-foreground">Debts between two people cancel out, so you only see what's left. Bills are paid to the provider and don't show here.</p>
+          <p className="px-1 text-xs text-muted-foreground">Debts between two people cancel out, so you only see what's left.</p>
         </div>
       )}
     </div>
