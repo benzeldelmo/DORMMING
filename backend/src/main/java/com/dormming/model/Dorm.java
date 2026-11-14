@@ -11,7 +11,7 @@ public class Dorm {
 
     private final String id;
     private final String name;
-    private InviteCode code;
+    private final InviteCode code;
     private final List<DormMember> members;
 
     public Dorm(String id, String name, InviteCode code, List<DormMember> members) {
@@ -76,9 +76,5 @@ public class Dorm {
 
     public boolean isEmpty() {
         return members.isEmpty();
-    }
-
-    public void regenerateCode(InviteCode newCode) {
-        this.code = newCode;
     }
 }

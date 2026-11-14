@@ -59,31 +59,29 @@ export default function AddExpense() {
         <Field label="Notes" as="textarea" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional..." maxLength={200} />
         <Field label="Date" type="date" value={date} max={todayIso()} onChange={(e) => setDate(e.target.value)} />
 
-        {(
-          <div className="space-y-4 rounded-[22px] bg-olive-soft/60 p-4">
-            <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)} inputClassName="bg-card">
-              {members.map(({ user }) => <option key={user.id} value={user.id}>{user.id === me?.id ? "Me" : user.displayName}</option>)}
-            </Field>
-            <PersonPicker members={members} selected={chosen} onChange={setPeople} meId={me?.id} />
-            <Segmented label="How to split" value={split} onChange={setSplit}
-              options={[{ value: "EQUAL", label: "Split equally" }, { value: "CUSTOM", label: "Custom amounts" }]} />
-            {split === "EQUAL" && total && chosen.length > 0 && (
-              <p className="text-sm text-foreground/75">About {formatPeso(Math.floor(total / chosen.length))} each. Extra centavos go to the others, not the payer.</p>
-            )}
-            {split === "CUSTOM" && (
-              <div className="space-y-2">
-                {members.filter((m) => chosen.includes(m.user.id)).map(({ user }) => (
-                  <AmountInput key={user.id} size="sm" label={user.id === me?.id ? "Me" : user.displayName}
-                    value={custom[user.id] ?? ""} onChange={(v) => setCustom({ ...custom, [user.id]: v })} />
-                ))}
-                <p className={`text-sm font-semibold ${left === 0 ? "text-olive" : "text-orange"}`}>
-                  {left === 0 ? "All assigned" : left > 0 ? `${formatPeso(left)} left to assign` : `${formatPeso(-left)} too much`}
-                </p>
-              </div>
-            )}
-            <Link to="/split" className="flex items-center gap-2 text-sm font-semibold text-olive"><ReceiptText className="size-4" />Split a receipt instead</Link>
-          </div>
-        )}
+        <div className="space-y-4 rounded-[22px] bg-olive-soft/60 p-4">
+          <Field label="Who paid?" as="select" value={payer} onChange={(e) => setPayer(e.target.value)} inputClassName="bg-card">
+            {members.map(({ user }) => <option key={user.id} value={user.id}>{user.id === me?.id ? "Me" : user.displayName}</option>)}
+          </Field>
+          <PersonPicker members={members} selected={chosen} onChange={setPeople} meId={me?.id} />
+          <Segmented label="How to split" value={split} onChange={setSplit}
+            options={[{ value: "EQUAL", label: "Split equally" }, { value: "CUSTOM", label: "Custom amounts" }]} />
+          {split === "EQUAL" && total && chosen.length > 0 && (
+            <p className="text-sm text-foreground/75">About {formatPeso(Math.floor(total / chosen.length))} each. Extra centavos go to the others, not the payer.</p>
+          )}
+          {split === "CUSTOM" && (
+            <div className="space-y-2">
+              {members.filter((m) => chosen.includes(m.user.id)).map(({ user }) => (
+                <AmountInput key={user.id} size="sm" label={user.id === me?.id ? "Me" : user.displayName}
+                  value={custom[user.id] ?? ""} onChange={(v) => setCustom({ ...custom, [user.id]: v })} />
+              ))}
+              <p className={`text-sm font-semibold ${left === 0 ? "text-olive" : "text-orange"}`}>
+                {left === 0 ? "All assigned" : left > 0 ? `${formatPeso(left)} left to assign` : `${formatPeso(-left)} too much`}
+              </p>
+            </div>
+          )}
+          <Link to="/split" className="flex items-center gap-2 text-sm font-semibold text-olive"><ReceiptText className="size-4" />Split a bill instead</Link>
+        </div>
 
         <FormError>{send.error?.message}</FormError>
         <PrimaryButton type="submit" busy={send.isPending} disabled={!total || !sharedReady}>Save expense</PrimaryButton>

@@ -15,4 +15,5 @@ public interface TransactionRepository {
 
     List<SharedExpense> sharedByDorm(String dormId);
 
-    List<Payment> paymentsByDorm(String dormId);}
+    List<Payment> paymentsByDorm(String dormId);
+}

@@ -17,7 +17,7 @@ To use them, you sign up, log in, and create or join a dorm with a 6-character c
 
 ## Run it
 
-You need Java 21 or newer, Maven, and Node 20 or newer.
+You need Java 21 or newer, Maven, and Node 22 or newer.
 
 Start the backend (port 8080):
 

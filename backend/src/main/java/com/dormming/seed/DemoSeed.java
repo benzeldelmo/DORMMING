@@ -1,6 +1,5 @@
 package com.dormming.seed;
 
-import com.dormming.controller.dto.SharedExpenseInput;
 import com.dormming.model.Category;
 import com.dormming.model.Dorm;
 import com.dormming.model.Money;
@@ -10,6 +9,7 @@ import com.dormming.model.split.SplitType;
 import com.dormming.service.AuthService;
 import com.dormming.service.DormService;
 import com.dormming.service.ExpenseService;
+import com.dormming.service.SharedExpenseInput;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
@@ -53,6 +53,5 @@ public class DemoSeed implements CommandLineRunner {
                 today.minusDays(2), b, List.of(b, s), SplitType.EQUAL, Map.of(), List.of(), null));
         expenses.addShared(v, new SharedExpenseInput(Money.ofPesos("2700"), Category.FOOD_GROCERIES, "Grocery",
                 today.minusDays(1), v, List.of(b, v, s), SplitType.EQUAL, Map.of(), List.of(), null));
-
     }
 }

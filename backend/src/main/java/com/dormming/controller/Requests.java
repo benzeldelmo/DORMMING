@@ -2,12 +2,12 @@ package com.dormming.controller;
 
 import com.dormming.controller.dto.ExpenseDtos.SharedRequest;
 import com.dormming.controller.dto.ExpenseDtos.SplitRequest;
-import com.dormming.controller.dto.SharedExpenseInput;
 import com.dormming.model.Category;
 import com.dormming.model.Money;
 import com.dormming.model.UserId;
 import com.dormming.model.split.ReceiptItem;
 import com.dormming.model.split.SplitType;
+import com.dormming.service.SharedExpenseInput;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

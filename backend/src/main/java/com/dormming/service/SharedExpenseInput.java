@@ -1,4 +1,4 @@
-package com.dormming.controller.dto;
+package com.dormming.service;
 
 import com.dormming.model.Category;
 import com.dormming.model.Money;

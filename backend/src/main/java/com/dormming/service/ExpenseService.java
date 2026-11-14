@@ -1,6 +1,5 @@
 package com.dormming.service;
 
-import com.dormming.controller.dto.SharedExpenseInput;
 import com.dormming.model.Dorm;
 import com.dormming.model.SharedExpense;
 import com.dormming.model.Transaction;
@@ -13,7 +12,6 @@ import com.dormming.repository.TransactionRepository;
 import com.dormming.service.exception.NotAllowedException;
 import com.dormming.service.exception.NotFoundException;
 import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -39,10 +37,10 @@ public class ExpenseService {
 
     public SharedExpense addShared(UserId actor, SharedExpenseInput in) {
         Dorm dorm = dorms.require(actor);
-        return (SharedExpense) transactions.save(build(dorm, null, actor, in, clock.instant()));
+        return (SharedExpense) transactions.save(build(dorm, actor, in));
     }
 
-    private SharedExpense build(Dorm dorm, String id, UserId createdBy, SharedExpenseInput in, Instant createdAt) {
+    private SharedExpense build(Dorm dorm, UserId createdBy, SharedExpenseInput in) {
         if (in.payer() == null || in.participants() == null || in.type() == null) {
             throw new IllegalArgumentException("Pick who paid, who shares it, and how to split");
         }
@@ -58,8 +56,8 @@ public class ExpenseService {
             case CUSTOM -> new CustomSplit(in.amounts());
             case ITEMIZED -> new ItemizedSplit(in.items(), in.extras());
         };
-        return SharedExpense.create(id, dorm.id(), createdBy, in.amount(), orToday(in.date()), in.note(),
-                in.category(), in.payer(), ordered, strategy, createdAt);
+        return SharedExpense.create(null, dorm.id(), createdBy, in.amount(), orToday(in.date()), in.note(),
+                in.category(), in.payer(), ordered, strategy, clock.instant());
     }
 
     public void delete(UserId actor, String id) {

@@ -53,10 +53,6 @@ public final class Money implements Comparable<Money> {
         return new Money(Math.subtractExact(centavos, other.centavos));
     }
 
-    public boolean isZero() {
-        return centavos == 0;
-    }
-
     public boolean isPositive() {
         return centavos > 0;
     }

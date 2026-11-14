@@ -59,19 +59,6 @@ public class Ledger {
         return debts;
     }
 
-    public List<Debt> allDebts() {
-        List<Debt> debts = new ArrayList<>();
-        for (UserId from : people) {
-            for (UserId to : people) {
-                Money amount = from.equals(to) ? Money.ZERO : openDebt(from, to);
-                if (amount.isPositive()) {
-                    debts.add(new Debt(from, to, amount));
-                }
-            }
-        }
-        return debts;
-    }
-
     public Money totalOwedTo(UserId user) {
         return debtsInvolving(user).stream().filter(d -> d.to().equals(user))
                 .map(Debt::amount).reduce(Money.ZERO, Money::plus);

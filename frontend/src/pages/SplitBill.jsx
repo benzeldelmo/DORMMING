@@ -129,7 +129,6 @@ export default function SplitBill() {
           </p>
         )}
 
-
         <div className="lg:hidden"><ThermalReceipt title={title} dormName={dorm.data?.name ?? ""} items={parsedItems} extras={extrasCentavos ?? 0}
           total={totalCentavos ?? expected} shares={preview.shares} nameOf={nameOf} payerName={nameOf(payer)} /></div>
 

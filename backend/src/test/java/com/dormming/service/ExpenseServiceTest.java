@@ -4,7 +4,6 @@ import static com.dormming.service.World.c;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.dormming.controller.dto.SharedExpenseInput;
 import com.dormming.model.Category;
 import com.dormming.model.Dorm;
 import com.dormming.model.SharedExpense;
