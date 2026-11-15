@@ -1,0 +1,17 @@
+# Render: one web service runs the whole app (React pages + Java API) from the Dockerfile.
+# Create it with: Render dashboard -> New -> Blueprint -> connect benzeldelmo/DORMMING -> choose the branch.
+services:
+  - type: web
+    name: dormming
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: LOCAL_JWT_SECRET        # Render generates a random value; logins are signed with it
+        generateValue: true
+      - key: REQUIRE_HTTPS           # redirect http to https (Render serves https)
+        value: "true"
+      - key: DORMMING_SEED           # no public demo accounts in the real deployment
+        value: "false"
