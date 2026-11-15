@@ -34,7 +34,7 @@ React page  →  controller/  →  service/  →  model/
 
 ---
 
-## Member 1: Split bills and Add expenses
+## Member 1: Add expenses and Bill reminders
 
 ### Your files
 
@@ -45,13 +45,17 @@ React page  →  controller/  →  service/  →  model/
 | `model/split/SplitStrategy.java` | **Interface**: "given a total, the people and the payer, how much does each person pay?" |
 | `model/split/EqualSplit.java` | Everyone pays the same. Leftover centavos go to people other than the payer. |
 | `model/split/CustomSplit.java` | Each person's amount is typed in, and the amounts must add up to the total. |
-| `model/split/ItemizedSplit.java` | **Split bills**: each item on a receipt is split among the people who had it. Extras (tax, tip, discount) are shared in proportion. |
+| `model/split/ItemizedSplit.java` | A split by receipt item: each item is split among the people who had it, extras shared in proportion. The API supports it; the app uses the equal split. |
 | `model/split/ReceiptItem.java` | One line on the receipt: name, price, who shared it. |
 | `model/split/SplitType.java` | `EQUAL`, `CUSTOM` or `ITEMIZED`. |
 | `service/ExpenseService.java` | Adds, lists and deletes expenses. Picks the right `SplitStrategy`. |
 | `controller/ExpenseController.java` | `GET /api/expenses`, `POST /api/expenses/shared`, `DELETE /api/expenses/{id}`. |
 | `frontend/src/pages/AddExpense.jsx` | The Add expense screen (equal or custom split). |
-| `frontend/src/pages/SplitBill.jsx` | The Split Bill screen (receipt items, extras, live receipt preview). |
+| `model/Bill.java` | A personal payment reminder: name, amount, due date, monthly or not. A Java `record`, so it can't change; `nextMonth()` returns a new one. |
+| `repository/BillRepository.java` + `memory/InMemoryBillRepository.java` | Saves and finds bills by owner. |
+| `service/BillService.java` | Add, list (soonest first), mark paid (monthly moves to next month, one-time is removed), delete. Someone else's bill is "not found". |
+| `controller/BillController.java` | `GET/POST /api/bills`, `POST /api/bills/{id}/paid`, `DELETE /api/bills/{id}`. |
+| `frontend/src/pages/Bills.jsx`, `AddBill.jsx` | Your reminders, and Set a reminder. |
 
 ### OOP concept: Polymorphism
 
@@ -67,23 +71,29 @@ SplitStrategy strategy = switch (in.type()) {
 
 `SharedExpense.create(...)` then calls `strategy.split(amount, participants, payer)`. It does not know or care which of the three it got. Each class answers the same question in its own way. That is polymorphism.
 
-### How "Split bills" flows
+### How "Add expense" flows
 
-1. `SplitBill.jsx` sends `POST /api/expenses/shared` with `split.type = "ITEMIZED"`, the items and the extras.
+1. `AddExpense.jsx` sends `POST /api/expenses/shared` with the amount, what it was for, who paid, everyone in the dorm, and `split.type = "EQUAL"`.
 2. `ExpenseController.addShared` turns the JSON into a `SharedExpenseInput` (`controller/Requests.java` checks every field).
-3. `ExpenseService.addShared` checks that everyone is in your dorm, builds an `ItemizedSplit`, and calls `SharedExpense.create`.
-4. `ItemizedSplit.split` splits each item equally among its sharers, then shares the extras by each person's subtotal. Leftover centavos go to whoever had the largest fraction. The shares always add up exactly to the total.
+3. `ExpenseService.addShared` checks that everyone is in your dorm, builds an `EqualSplit`, and calls `SharedExpense.create`.
+4. `EqualSplit.split` gives everyone the same share; leftover centavos go to people other than the payer. The shares always add up exactly to the total.
 5. The expense is saved in `TransactionRepository`. Balances change because `Ledger` reads every expense.
 
-"Add expenses" is the same flow with `EQUAL` or `CUSTOM` instead.
+### How "Set a reminder" flows
+
+1. `AddBill.jsx` sends `POST /api/bills` with the name, amount, due date and "repeats monthly".
+2. `BillService.add` creates a `Bill` (its constructor rejects a blank name or a ₱0 amount) and saves it under your user id.
+3. Home asks `GET /api/bills`; when one is due within 2 days, Ming's mood turns worried and he names it.
+4. "Mark paid" calls `POST /api/bills/{id}/paid`: a monthly bill comes back with `nextMonth()`'s date, a one-time bill is deleted.
 
 ### Likely questions
 
 - **Why an interface and not one method with if/else?** Each split has its own rules and its own checks (custom amounts must add up; receipt items must match the total). Separate classes keep each rule small and testable. Adding a fourth split means adding one class, not editing the others.
 - **₱100 split three ways. Who pays the extra centavo?** ₱33.33 each leaves 1 centavo. It goes to someone other than the payer, so the payer never pays more than their fair share (`EqualSplit.divide`).
-- **What if the receipt items don't add up to the total?** `ItemizedSplit.split` throws "Items and extras must add up to the total", and the screen shows it. The screen also offers a "Use ₱…" button to fix the total.
+- **Why is `Bill` a record and not a class?** It only holds data and never changes: paying a monthly bill makes a new `Bill` one month later instead of editing the old one. That makes it impossible to half-update.
+- **Can my dormmates see my bills?** No. `BillService` only returns bills whose owner is you, and treats anyone else's bill id as "not found".
 - **Who may delete an expense?** The person who added it, or the dorm creator (`DormMember.canEdit` / `DormCreator.canEdit`). It can't be deleted if someone in it has left the dorm, because that would leave a debt nobody can pay.
-- **Where is this tested?** `model/split/SplitStrategyTest.java`, `model/MoneyTest.java`, `service/ExpenseServiceTest.java`.
+- **Where is this tested?** `model/split/SplitStrategyTest.java`, `model/MoneyTest.java`, `service/ExpenseServiceTest.java`, `service/BillServiceTest.java`.
 
 ---
 

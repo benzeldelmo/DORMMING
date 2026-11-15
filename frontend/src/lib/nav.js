@@ -1,16 +1,17 @@
-import { HandCoins, House, Receipt, ShoppingBag, Wallet } from "lucide-react";
+import { BellRing, HandCoins, House, ReceiptText, ScanLine, ShoppingBag, Wallet } from "lucide-react";
 
-/** Main tabs, in menu order. The phone bar splits them around the + button (first two left, last two right). */
+/** Main tabs, in menu order: the phone's frosted pill and the laptop sidebar. */
 export const TABS = [
   { to: "/home", icon: House, label: "Home" },
   { to: "/expenses", icon: ShoppingBag, label: "Expenses" },
-  { to: "/split", icon: Receipt, label: "Split Bill" },
+  { to: "/bills", icon: ReceiptText, label: "Bills" },
   { to: "/balances", icon: Wallet, label: "Balances" },
 ];
 
-/** What the + button can add. */
+/** What the round + button can do. */
 export const ADD_ACTIONS = [
-  { to: "/expenses/new", icon: ShoppingBag, title: "Add expense", subtitle: "One person paid; split it equally or by amount." },
-  { to: "/split", icon: Receipt, title: "Split a bill", subtitle: "Item by item, straight from the receipt." },
-  { to: "/payments/new", icon: HandCoins, title: "Record payment", subtitle: "You paid a dormmate back." },
+  { to: "/expenses/new", icon: ShoppingBag, title: "Add expense", subtitle: "Split equally with your dorm, automatically." },
+  { to: "/balances", icon: HandCoins, title: "Pay back", subtitle: "See who you owe and tap Pay." },
+  { to: "/bills/new", icon: BellRing, title: "Set a reminder", subtitle: "A bill you need to pay, and when." },
+  { to: "/scan", icon: ScanLine, title: "Scan QR", subtitle: "Join a dorm, or show yours to dormmates." },
 ];

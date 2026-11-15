@@ -1,8 +1,12 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
+  # Behind a host's proxy (Render, Railway, Fly), trust its X-Forwarded-Proto so https is detected
+  forward-headers-strategy: native
 spring:
   application:
     name: dormming
 dormming:
   local-jwt-secret: ${LOCAL_JWT_SECRET:dormming-local-dev-secret-change-me-0123456789}
   seed: ${DORMMING_SEED:true}
+  # true when deployed: redirect http to https and send HSTS. Local dev runs plain http behind Vite.
+  require-https: ${REQUIRE_HTTPS:false}

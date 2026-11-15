@@ -1,7 +1,7 @@
 import { QRCodeSVG } from "qrcode.react";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
-import { joinUrl } from "@/lib/qr";
+import { copyCode, joinUrl } from "@/lib/qr";
 
 /** A dorm's QR code and its 6-character code. Any phone camera can scan the QR to open the join link. */
 export default function DormQr({ code, size = 168 }) {
@@ -12,7 +12,7 @@ export default function DormQr({ code, size = 168 }) {
       </span>
       <div>
         <p className="text-[13px] font-bold text-olive-ink">Scan to join, or type the code</p>
-        <button type="button" onClick={() => { navigator.clipboard?.writeText(code); toast.success("Code copied"); }}
+        <button type="button" onClick={() => copyCode(code, toast)}
           className="mt-1 flex min-h-11 items-center gap-2 rounded-xl px-2 font-heading text-3xl font-extrabold tracking-[0.18em] tabular-nums">
           {code}<Copy className="size-5 text-olive" aria-label="Copy code" />
         </button>

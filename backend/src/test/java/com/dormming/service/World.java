@@ -8,6 +8,7 @@ import com.dormming.model.SharedExpense;
 import com.dormming.model.User;
 import com.dormming.model.UserId;
 import com.dormming.model.split.EqualSplit;
+import com.dormming.repository.memory.InMemoryBillRepository;
 import com.dormming.repository.memory.InMemoryDormRepository;
 import com.dormming.repository.memory.InMemoryTransactionRepository;
 import com.dormming.repository.memory.InMemoryUserRepository;
@@ -34,6 +35,9 @@ public class World {
 
     public final ExpenseService expenses = new ExpenseService(transactions, dormService, clock);
     public final PaymentService payments = new PaymentService(transactions, dormService, balances, clock);
+    public final InMemoryBillRepository billRepo = new InMemoryBillRepository();
+    public final BillService bills = new BillService(billRepo, clock);
+    public final AccountService accounts = new AccountService(users, dormService, billRepo);
 
     public final UserId a = user("a", "Benzel");
     public final UserId b = user("b", "Vince");

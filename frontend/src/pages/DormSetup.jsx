@@ -68,7 +68,7 @@ export default function DormSetup() {
         </form>
       ) : (
         <form onSubmit={create} className="space-y-4" noValidate>
-          <Field label="Dorm name" value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Mabini Hall 3B" />
+          <Field label="Dorm name" value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="e.g. Mabini Hall 3B" />
           <FormError>{send.error?.message}</FormError>
           <PrimaryButton type="submit" busy={send.isPending} disabled={!name.trim()}>Create dorm</PrimaryButton>
         </form>

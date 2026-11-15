@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
   --font-heading: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
   --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
@@ -92,11 +94,74 @@
   }
 }
 
-/* The logo's sticker lettering: yellow fill with a dark brown outline. */
-.sticker-text {
-  color: var(--sun);
-  -webkit-text-stroke: 5px var(--brown);
-  paint-order: stroke fill;
+/* Dark theme: deep green-black ground, lifted cards, the same brand green a step brighter. */
+.dark {
+  --olive: #4f9a4b;
+  --olive-soft: #1f3320;
+  --olive-ink: #a8dba0;
+  --orange: #f08a3c;
+  --orange-soft: #3a2616;
+  --orange-ink: #ffc28f;
+  --cream: #2a2218;
+  --background: #0f130e;
+  --foreground: #eef2ea;
+  --card: #192017;
+  --card-foreground: #eef2ea;
+  --popover: #192017;
+  --popover-foreground: #eef2ea;
+  --secondary: #222b20;
+  --secondary-foreground: #eef2ea;
+  --muted: #222b20;
+  --muted-foreground: #a3ad9e;
+  --border: #2b3529;
+  --input: #364233;
+  --destructive: #ff7a63;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px -14px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+.dark .frosted { background: rgb(25 32 23 / 0.72); box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.6), inset 0 0 0 1px rgb(255 255 255 / 0.06); }
+
+/* Splash: the wordmark pops in on the green mat, then the whole screen fades away. */
+@keyframes splash-in { from { opacity: 0; transform: scale(0.86); } 60% { opacity: 1; transform: scale(1.04); } to { transform: scale(1); } }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+.splash { animation: splash-out 360ms ease 1100ms both; }
+.splash img { animation: splash-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Scanner: the green line sweeps the frame while the camera looks for a code. */
+@keyframes scan-sweep { from { transform: translateY(0); } to { transform: translateY(var(--sweep, 240px)); } }
+.scan-line { animation: scan-sweep 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
+@keyframes pin-shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+.pin-shake { animation: pin-shake 0.35s ease-in-out; }
+@media (prefers-reduced-motion: reduce) { .scan-line, .splash img, .pin-shake { animation: none; } }
+.reduce-motion .scan-line, .reduce-motion .splash img, .reduce-motion .pin-shake { animation: none; }
+
+/* Frosted glass: the phone's nav pill. Opaque enough to read over anything behind it. */
+.frosted {
+  background: rgb(255 255 255 / 0.72);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow: 0 10px 30px -12px rgb(18 22 15 / 0.35), inset 0 0 0 1px rgb(255 255 255 / 0.6), 0 0 0 1px rgb(18 22 15 / 0.06);
+}
+
+/* Page entry: content rises in a few pixels and fades up when a page opens. Off under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter > * { animation: page-enter 360ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .page-enter > *:nth-child(2) { animation-delay: 40ms; }
+  .page-enter > *:nth-child(n + 3) { animation-delay: 80ms; }
+}
+@keyframes page-enter { from { opacity: 0; transform: translateY(10px); } }
+.reduce-motion .page-enter > * { animation: none; }
+
+/* Cutting-mat grid: fine lines every 14px, a stronger line every 70px (the green mat on an architect's desk). */
+.cutting-mat {
+  background-color: var(--olive);
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.16) 1px, transparent 1px),
+    linear-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: 70px 70px, 70px 70px, 14px 14px, 14px 14px;
+  background-position: -1px -1px;
 }
 
 /* One visible keyboard focus ring for every link and button. */
@@ -112,14 +177,105 @@ html { -webkit-tap-highlight-color: transparent; touch-action: pan-x pan-y; -web
 
 ::selection { background: color-mix(in oklab, var(--sun) 70%, transparent); color: var(--brown) }
 
-/* Thermal receipt paper: zig-zag torn top and bottom edges. */
-.receipt-paper {
-  --z: 12px;
-  background: #fffdf6;
-  mask:
-    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--z) 51% repeat-x,
-    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--z) 51% repeat-x;
+
+
+/* Landing motion: the hero enters once,
+   buttons step and press, nav and footer words draw an underline. Transform and opacity only. */
+:root { --ease-enter: cubic-bezier(0.22, 1, 0.36, 1); }
+.enter-line { display: block; overflow: clip; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.enter-line > span { display: block; animation: line-rise 700ms var(--ease-enter) both; animation-delay: calc(var(--i) * 80ms); }
+.enter-fade { animation: fade-up 520ms var(--ease-enter) both; animation-delay: calc(380ms + var(--i) * 60ms); }
+.enter-media { animation: settle 900ms var(--ease-enter) both; }
+@keyframes line-rise { from { transform: translateY(105%); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(12px); } }
+@keyframes settle { from { transform: scale(0.98); } }
+
+.m-btn { transition: transform 150ms var(--ease-enter), background-color 150ms, box-shadow 150ms; }
+.m-btn:active { transform: translateY(1px) scale(0.985); transition-duration: 90ms; }
+.m-link { background: linear-gradient(currentColor, currentColor) no-repeat right calc(50% + 0.8em) / 0 1px; transition: background-size 120ms, color 120ms; }
+@media (hover: hover) and (pointer: fine) {
+  /* Filled buttons darken and lift 2px with a deeper shadow; light buttons take a green tint */
+  .m-btn:hover { transform: translateY(-2px); background-color: var(--olive-ink); box-shadow: 0 12px 24px -12px rgb(36 82 31 / 0.6); }
+  .m-btn--quiet:hover { background-color: var(--olive-soft); color: var(--olive-ink); box-shadow: 0 12px 24px -14px rgb(18 22 15 / 0.35); }
+  .m-btn:hover:active { transform: translateY(1px) scale(0.985); }
+  .m-link:hover { color: var(--foreground); background-position-x: left; background-size: 100% 1px; transition-duration: 150ms; }
+  .faq summary:hover { color: var(--olive-ink); }
+}
+/* FAQ answers ease in when opened */
+.faq[open] > p { animation: fade-up 260ms var(--ease-enter); }
+@media (prefers-reduced-motion: reduce) {
+  .enter-line > span, .enter-fade, .enter-media, .faq[open] > p { animation: none; }
+  .m-btn, .m-btn:hover, .m-btn:active { transform: none; }
+}
+.reduce-motion .enter-line > span, .reduce-motion .enter-fade, .reduce-motion .enter-media { animation: none; }
+.reduce-motion .m-btn { transform: none !important; }
+
+/* The green mat's grid drifts slowly (one 70px tile every 8s, so the loop is seamless). */
+.mat-drift { animation: mat-drift 8s linear infinite; }
+@keyframes mat-drift { to { background-position: 69px 69px; } }
+
+/* The landing's first screen: a faint olive grid that fades out at the edges, two soft green spots,
+   and a third that follows the mouse (--mx/--my from Landing.jsx). */
+.hero-ground { --mx: 70%; --my: 40%; isolation: isolate; }
+.hero-ground::before, .hero-ground::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.hero-ground::before {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--olive) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--olive) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--olive) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--olive) 6%, transparent) 1px, transparent 1px);
+  background-size: 70px 70px, 70px 70px, 14px 14px, 14px 14px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, #000 30%, transparent 85%);
+  animation: mat-drift 10s linear infinite;
+}
+.hero-ground::after {
+  background:
+    radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--olive) 22%, transparent), transparent 70%),
+    radial-gradient(520px circle at 12% 18%, color-mix(in srgb, var(--olive) 14%, transparent), transparent 70%),
+    radial-gradient(560px circle at 88% 92%, color-mix(in srgb, var(--olive) 16%, transparent), transparent 70%);
+  transition: background-position 200ms;
 }
 
-.card-surface { background: var(--card); border-radius: 24px; box-shadow: var(--shadow-card); }
+/* Cards float into place each time they scroll into view (Landing.jsx toggles .is-in). */
+.float-ready [data-float] { opacity: 0; transform: translateY(28px); transition: opacity 600ms var(--ease-enter), transform 700ms var(--ease-enter); transition-delay: calc(var(--i, 0) * 90ms); }
+.float-ready [data-float].is-in { opacity: 1; transform: none; }
 
+@media (prefers-reduced-motion: reduce) {
+  .mat-drift, .hero-ground::before { animation: none; }
+  .float-ready [data-float] { opacity: 1; transform: none; transition: none; }
+}
+.reduce-motion .mat-drift, .reduce-motion .hero-ground::before { animation: none; }
+.reduce-motion.float-ready [data-float] { opacity: 1; transform: none; transition: none; }
+
+/* No visible scrollbar anywhere (the page still scrolls), like a phone app */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+
+/* The number keypad slides up from the bottom */
+.keypad-in { animation: keypad-in 220ms var(--ease-enter); }
+@keyframes keypad-in { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .keypad-in { animation: none; } }
+.reduce-motion .keypad-in { animation: none; }
+
+/* The + menu's actions pop up one after another (BottomNav sets --i: 0 is nearest the button) */
+.dial-item { opacity: 0; transform: translateY(14px) scale(0.85); transform-origin: right center;
+  transition: opacity 140ms ease, transform 160ms ease; transition-delay: 0ms; }
+.dial-item[data-open] { opacity: 1; transform: none;
+  transition: opacity 200ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1); transition-delay: calc(var(--i) * 45ms); }
+@media (prefers-reduced-motion: reduce) { .dial-item, .dial-item[data-open] { transform: none; transition-duration: 0ms; transition-delay: 0ms; } }
+.reduce-motion .dial-item, .reduce-motion .dial-item[data-open] { transform: none; transition-duration: 0ms; transition-delay: 0ms; }
+
+/* Text fields show their own soft gray ring when focused (forms.jsx, AmountInput), not the green outline */
+input:not([type="checkbox"]):not([type="radio"]):focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
+
+/* No white edges on phones: when the keyboard opens, the page bounces, or the iPhone's home bar area
+   shows, what's behind the app is the app's own colour (green on log in and sign up). */
+html { background: var(--background); }
+html:has(.auth-ground), html:has(.pin-ground) { background: var(--olive); }
+body { overscroll-behavior-y: none; }
+
+/* A digit that just changed slides up into place (RollingNumber) */
+.digit-in { display: inline-block; animation: digit-in 260ms var(--ease-enter); }
+@keyframes digit-in { from { opacity: 0; transform: translateY(0.35em); } }
+@media (prefers-reduced-motion: reduce) { .digit-in { animation: none; } }
+.reduce-motion .digit-in { animation: none; }

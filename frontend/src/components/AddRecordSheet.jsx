@@ -12,8 +12,8 @@ export default function AddRecordSheet({ open, onOpenChange, side = "bottom" }) 
       <SheetContent side={side}
         className={side === "bottom" ? "mx-auto max-w-[640px] rounded-t-[28px] border-0 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]" : "w-[420px] border-0 px-5 pt-6 sm:max-w-[420px]"}>
         <SheetHeader className="px-0">
-          <SheetTitle className="font-heading text-2xl font-extrabold">Add a record</SheetTitle>
-          <SheetDescription>What happened with money in the dorm?</SheetDescription>
+          <SheetTitle className="font-heading text-2xl font-extrabold">What do you want to do?</SheetTitle>
+          <SheetDescription className="sr-only">Add an expense, record a payment, set a bill reminder or scan a dorm QR</SheetDescription>
         </SheetHeader>
         <ul className="space-y-2.5">
           {ADD_ACTIONS.map(({ to, icon: Icon, title, subtitle }) => (

@@ -13,8 +13,8 @@ export default function PersonPicker({ members, selected, onChange, meId, label 
           return (
             <button key={user.id} type="button" aria-pressed={on} onClick={() => toggle(user.id)}
               className={cn("flex h-10 items-center gap-2 rounded-full pr-4 pl-1.5 text-sm font-semibold transition-colors",
-                on ? "bg-olive text-white" : "bg-secondary text-foreground/80 hover:bg-secondary/70")}>
-              <span className={cn("grid size-7 place-items-center rounded-full text-xs", on ? "bg-white/25" : "bg-card")}>
+                on ? "bg-foreground text-background" : "bg-secondary text-foreground/80 hover:bg-secondary/70")}>
+              <span className={cn("grid size-7 place-items-center rounded-full text-xs", on ? "bg-background/20" : "bg-card")}>
                 {on ? <Check className="size-4" strokeWidth={3} /> : user.initials}
               </span>
               {user.id === meId ? "Me" : user.displayName}

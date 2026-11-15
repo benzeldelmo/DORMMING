@@ -1,4 +1,3 @@
-import jsQR from "jsqr";
 
 // Dorm codes: 6 characters, no I, O, 0 or 1 (same alphabet as the backend's InviteCode).
 const CODE = /^[A-HJ-NP-Z2-9]{6}$/;
@@ -22,5 +21,16 @@ export async function readQrFromPhoto(file) {
   const ctx = canvas.getContext("2d");
   ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   const { data, width, height } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const { default: jsQR } = await import("jsqr"); // the QR reader loads only when someone scans
   return jsQR(data, width, height)?.data ?? null;
+}
+
+/** Copies the dorm code, and says honestly whether it worked (some browsers block the clipboard). */
+export async function copyCode(code, toast) {
+  try {
+    await navigator.clipboard.writeText(code);
+    toast.success("Code copied. Send it to your dormmate.");
+  } catch {
+    toast.error(`Couldn't copy. The code is ${code}`);
+  }
 }

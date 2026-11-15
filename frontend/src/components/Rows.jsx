@@ -1,19 +1,20 @@
 import { Link } from "react-router-dom";
 import { categoryById } from "@/lib/categories";
-import { formatPeso } from "@/lib/money";
+import { formatPesoShort } from "@/lib/money";
+import Sentences from "./Sentences";
 
 /** One expense in a list: category icon, title, who shared it, and the amount. Opens with `onClick`, or links with `to`. */
 export function ExpenseRow({ title, subtitle, category, amountCentavos, onClick, to }) {
   const Icon = categoryById(category).icon;
   const Box = to ? Link : "button";
   return (
-    <Box to={to} type={to ? undefined : "button"} onClick={onClick} className="flex w-full items-center gap-3 rounded-2xl bg-card px-3 py-3 text-left shadow-[var(--shadow-card)]">
-      <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-secondary text-foreground/80"><Icon className="size-5" /></span>
+    <Box to={to} type={to ? undefined : "button"} onClick={onClick} className="flex min-h-[64px] w-full items-center gap-3 rounded-2xl bg-card px-3 py-2.5 text-left shadow-[var(--shadow-card)]">
+      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-olive-soft text-olive-ink"><Icon aria-hidden className="size-5" /></span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[17px] font-semibold leading-tight">{title}</span>
-        <span className="line-clamp-2 text-xs text-muted-foreground">{subtitle}</span>
+        <span className="block text-[16px] font-bold leading-tight text-pretty">{title}</span>
+        <Sentences className="mt-0.5 block text-[13px] leading-snug text-muted-foreground">{subtitle}</Sentences>
       </span>
-      <span className="font-heading text-lg font-bold tabular-nums">{formatPeso(amountCentavos).replace(/\.00$/, "")}</span>
+      <span className="font-heading text-[17px] font-extrabold tabular-nums">{formatPesoShort(amountCentavos).replace(/\.00$/, "")}</span>
     </Box>
   );
 }

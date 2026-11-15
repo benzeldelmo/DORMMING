@@ -73,6 +73,15 @@ public class DormService {
         }
     }
 
+    public Dorm rename(UserId actor, String name) {
+        Dorm dorm = require(actor);
+        if (!memberOf(dorm, actor).canRename()) {
+            throw new NotAllowedException("Only the dorm creator can rename the dorm");
+        }
+        dorm.rename(name);
+        return dorms.save(dorm);
+    }
+
     public void leave(UserId user) {
         Dorm dorm = require(user);
         requireSettled(dorm, user, "Settle your balance before leaving");

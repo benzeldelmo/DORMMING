@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.dormming.model.Dorm;
 import com.dormming.model.DormCreator;
+import com.dormming.service.exception.NotAllowedException;
 import com.dormming.service.exception.NotFoundException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -54,5 +55,13 @@ class DormServiceTest {
         Dorm dorm = w.dormService.create(w.a, "Solo");
         w.dormService.leave(w.a);
         assertThat(w.dorms.findById(dorm.id())).isEmpty();
+    }
+
+    @Test
+    void onlyTheCreatorRenamesTheDorm() {
+        w.dormOfThree();
+        assertThatThrownBy(() -> w.dormService.rename(w.b, "Hacked")).isInstanceOf(NotAllowedException.class);
+        assertThat(w.dormService.rename(w.a, "  Rizal Hall 2A ").name()).isEqualTo("Rizal Hall 2A");
+        assertThatThrownBy(() -> w.dormService.rename(w.a, " ")).hasMessage("Dorm name must be 1 to 40 characters");
     }
 }

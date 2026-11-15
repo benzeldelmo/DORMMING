@@ -21,7 +21,7 @@ public class Views {
     }
 
     public UserRef ref(UserId id) {
-        return users.findById(id).map(UserRef::of).orElse(new UserRef(id.value(), "Former member", "?"));
+        return users.findById(id).map(UserRef::of).orElse(new UserRef(id.value(), "Former member", "?", null));
     }
 
     public Function<UserId, String> names() {
@@ -29,7 +29,8 @@ public class Views {
     }
 
     public DormDto dorm(Dorm dorm, UserId viewer) {
-        var members = dorm.members().stream().map(m -> new MemberDto(ref(m.userId()), m.role(), m.joinedAt())).toList();
+        var members = dorm.members().stream().map(m -> new MemberDto(
+                users.findById(m.userId()).map(UserRef::withPhoto).orElse(ref(m.userId())), m.role(), m.joinedAt())).toList();
         String myRole = dorm.memberOf(viewer).map(m -> m.role()).orElse(null);
         return new DormDto(dorm.id(), dorm.name(), dorm.code().value(), members, myRole);
     }

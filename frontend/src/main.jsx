@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import "./index.css";
 import App from "./App.jsx";
+import "./lib/motion";
+import "./lib/theme";
 
 // iPhone Safari ignores user-scalable=no and touch-action for pinch, so block its pinch gestures here.
 for (const type of ["gesturestart", "gesturechange", "gestureend"]) {
@@ -18,7 +20,8 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <App />
-        <Toaster position="top-center" richColors />
+        {/* Below the iPhone's camera area and status bar, not under them */}
+        <Toaster position="top-center" offset={{ top: "calc(env(safe-area-inset-top) + 12px)" }} mobileOffset={{ top: "calc(env(safe-area-inset-top) + 8px)" }} />
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

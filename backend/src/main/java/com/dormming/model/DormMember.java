@@ -25,6 +25,10 @@ public class DormMember {
         return transaction.createdBy().equals(userId);
     }
 
+    public boolean canRename() {
+        return false;
+    }
+
     public String role() {
         return "MEMBER";
     }

@@ -2,6 +2,7 @@ package com.dormming.controller;
 
 import com.dormming.service.exception.NotAllowedException;
 import com.dormming.service.exception.NotFoundException;
+import com.dormming.service.exception.TooManyAttemptsException;
 import com.dormming.service.exception.UnauthorizedException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,10 @@ public class ApiErrors {
     @ExceptionHandler(NotFoundException.class)
     ResponseEntity<Map<String, String>> notFound(NotFoundException e) {
         return error(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(TooManyAttemptsException.class)
+    ResponseEntity<Map<String, String>> tooMany(TooManyAttemptsException e) {
+        return error(HttpStatus.TOO_MANY_REQUESTS, e.getMessage());
     }
 }

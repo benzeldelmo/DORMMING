@@ -2,16 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/brand/icon.png" />
+    <link rel="icon" type="image/png" href="/brand/favicon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <!-- Zoom is locked on purpose (app-like on phones). Trade-off: people who need to zoom to read cannot. -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="DormMing" />
-    <link rel="apple-touch-icon" href="/brand/icon.png" />
-    <title>DormMing</title>
-    <meta name="theme-color" content="#f6f6f3" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <title>DormMing - Your Digital Dormmate Companion</title>
+    <meta name="description" content="DormMing - Your Digital Dormmate Companion. Track, split and settle shared expenses with your dormmates." />
+    <!-- Deployed on http by mistake? Go to https (local addresses stay as they are for development) -->
+    <script>if (location.protocol === "http:" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && !/^(192\.168|10)\./.test(location.hostname)) location.replace("https://" + location.host + location.pathname + location.search + location.hash);</script>
+    <meta name="theme-color" content="#f3f5f0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap" rel="stylesheet" />

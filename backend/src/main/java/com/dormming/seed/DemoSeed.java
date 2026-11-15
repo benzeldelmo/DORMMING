@@ -7,6 +7,7 @@ import com.dormming.model.User;
 import com.dormming.model.UserId;
 import com.dormming.model.split.SplitType;
 import com.dormming.service.AuthService;
+import com.dormming.service.BillService;
 import com.dormming.service.DormService;
 import com.dormming.service.ExpenseService;
 import com.dormming.service.SharedExpenseInput;
@@ -26,12 +27,14 @@ public class DemoSeed implements CommandLineRunner {
     private final AuthService auth;
     private final DormService dorms;
     private final ExpenseService expenses;
+    private final BillService bills;
     private final Clock clock;
 
-    public DemoSeed(AuthService auth, DormService dorms, ExpenseService expenses, Clock clock) {
+    public DemoSeed(AuthService auth, DormService dorms, ExpenseService expenses, BillService bills, Clock clock) {
         this.auth = auth;
         this.dorms = dorms;
         this.expenses = expenses;
+        this.bills = bills;
         this.clock = clock;
     }
 
@@ -53,5 +56,9 @@ public class DemoSeed implements CommandLineRunner {
                 today.minusDays(2), b, List.of(b, s), SplitType.EQUAL, Map.of(), List.of(), null));
         expenses.addShared(v, new SharedExpenseInput(Money.ofPesos("2700"), Category.FOOD_GROCERIES, "Grocery",
                 today.minusDays(1), v, List.of(b, v, s), SplitType.EQUAL, Map.of(), List.of(), null));
+
+        // Benzel's own reminders: one due soon (it shows on Home), one later in the month
+        bills.add(b, "Internet", Money.ofPesos("1500"), today.plusDays(2), true);
+        bills.add(b, "Water", Money.ofPesos("400"), today.plusDays(9), true);
     }
 }

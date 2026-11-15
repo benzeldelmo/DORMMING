@@ -1,5 +1,6 @@
 const KEY = "dormming.token";
-const BASE = import.meta.env.VITE_API_URL ?? `http://${location.hostname}:8080`;
+// Same address as the page; the dev server forwards /api to the backend.
+const BASE = import.meta.env.VITE_API_URL ?? "";
 
 function store(fn, fallback) {
   try {
@@ -19,6 +20,8 @@ async function post(path, body) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+  }).catch(() => {
+    throw new Error("Can't reach DormMing. Check your connection and try again.");
   });
   const data = res.status === 204 ? null : await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data?.error ?? "Something went wrong. Try again.");

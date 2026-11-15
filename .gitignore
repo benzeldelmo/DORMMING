@@ -5,3 +5,11 @@ target/
 .DS_Store
 dist/
 .superpowers/
+backend/src/main/resources/static/
+.taste-skill/
+# Design-tool working files (not part of the app)
+.impeccable/
+.taste-skill/
+frontend/.taste-skill/
+PRODUCT.md
+handoff/

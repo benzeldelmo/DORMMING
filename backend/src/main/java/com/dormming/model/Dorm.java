@@ -10,17 +10,13 @@ import java.util.UUID;
 public class Dorm {
 
     private final String id;
-    private final String name;
+    private String name;
     private final InviteCode code;
     private final List<DormMember> members;
 
     public Dorm(String id, String name, InviteCode code, List<DormMember> members) {
-        String trimmed = name == null ? "" : name.strip();
-        if (trimmed.isEmpty() || trimmed.length() > 40) {
-            throw new IllegalArgumentException("Dorm name must be 1 to 40 characters");
-        }
         this.id = id == null ? UUID.randomUUID().toString() : id;
-        this.name = trimmed;
+        this.name = checkedName(name);
         this.code = code;
         this.members = new ArrayList<>(members);
     }
@@ -35,6 +31,19 @@ public class Dorm {
 
     public String name() {
         return name;
+    }
+
+    /** Changes the dorm's name; who may do it is DormService's call (only the creator). */
+    public void rename(String newName) {
+        this.name = checkedName(newName);
+    }
+
+    private static String checkedName(String name) {
+        String trimmed = name == null ? "" : name.strip();
+        if (trimmed.isEmpty() || trimmed.length() > 40) {
+            throw new IllegalArgumentException("Dorm name must be 1 to 40 characters");
+        }
+        return trimmed;
     }
 
     public InviteCode code() {

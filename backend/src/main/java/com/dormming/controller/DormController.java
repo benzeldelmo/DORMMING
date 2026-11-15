@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,13 @@ public class DormController {
         UserId me = CurrentUser.id(jwt);
         return dorms.current(me).map(d -> ResponseEntity.ok(views.dorm(d, me)))
                 .orElse(ResponseEntity.noContent().build());
+    }
+
+    /** Rename the dorm (creator only). */
+    @PatchMapping("/dorms/current")
+    DormDto rename(@AuthenticationPrincipal Jwt jwt, @RequestBody CreateDormRequest req) {
+        UserId me = CurrentUser.id(jwt);
+        return views.dorm(dorms.rename(me, req.name()), me);
     }
 
     @PostMapping("/dorms/current/leave")
